@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+  
+  surveys      Survey[]
+  responses    Response[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Survey {
+  id        Int     @id @default(autoincrement())
+  title     String
+  description String?
+  authorId  Int
+  author    User    @relation(fields: [authorId], references: [id])
+  
+  questions Question[]
+  responses Response[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Question {
+  id        Int     @id @default(autoincrement())
+  surveyId  Int
+  survey    Survey  @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  text      String
+  order     Int
+  
+  answers   Answer[]
+  createdAt DateTime @default(now())
+}
+
+model Answer {
+  id        Int     @id @default(autoincrement())
+  questionId Int
+  question  Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  text      String
+  value     Int
+  
+  responses AnswerResponse[]
+}
+
+model Response {
+  id        Int     @id @default(autoincrement())
+  surveyId  Int
+  survey    Survey  @relation(fields: [surveyId], references: [id])
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+  
+  answers   AnswerResponse[]
+  score     Int?
+  aiExplanation String?
+  createdAt DateTime @default(now())
+}
+
+model AnswerResponse {
+  id        Int     @id @default(autoincrement())
+  responseId Int
+  response  Response @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  answerId  Int
+  answer    Answer   @relation(fields: [answerId], references: [id])
+  
+  @@unique([responseId, answerId])
+}
+
+model SafetyEvent {
+  id        Int     @id @default(autoincrement())
+  type      String
+  severity  String
+  message   String
+  metadata  Json?
+  
+  createdAt DateTime @default(now())
+}
