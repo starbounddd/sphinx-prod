@@ -23,6 +23,7 @@ In this survey application, Prisma manages all database operations for users, su
 - Node.js and npm installed
 - PostgreSQL database server running
 - `.env` file with `DATABASE_URL` configured
+- **Node.js binaries in PATH** (run `npx --version` to verify)
 
 ## Database Schema
 
@@ -77,7 +78,18 @@ Populate with test data:
 npx prisma db seed
 ```
 
-This runs the `seed.ts` script to create sample users and surveys.
+**Note:** If you get a "Unique constraint failed" error, the seed data already exists. To reseed:
+
+```bash
+npx prisma migrate reset  # This will reset the database
+npx prisma db seed
+```
+
+Or run the seed script directly:
+
+```bash
+./node_modules/.bin/tsx prisma/seed.ts
+```
 
 ### Database Introspection
 
@@ -129,6 +141,9 @@ const survey = await prisma.survey.create({
 
 ## Troubleshooting
 
+- **"npx: command not found"** - Ensure Node.js is installed and in your PATH. Try restarting your terminal or run: `$env:PATH += ";C:\Program Files\nodejs"` (PowerShell)
+- **"tsx must be loaded with --import"** - Update Node.js or use the direct command: `./node_modules/.bin/tsx prisma/seed.ts`
+- **"Unique constraint failed"** - Seed data already exists. Reset database with `npx prisma migrate reset` then seed again
 - **"Environment variable not found"** - Ensure `.env` exists and `DATABASE_URL` is set
 - **"Table does not exist"** - Run `npx prisma migrate dev`
 - **Connection errors** - Check PostgreSQL is running and credentials are correct
