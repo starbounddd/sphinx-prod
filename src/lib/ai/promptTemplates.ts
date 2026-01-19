@@ -4,4 +4,4 @@ export const promptTemplates = {
     explanation: 'Template for explanation generation',
   },
   // Add more versions as needed
-}
+};

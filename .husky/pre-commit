@@ -1,0 +1,5 @@
+#!/bin/sh
+# Ensure local node bins are in PATH when git runs hooks
+export PATH="$(pwd)/node_modules/.bin:$PATH"
+. "$(dirname "$0")/_/husky.sh"
+npx --no-install lint-staged

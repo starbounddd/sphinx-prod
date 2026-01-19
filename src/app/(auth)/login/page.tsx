@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 export default function LoginPage() {
   return (
@@ -6,5 +6,5 @@ export default function LoginPage() {
       <h1>Login</h1>
       {/* Login form component */}
     </div>
-  )
+  );
 }

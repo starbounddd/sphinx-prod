@@ -4,4 +4,4 @@ export const aiPolicies = {
   allowedModels: ['gpt-4', 'gpt-3.5-turbo'],
   enabledFeatures: ['explanation', 'suggestion'],
   safetyChecksRequired: true,
-}
+};

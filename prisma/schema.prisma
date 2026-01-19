@@ -10,80 +10,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Enums
+enum AgeRange {
+  TEEN
+  ADULT
+  UNSPECIFIED
+}
+
+// User Identity 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id                String   @id @default(uuid()) @db.Uuid
+  email             String?  @unique
+  authProviderId    String?  @unique
+  createdAt         DateTime @default(now())
   
-  surveys      Survey[]
-  responses    Response[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  profile           UserProfile?
+  
+  @@map("users")
 }
 
-model Survey {
-  id        Int     @id @default(autoincrement())
-  title     String
-  description String?
-  authorId  Int
-  author    User    @relation(fields: [authorId], references: [id])
+// User Profile
+model UserProfile {
+  id                String    @id @default(uuid()) @db.Uuid
+  userId            String    @unique @db.Uuid
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  questions Question[]
-  responses Response[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Question {
-  id        Int     @id @default(autoincrement())
-  surveyId  Int
-  survey    Survey  @relation(fields: [surveyId], references: [id], onDelete: Cascade)
-  text      String
-  order     Int
+  ageRange          AgeRange  @default(UNSPECIFIED)
+  preferredLanguage String    @default("en")
+  consentVersion    String?
+  consentedAt       DateTime?
   
-  answers   Answer[]
-  createdAt DateTime @default(now())
-}
-
-model Answer {
-  id        Int     @id @default(autoincrement())
-  questionId Int
-  question  Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  text      String
-  value     Int
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
   
-  responses AnswerResponse[]
-}
-
-model Response {
-  id        Int     @id @default(autoincrement())
-  surveyId  Int
-  survey    Survey  @relation(fields: [surveyId], references: [id])
-  userId    Int
-  user      User    @relation(fields: [userId], references: [id])
-  
-  answers   AnswerResponse[]
-  score     Int?
-  aiExplanation String?
-  createdAt DateTime @default(now())
-}
-
-model AnswerResponse {
-  id        Int     @id @default(autoincrement())
-  responseId Int
-  response  Response @relation(fields: [responseId], references: [id], onDelete: Cascade)
-  answerId  Int
-  answer    Answer   @relation(fields: [answerId], references: [id])
-  
-  @@unique([responseId, answerId])
-}
-
-model SafetyEvent {
-  id        Int     @id @default(autoincrement())
-  type      String
-  severity  String
-  message   String
-  metadata  Json?
-  
-  createdAt DateTime @default(now())
+  @@map("user_profiles")
 }
