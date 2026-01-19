@@ -35,6 +35,12 @@
     "globals": "^17.0.0",
     "husky": "^9.1.7",
     "jest": "^29.0.0",
+    "prisma": "^5.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "prisma": {
+    "seed": "node --import tsx prisma/seed.ts",
     "jiti": "^2.6.1",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.0",
