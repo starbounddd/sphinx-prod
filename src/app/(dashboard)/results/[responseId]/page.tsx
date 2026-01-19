@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { useParams } from 'next/navigation'
+import { useParams } from 'next/navigation';
 
 export default function ResultsPage() {
-  const params = useParams()
-  const responseId = params.responseId
+  const params = useParams();
+  const responseId = params.responseId;
 
   return (
     <div>
@@ -12,5 +12,5 @@ export default function ResultsPage() {
       <p>Response ID: {responseId}</p>
       {/* Results and AI explanation component */}
     </div>
-  )
+  );
 }

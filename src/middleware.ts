@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
   // Auth and route protection logic
-  
-  return NextResponse.next()
+
+  return NextResponse.next();
 }
 
 export const config = {
@@ -16,4 +16,4 @@ export const config = {
      */
     '/((?!api|_next/static|favicon.ico).*)',
   ],
-}
+};

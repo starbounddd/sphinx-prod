@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { useParams } from 'next/navigation'
+import { useParams } from 'next/navigation';
 
 export default function TakeSurveyPage() {
-  const params = useParams()
-  const surveyId = params.surveyId
+  const params = useParams();
+  const surveyId = params.surveyId;
 
   return (
     <div>
@@ -12,5 +12,5 @@ export default function TakeSurveyPage() {
       <p>Survey ID: {surveyId}</p>
       {/* Survey form component */}
     </div>
-  )
+  );
 }

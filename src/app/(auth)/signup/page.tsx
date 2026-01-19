@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 export default function SignupPage() {
   return (
@@ -6,5 +6,5 @@ export default function SignupPage() {
       <h1>Sign Up</h1>
       {/* Signup form component */}
     </div>
-  )
+  );
 }

@@ -56,6 +56,7 @@ npx prisma migrate dev --name your_migration_name
 ```
 
 This will:
+
 - Create a new migration file in `migrations/`
 - Apply it to your database
 - Regenerate the Prisma client
@@ -120,15 +121,15 @@ DATABASE_URL="postgresql://username:password@localhost:5432/database_name"
 Import and use the Prisma client:
 
 ```typescript
-import { prisma } from '@/lib/db/prisma'
+import { prisma } from '@/lib/db/prisma';
 
-const users = await prisma.user.findMany()
+const users = await prisma.user.findMany();
 const survey = await prisma.survey.create({
   data: {
     title: 'My Survey',
-    authorId: userId
-  }
-})
+    authorId: userId,
+  },
+});
 ```
 
 ## Best Practices

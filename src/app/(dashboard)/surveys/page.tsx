@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 export default function SurveysPage() {
   return (
@@ -6,5 +6,5 @@ export default function SurveysPage() {
       <h1>My Surveys</h1>
       {/* Survey list component */}
     </div>
-  )
+  );
 }

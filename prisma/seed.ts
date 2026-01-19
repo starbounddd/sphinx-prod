@@ -1,10 +1,10 @@
-import 'dotenv/config'
-import { PrismaClient, AgeRange } from '@prisma/client'
+import 'dotenv/config';
+import { PrismaClient, AgeRange } from '@prisma/client';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Starting seed...')
+  console.log('🌱 Starting seed...');
 
   // Create a test user with profile
   const user = await prisma.user.create({
@@ -23,7 +23,7 @@ async function main() {
     include: {
       profile: true,
     },
-  })
+  });
 
   console.log('✅ Seed user created:', {
     id: user.id,
@@ -32,7 +32,7 @@ async function main() {
       ageRange: user.profile?.ageRange,
       consentVersion: user.profile?.consentVersion,
     },
-  })
+  });
 
   // Create a teen user without consent (for testing)
   const teenUser = await prisma.user.create({
@@ -50,7 +50,7 @@ async function main() {
     include: {
       profile: true,
     },
-  })
+  });
 
   console.log('✅ Teen user created (no consent):', {
     id: teenUser.id,
@@ -59,16 +59,16 @@ async function main() {
       ageRange: teenUser.profile?.ageRange,
       consentVersion: teenUser.profile?.consentVersion,
     },
-  })
+  });
 
-  console.log('🎉 Seed completed successfully!')
+  console.log('🎉 Seed completed successfully!');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Seed failed:', e)
-    process.exit(1)
+    console.error('❌ Seed failed:', e);
+    process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect()
-  })
+    await prisma.$disconnect();
+  });

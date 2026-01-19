@@ -1,10 +1,10 @@
 // Safety detectors for harmful content
 export function detectHarmfulContent(text: string): boolean {
   // Detection logic
-  return false
+  return false;
 }
 
 export function detectAnomalies(data: any): boolean {
   // Anomaly detection
-  return false
+  return false;
 }
