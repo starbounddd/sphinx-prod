@@ -1,0 +1,9 @@
+# Ignore markdown files from prettier
+**/*.md
+README.md
+
+# ignore lockfiles and node modules
+node_modules
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

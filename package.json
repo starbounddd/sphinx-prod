@@ -10,8 +10,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "prepare": "husky install",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\""
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json}\""
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
@@ -53,14 +53,6 @@
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{json,md}": "prettier --write"
-  },
-  "prisma": {
-    "seed": "node --import tsx prisma/seed.ts",
-    "jiti": "^2.6.1",
-    "prettier": "^3.8.0",
-    "prisma": "^5.0.0",
-    "typescript": "^5.0.0",
-    "typescript-eslint": "^8.53.0"
+    "*.{json}": "prettier --write"
   }
 }
