@@ -1,10 +1,9 @@
-'use client'
+import { SignUp } from '@clerk/nextjs'
 
 export default function SignupPage() {
   return (
-    <div>
-      <h1>Sign Up</h1>
-      {/* Signup form component */}
+    <div className="flex min-h-screen items-center justify-center">
+      <SignUp routing="path" path="/signup" />
     </div>
   )
 }

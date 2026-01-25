@@ -11,11 +11,14 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@clerk/backend": "^2.29.5",
+    "@clerk/nextjs": "^6.36.10",
     "@prisma/client": "^5.0.0",
     "dotenv": "^17.2.3",
     "next": "^14.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "svix": "^1.84.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.0.0",
