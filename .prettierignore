@@ -1,5 +1,8 @@
-# Ignore markdown files from prettier
+# Ignore markdown files from Prettier
+# Exclude all markdown files in the repo
 **/*.md
+
+# Optionally keep README out too (covered by the previous line)
 README.md
 
 # ignore lockfiles and node modules

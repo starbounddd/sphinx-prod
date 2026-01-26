@@ -1,0 +1,133 @@
+{
+  "survey_id": "wellbeing_checkin",
+  "name": "Wellbeing Check-In",
+  "version": "1.0",
+  "description": "A short, non-clinical self-reflection survey focused on general emotional strain and stress over the past two weeks.",
+  "timeframe": "past_2_weeks",
+  "estimated_duration_minutes": 3,
+  "is_active": true,
+  "instructions": "This short check-in asks about how you’ve been feeling over the past two weeks. There are no right or wrong answers. This is not a diagnosis or medical assessment.",
+  "scales": {
+    "frequency_0_4": {
+      "type": "likert",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "A little" },
+        { "value": 2, "label": "Several days" },
+        { "value": 3, "label": "More than half the days" },
+        { "value": 4, "label": "Nearly every day" }
+      ]
+    }
+  },
+  "questions": [
+    {
+      "id": "emotional_overwhelm",
+      "order": 1,
+      "text": "I’ve felt overwhelmed by everyday responsibilities.",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "emotional_load"
+    },
+    {
+      "id": "difficulty_relaxing",
+      "order": 2,
+      "text": "I’ve had difficulty relaxing, even during downtime.",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "emotional_load"
+    },
+    {
+      "id": "mental_exhaustion",
+      "order": 3,
+      "text": "I’ve felt mentally exhausted or burned out.",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "emotional_load"
+    },
+    {
+      "id": "low_mood",
+      "order": 4,
+      "text": "I’ve felt low, discouraged, or unmotivated.",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "mood_motivation"
+    },
+    {
+      "id": "loss_of_interest",
+      "order": 5,
+      "text": "I’ve lost interest in things I usually enjoy.",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "mood_motivation"
+    },
+    {
+      "id": "difficulty_starting_tasks",
+      "order": 6,
+      "text": "I’ve had trouble finding motivation to start tasks.",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "mood_motivation"
+    },
+    {
+      "id": "increased_worry",
+      "order": 7,
+      "text": "I’ve found myself worrying more than usual.",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "stress_worry"
+    },
+    {
+      "id": "difficulty_controlling_worry",
+      "order": 8,
+      "text": "I’ve had trouble stopping or controlling my worries.",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "stress_worry"
+    },
+    {
+      "id": "sleep_disruption",
+      "order": 9,
+      "text": "My sleep has felt unsatisfying or disrupted.",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "daily_functioning"
+    },
+    {
+      "id": "daily_impact",
+      "order": 10,
+      "text": "My stress or mood has made daily activities harder.",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "daily_functioning"
+    },
+    {
+      "id": "manageable_signal",
+      "order": 11,
+      "text": "Have you felt like stress or emotions have been hard to manage lately?",
+      "type": "yes_no",
+      "domain": "safety_signal"
+    }
+  ],
+  "scoring": {
+    "method": "sum",
+    "included_question_ids": [
+      "emotional_overwhelm",
+      "difficulty_relaxing",
+      "mental_exhaustion",
+      "low_mood",
+      "loss_of_interest",
+      "difficulty_starting_tasks",
+      "increased_worry",
+      "difficulty_controlling_worry",
+      "sleep_disruption",
+      "daily_impact"
+    ],
+    "score_range": { "min": 0, "max": 40 },
+    "severity_bands": [
+      { "label": "low", "min": 0, "max": 10 },
+      { "label": "mild", "min": 11, "max": 20 },
+      { "label": "moderate", "min": 21, "max": 30 },
+      { "label": "elevated", "min": 31, "max": 40 }
+    ]
+  }
+}
