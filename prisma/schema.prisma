@@ -48,7 +48,7 @@ model UserProfile {
 }
 
 model ConsentVersion {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) @db.Uuid
   version     String
   title       String
   contentHash String
@@ -59,9 +59,9 @@ model ConsentVersion {
 }
 
 model UserConsent {
-  id               String   @id @default(uuid())
-  userId           String
-  consentVersionId String
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String   @db.Uuid
+  consentVersionId String   @db.Uuid
   acceptedAt       DateTime @default(now())
   ipAddress        String?
   userAgent        String?
