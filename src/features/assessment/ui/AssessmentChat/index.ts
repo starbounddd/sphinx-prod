@@ -1,0 +1,1 @@
+export { AssessmentChat } from "./AssessmentChat";

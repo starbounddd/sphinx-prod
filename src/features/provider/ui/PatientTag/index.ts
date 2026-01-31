@@ -1,0 +1,1 @@
+export { PatientTag } from "./PatientTag";
