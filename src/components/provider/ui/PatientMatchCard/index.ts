@@ -1,0 +1,1 @@
+export { PatientMatchCard } from "./PatientMatchCard";

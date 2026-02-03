@@ -1,0 +1,1 @@
+export { HoverScale } from "./HoverScale";

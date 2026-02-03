@@ -1,0 +1,1 @@
+export { WordFadeIn } from "./WordFadeIn";

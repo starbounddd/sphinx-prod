@@ -1,0 +1,1 @@
+export { QuickReplyChip } from "./QuickReplyChip";

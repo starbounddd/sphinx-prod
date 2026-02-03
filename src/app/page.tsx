@@ -1,8 +1,24 @@
-export default function Home() {
-  return (
-    <main>
-      <h1>Welcome to Survey App</h1>
-      <p>AI-powered survey insights platform</p>
-    </main>
-  );
+import { Navbar, Footer } from "@/components/ui/navigation";
+import {
+    Hero,
+    QuoteSection,
+    PhoneShowcase,
+    FeatureGrid,
+    CTASection,
+} from "@/components/landing/ui";
+
+export default function LandingPage() {
+    return (
+        <>
+            <Navbar />
+            <main className="pt-24">
+                <Hero />
+                <QuoteSection />
+                <PhoneShowcase />
+                <FeatureGrid />
+                <CTASection />
+            </main>
+            <Footer />
+        </>
+    );
 }
