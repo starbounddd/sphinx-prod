@@ -1,1 +1,1 @@
-export { HoverScale } from "./HoverScale";
+export { HoverScale } from './HoverScale';

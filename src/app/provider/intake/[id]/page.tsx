@@ -1,19 +1,16 @@
-import type { JSX } from "react";
-import { Typography } from "@/components/ui/typography";
-import {
-  ProviderNavbar,
-  PatientMatchCard,
-} from "@/components/provider/ui";
+import type { JSX } from 'react';
+import { Typography } from '@/components/ui/typography';
+import { ProviderNavbar, PatientMatchCard } from '@/components/provider/ui';
 
 // Mock data for the patient match
 const mockPatientData = {
-  patientId: "4092",
+  patientId: '4092',
   matchScore: 92,
-  receivedAt: "Received today at 2:45 PM",
+  receivedAt: 'Received today at 2:45 PM',
   tags: [
-    { label: "Social Anxiety", variant: "primary" as const },
-    { label: "High Motivation", variant: "secondary" as const },
-    { label: "Young Adult (24)", variant: "tertiary" as const },
+    { label: 'Social Anxiety', variant: 'primary' as const },
+    { label: 'High Motivation', variant: 'secondary' as const },
+    { label: 'Young Adult (24)', variant: 'tertiary' as const },
   ],
   aiInsights: (
     <>
@@ -25,14 +22,14 @@ const mockPatientData = {
     </>
   ),
   stats: {
-    duration: "6+ months",
-    intensity: "High",
-    onset: "Gradual",
+    duration: '6+ months',
+    intensity: 'High',
+    onset: 'Gradual',
   },
   keyContext: [
-    "Previous therapy experience with mixed results",
-    "Prefers evidence-based, structured approaches",
-    "Open to teletherapy or in-person sessions",
+    'Previous therapy experience with mixed results',
+    'Prefers evidence-based, structured approaches',
+    'Open to teletherapy or in-person sessions',
   ],
 };
 
@@ -50,7 +47,10 @@ export default async function IntakePage({
   const { id } = await params;
 
   // In production, fetch patient data based on id
-  const patientData = { ...mockPatientData, patientId: id || mockPatientData.patientId };
+  const patientData = {
+    ...mockPatientData,
+    patientId: id || mockPatientData.patientId,
+  };
 
   return (
     <div className="flex flex-col gap-12">

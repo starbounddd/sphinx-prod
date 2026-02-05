@@ -1,2 +1,2 @@
-export { QuoteSection } from "./QuoteSection";
-export { QuoteCard } from "./QuoteCard";
+export { QuoteSection } from './QuoteSection';
+export { QuoteCard } from './QuoteCard';

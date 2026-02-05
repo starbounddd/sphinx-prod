@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { PatientStats } from "./PatientStats";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { PatientStats } from './PatientStats';
 
 const meta: Meta<typeof PatientStats> = {
-  title: "Provider/PatientStats",
+  title: 'Provider/PatientStats',
   component: PatientStats,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [
     (Story) => (
       <div className="w-[600px]">
@@ -22,24 +22,24 @@ type Story = StoryObj<typeof PatientStats>;
 
 export const Default: Story = {
   args: {
-    duration: "3 months",
-    intensity: "Moderate",
-    onset: "Gradual",
+    duration: '3 months',
+    intensity: 'Moderate',
+    onset: 'Gradual',
   },
 };
 
 export const AcuteCase: Story = {
   args: {
-    duration: "2 weeks",
-    intensity: "Severe",
-    onset: "Sudden",
+    duration: '2 weeks',
+    intensity: 'Severe',
+    onset: 'Sudden',
   },
 };
 
 export const ChronicCase: Story = {
   args: {
-    duration: "2+ years",
-    intensity: "Mild",
-    onset: "Childhood",
+    duration: '2+ years',
+    intensity: 'Mild',
+    onset: 'Childhood',
   },
 };

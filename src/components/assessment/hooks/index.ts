@@ -1,1 +1,1 @@
-export { useAssessmentChat } from "./useAssessmentChat";
+export { useAssessmentChat } from './useAssessmentChat';

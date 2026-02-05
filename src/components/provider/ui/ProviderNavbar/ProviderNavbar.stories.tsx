@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { ProviderNavbar } from "./ProviderNavbar";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ProviderNavbar } from './ProviderNavbar';
 
 const meta: Meta<typeof ProviderNavbar> = {
-  title: "Provider/ProviderNavbar",
+  title: 'Provider/ProviderNavbar',
   component: ProviderNavbar,
   parameters: {
-    layout: "padded",
+    layout: 'padded',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [
     (Story) => (
       <div className="w-full rounded-lg bg-white p-4">
@@ -22,21 +22,21 @@ type Story = StoryObj<typeof ProviderNavbar>;
 
 export const Default: Story = {
   args: {
-    activeTab: "patients",
-    providerName: "Dr. Chen",
+    activeTab: 'patients',
+    providerName: 'Dr. Chen',
   },
 };
 
 export const DashboardActive: Story = {
   args: {
-    activeTab: "dashboard",
-    providerName: "Dr. Smith",
+    activeTab: 'dashboard',
+    providerName: 'Dr. Smith',
   },
 };
 
 export const PatientsActive: Story = {
   args: {
-    activeTab: "patients",
-    providerName: "Dr. Johnson",
+    activeTab: 'patients',
+    providerName: 'Dr. Johnson',
   },
 };

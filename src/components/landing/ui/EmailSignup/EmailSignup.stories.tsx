@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { EmailSignup } from "./EmailSignup";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { EmailSignup } from './EmailSignup';
 
 const meta: Meta<typeof EmailSignup> = {
-  title: "Landing/EmailSignup",
+  title: 'Landing/EmailSignup',
   component: EmailSignup,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [
     (Story) => (
       <div className="w-[576px] rounded-2xl bg-sage/30 p-8">

@@ -1,15 +1,15 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { ChatMessageList } from "./ChatMessageList";
-import type { ChatMessage } from "../../types";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ChatMessageList } from './ChatMessageList';
+import type { ChatMessage } from '../../types';
 
 const meta: Meta<typeof ChatMessageList> = {
-  title: "Assessment/ChatMessageList",
+  title: 'Assessment/ChatMessageList',
   component: ChatMessageList,
   parameters: {
-    layout: "fullscreen",
-    backgrounds: { default: "cream" },
+    layout: 'fullscreen',
+    backgrounds: { default: 'cream' },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -17,26 +17,28 @@ type Story = StoryObj<typeof ChatMessageList>;
 
 const mockMessages: ChatMessage[] = [
   {
-    id: "1",
-    role: "ai",
-    content: "Hi there! I'm Sphinx, your mental wellness guide. How are you feeling today?",
+    id: '1',
+    role: 'ai',
+    content:
+      "Hi there! I'm Sphinx, your mental wellness guide. How are you feeling today?",
     timestamp: new Date(),
   },
   {
-    id: "2",
-    role: "user",
+    id: '2',
+    role: 'user',
     content: "I've been feeling a bit overwhelmed lately",
     timestamp: new Date(),
   },
   {
-    id: "3",
-    role: "ai",
-    content: "I hear you. Feeling overwhelmed is something many people experience. Can you tell me more about what's been contributing to this feeling?",
+    id: '3',
+    role: 'ai',
+    content:
+      "I hear you. Feeling overwhelmed is something many people experience. Can you tell me more about what's been contributing to this feeling?",
     timestamp: new Date(),
   },
   {
-    id: "4",
-    role: "user",
+    id: '4',
+    role: 'user',
     content: "Work has been really stressful, and I'm not sleeping well",
     timestamp: new Date(),
   },

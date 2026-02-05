@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { ThinkingIndicator } from "./ThinkingIndicator";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ThinkingIndicator } from './ThinkingIndicator';
 
 const meta: Meta<typeof ThinkingIndicator> = {
-  title: "Assessment/ThinkingIndicator",
+  title: 'Assessment/ThinkingIndicator',
   component: ThinkingIndicator,
   parameters: {
-    layout: "centered",
-    backgrounds: { default: "cream" },
+    layout: 'centered',
+    backgrounds: { default: 'cream' },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;

@@ -1,7 +1,7 @@
-import type { JSX } from "react";
-import { Clock, Activity, TrendingUp } from "lucide-react";
-import { Typography } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { Clock, Activity, TrendingUp } from 'lucide-react';
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -42,7 +42,7 @@ export function PatientStats({
   className,
 }: PatientStatsProps): JSX.Element {
   return (
-    <div className={cn("flex gap-4", className)}>
+    <div className={cn('flex gap-4', className)}>
       <StatCard
         icon={<Clock className="h-6 w-6" />}
         label="Duration"

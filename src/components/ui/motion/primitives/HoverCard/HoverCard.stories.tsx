@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { HoverCard } from "./HoverCard";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { HoverCard } from './HoverCard';
 
 const meta: Meta<typeof HoverCard> = {
-  title: "Shared/Motion/HoverCard",
+  title: 'Shared/Motion/HoverCard',
   component: HoverCard,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;

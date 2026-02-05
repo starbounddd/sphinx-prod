@@ -1,1 +1,1 @@
-export { HoverFloat } from "./HoverFloat";
+export { HoverFloat } from './HoverFloat';

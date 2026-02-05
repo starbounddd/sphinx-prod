@@ -1,1 +1,1 @@
-export { ScaleIn } from "./ScaleIn";
+export { ScaleIn } from './ScaleIn';

@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { ArrowRight } from "lucide-react";
-import { ShimmerButton } from "./ShimmerButton";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ArrowRight } from 'lucide-react';
+import { ShimmerButton } from './ShimmerButton';
 
 const meta: Meta<typeof ShimmerButton> = {
-  title: "Shared/MagicUI/ShimmerButton",
+  title: 'Shared/MagicUI/ShimmerButton',
   component: ShimmerButton,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -16,7 +16,7 @@ type Story = StoryObj<typeof ShimmerButton>;
 
 export const Default: Story = {
   args: {
-    children: "Get Started",
+    children: 'Get Started',
   },
 };
 
@@ -33,22 +33,22 @@ export const WithIcon: Story = {
 
 export const CustomColors: Story = {
   args: {
-    children: "Custom Shimmer",
-    shimmerColor: "rgba(255, 255, 255, 0.4)",
-    background: "linear-gradient(to right, #6366f1, #8b5cf6)",
+    children: 'Custom Shimmer',
+    shimmerColor: 'rgba(255, 255, 255, 0.4)',
+    background: 'linear-gradient(to right, #6366f1, #8b5cf6)',
   },
 };
 
 export const SlowAnimation: Story = {
   args: {
-    children: "Slow Shimmer",
-    shimmerDuration: "4s",
+    children: 'Slow Shimmer',
+    shimmerDuration: '4s',
   },
 };
 
 export const Disabled: Story = {
   args: {
-    children: "Disabled",
+    children: 'Disabled',
     disabled: true,
   },
 };

@@ -1,7 +1,7 @@
-import type { JSX, ReactNode } from "react";
-import { Sparkles } from "lucide-react";
-import { Typography } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
+import type { JSX, ReactNode } from 'react';
+import { Sparkles } from 'lucide-react';
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
 
 interface AIInsightsProps {
   children: ReactNode;
@@ -12,11 +12,14 @@ interface AIInsightsProps {
  * AI Insights callout box
  * Cream background with coral left border accent
  */
-export function AIInsights({ children, className }: AIInsightsProps): JSX.Element {
+export function AIInsights({
+  children,
+  className,
+}: AIInsightsProps): JSX.Element {
   return (
     <div
       className={cn(
-        "rounded-2xl border-l-[3px] border-accent bg-amber-light px-6 py-6",
+        'rounded-2xl border-l-[3px] border-accent bg-amber-light px-6 py-6',
         className
       )}
     >

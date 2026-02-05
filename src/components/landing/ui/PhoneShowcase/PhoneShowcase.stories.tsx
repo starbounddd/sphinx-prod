@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { PhoneShowcase } from "./PhoneShowcase";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { PhoneShowcase } from './PhoneShowcase';
 
 const meta: Meta<typeof PhoneShowcase> = {
-  title: "Landing/PhoneShowcase",
+  title: 'Landing/PhoneShowcase',
   component: PhoneShowcase,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;

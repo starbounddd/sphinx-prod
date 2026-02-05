@@ -1,9 +1,9 @@
-import type { JSX } from "react";
-import { X } from "lucide-react";
-import Link from "next/link";
-import { GhostButton } from "@/components/ui/buttons";
-import { Typography } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { X } from 'lucide-react';
+import Link from 'next/link';
+import { GhostButton } from '@/components/ui/buttons';
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
 
 interface AssessmentHeaderProps {
   title?: string;
@@ -15,15 +15,15 @@ interface AssessmentHeaderProps {
  * Assessment page header with title and close button
  */
 export function AssessmentHeader({
-  title = "Sphinx Assessment",
-  backHref = "/",
+  title = 'Sphinx Assessment',
+  backHref = '/',
   className,
 }: AssessmentHeaderProps): JSX.Element {
   return (
     <header
       className={cn(
-        "sticky top-0 z-10 flex items-center justify-between",
-        "border-b border-gray/50 bg-cream/95 px-6 py-5 backdrop-blur-sm",
+        'sticky top-0 z-10 flex items-center justify-between',
+        'border-b border-gray/50 bg-cream/95 px-6 py-5 backdrop-blur-sm',
         className
       )}
     >

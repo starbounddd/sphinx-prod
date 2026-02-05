@@ -1,15 +1,15 @@
-import type { JSX, ReactNode } from "react";
-import { cn } from "@/lib/utils";
-import { Card } from "@/components/ui/shadcn/card";
-import { Typography } from "@/components/ui/typography";
-import { Check } from "lucide-react";
+import type { JSX, ReactNode } from 'react';
+import { cn } from '@/lib/utils';
+import { Card } from '@/components/ui/shadcn/card';
+import { Typography } from '@/components/ui/typography';
+import { Check } from 'lucide-react';
 
 interface FeatureCardProps {
   icon: ReactNode;
   title: string;
   description: ReactNode;
   features: string[];
-  variant?: "light" | "dark";
+  variant?: 'light' | 'dark';
   className?: string;
 }
 
@@ -18,18 +18,18 @@ export function FeatureCard({
   title,
   description,
   features,
-  variant = "light",
+  variant = 'light',
   className,
 }: FeatureCardProps): JSX.Element {
-  const isDark = variant === "dark";
+  const isDark = variant === 'dark';
 
   return (
     <Card
       className={cn(
-        "flex flex-col overflow-hidden rounded-3xl border-0 p-12 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]",
+        'flex flex-col overflow-hidden rounded-3xl border-0 p-12 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]',
         isDark
-          ? "bg-dark shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.1)]"
-          : "bg-linear-to-br from-sage/60 to-lavender/60",
+          ? 'bg-dark shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.1)]'
+          : 'bg-linear-to-br from-sage/60 to-lavender/60',
         className
       )}
     >
@@ -37,14 +37,14 @@ export function FeatureCard({
 
       <Typography
         size="h1"
-        className={cn("mb-4", isDark ? "text-white" : "text-dark")}
+        className={cn('mb-4', isDark ? 'text-white' : 'text-dark')}
       >
         {title}
       </Typography>
 
       <Typography
         size="body"
-        className={cn("mb-[22px]", isDark ? "text-sage" : "text-gray")}
+        className={cn('mb-[22px]', isDark ? 'text-sage' : 'text-gray')}
       >
         {description}
       </Typography>
@@ -58,7 +58,7 @@ export function FeatureCard({
             <Typography
               size="body-sm"
               as="span"
-              className={isDark ? "text-sage" : "text-gray"}
+              className={isDark ? 'text-sage' : 'text-gray'}
             >
               {feature}
             </Typography>

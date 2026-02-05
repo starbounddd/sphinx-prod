@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import type { JSX } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { User } from "lucide-react";
-import { Typography } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { User } from 'lucide-react';
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
 
 interface NavLinkProps {
   href: string;
@@ -20,8 +20,8 @@ function NavLink({ href, label, active = false }: NavLinkProps) {
         size="body-sm"
         as="span"
         className={cn(
-          "font-medium transition-colors hover:text-dark",
-          active ? "text-dark" : "text-gray"
+          'font-medium transition-colors hover:text-dark',
+          active ? 'text-dark' : 'text-gray'
         )}
       >
         {label}
@@ -31,7 +31,7 @@ function NavLink({ href, label, active = false }: NavLinkProps) {
 }
 
 interface ProviderNavbarProps {
-  activeTab?: "dashboard" | "patients";
+  activeTab?: 'dashboard' | 'patients';
   providerName?: string;
 }
 
@@ -40,8 +40,8 @@ interface ProviderNavbarProps {
  * Shows Sphinx logo with "Provider Portal" badge and provider-specific nav items
  */
 export function ProviderNavbar({
-  activeTab = "patients",
-  providerName = "Dr. Chen",
+  activeTab = 'patients',
+  providerName = 'Dr. Chen',
 }: ProviderNavbarProps): JSX.Element {
   return (
     <nav className="flex w-full items-center justify-between">
@@ -68,12 +68,12 @@ export function ProviderNavbar({
         <NavLink
           href="/provider/dashboard"
           label="Dashboard"
-          active={activeTab === "dashboard"}
+          active={activeTab === 'dashboard'}
         />
         <NavLink
           href="/provider/patients"
           label="Patients"
-          active={activeTab === "patients"}
+          active={activeTab === 'patients'}
         />
 
         {/* Profile */}

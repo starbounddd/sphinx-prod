@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { HoverFloat } from "./HoverFloat";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { HoverFloat } from './HoverFloat';
 
 const meta: Meta<typeof HoverFloat> = {
-  title: "Shared/Motion/HoverFloat",
+  title: 'Shared/Motion/HoverFloat',
   component: HoverFloat,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -15,16 +15,16 @@ type Story = StoryObj<typeof HoverFloat>;
 
 export const Default: Story = {
   args: {
-    className: "rounded-full bg-sage px-6 py-3 text-dark font-medium",
-    children: "Hover to float",
+    className: 'rounded-full bg-sage px-6 py-3 text-dark font-medium',
+    children: 'Hover to float',
   },
 };
 
 export const Disabled: Story = {
   args: {
     disabled: true,
-    className: "rounded-full bg-gray/30 px-6 py-3 text-gray cursor-not-allowed",
-    children: "Disabled",
+    className: 'rounded-full bg-gray/30 px-6 py-3 text-gray cursor-not-allowed',
+    children: 'Disabled',
   },
 };
 

@@ -1,1 +1,1 @@
-export { ProviderNavbar } from "./ProviderNavbar";
+export { ProviderNavbar } from './ProviderNavbar';

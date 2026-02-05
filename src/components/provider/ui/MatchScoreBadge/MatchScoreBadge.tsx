@@ -1,6 +1,6 @@
-import type { JSX } from "react";
-import { Star } from "lucide-react";
-import { Typography } from "@/components/ui/typography";
+import type { JSX } from 'react';
+import { Star } from 'lucide-react';
+import { Typography } from '@/components/ui/typography';
 
 interface MatchScoreBadgeProps {
   score: number;

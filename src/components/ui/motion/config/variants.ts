@@ -1,5 +1,5 @@
-import type { Variants, TargetAndTransition } from "framer-motion";
-import { transitions } from "./transitions";
+import type { Variants, TargetAndTransition } from 'framer-motion';
+import { transitions } from './transitions';
 
 /**
  * Reusable motion variants for common animation patterns

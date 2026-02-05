@@ -1,8 +1,8 @@
-import type { JSX } from "react";
-import { Typography } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
 
-type RiskLevel = "low" | "moderate" | "high";
+type RiskLevel = 'low' | 'moderate' | 'high';
 
 export interface SphinxSummaryProps {
   symptoms: string[];
@@ -13,9 +13,9 @@ export interface SphinxSummaryProps {
 }
 
 const riskIndicatorColors: Record<RiskLevel, string> = {
-  low: "bg-emerald",
-  moderate: "bg-orange",
-  high: "bg-red",
+  low: 'bg-emerald',
+  moderate: 'bg-orange',
+  high: 'bg-red',
 };
 
 /**
@@ -32,7 +32,7 @@ export function SphinxSummary({
   return (
     <div
       className={cn(
-        "w-full shrink-0 rounded-3xl border border-amber/20 bg-amber-light/40 p-5 md:w-[380px]",
+        'w-full shrink-0 rounded-3xl border border-amber/20 bg-amber-light/40 p-5 md:w-[380px]',
         className
       )}
     >
@@ -82,9 +82,9 @@ export function SphinxSummary({
           <div className="flex items-center gap-3 rounded-lg border border-amber/20 bg-white/50 p-2">
             <div
               className={cn(
-                "h-2 w-2 rounded-full",
+                'h-2 w-2 rounded-full',
                 riskIndicatorColors[riskLevel],
-                riskLevel === "high" && "animate-pulse"
+                riskLevel === 'high' && 'animate-pulse'
               )}
             />
             <Typography size="body-sm" className="font-medium text-dark">

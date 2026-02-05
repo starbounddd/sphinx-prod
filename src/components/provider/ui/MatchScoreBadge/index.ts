@@ -1,1 +1,1 @@
-export { MatchScoreBadge } from "./MatchScoreBadge";
+export { MatchScoreBadge } from './MatchScoreBadge';

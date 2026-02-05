@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import type { JSX, ReactNode } from "react";
-import { Clock, UserCheck, FileText } from "lucide-react";
-import { PrimaryButton, SecondaryButton } from "@/components/ui/buttons";
-import { Typography } from "@/components/ui/typography";
-import { MatchScoreBadge } from "../MatchScoreBadge";
-import { PatientTag } from "../PatientTag";
-import { AIInsights } from "../AIInsights";
-import { PatientStats } from "../PatientStats";
-import { KeyContext } from "../KeyContext";
-import { cn } from "@/lib/utils";
+import type { JSX, ReactNode } from 'react';
+import { Clock, UserCheck, FileText } from 'lucide-react';
+import { PrimaryButton, SecondaryButton } from '@/components/ui/buttons';
+import { Typography } from '@/components/ui/typography';
+import { MatchScoreBadge } from '../MatchScoreBadge';
+import { PatientTag } from '../PatientTag';
+import { AIInsights } from '../AIInsights';
+import { PatientStats } from '../PatientStats';
+import { KeyContext } from '../KeyContext';
+import { cn } from '@/lib/utils';
 
 interface PatientMatchCardProps {
   patientId: string;
@@ -17,7 +17,7 @@ interface PatientMatchCardProps {
   receivedAt: string;
   tags: Array<{
     label: string;
-    variant: "primary" | "secondary" | "tertiary";
+    variant: 'primary' | 'secondary' | 'tertiary';
   }>;
   aiInsights: ReactNode;
   stats: {
@@ -50,7 +50,7 @@ export function PatientMatchCard({
   return (
     <div
       className={cn(
-        "rounded-3xl bg-white px-10 pb-6 pt-10 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]",
+        'rounded-3xl bg-white px-10 pb-6 pt-10 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]',
         className
       )}
     >
@@ -100,10 +100,7 @@ export function PatientMatchCard({
           <UserCheck className="h-5 w-5" />
           Accept Intake
         </PrimaryButton>
-        <SecondaryButton
-          onClick={onViewReport}
-          className="h-14 flex-1 gap-2"
-        >
+        <SecondaryButton onClick={onViewReport} className="h-14 flex-1 gap-2">
           <FileText className="h-5 w-5" />
           View Full Report
         </SecondaryButton>

@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import type { JSX } from "react";
-import { Download, Sparkles } from "lucide-react";
-import { SlideIn } from "@/components/ui/motion";
-import { SecondaryButton } from "@/components/ui/buttons";
-import { Typography } from "@/components/ui/typography";
-import { SummaryCard } from "../SummaryCard";
-import { FindingsGrid } from "../FindingsGrid";
-import { ReportFooter } from "../ReportFooter";
-import type { ClarityReport as ClarityReportType } from "../../types";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { Download, Sparkles } from 'lucide-react';
+import { SlideIn } from '@/components/ui/motion';
+import { SecondaryButton } from '@/components/ui/buttons';
+import { Typography } from '@/components/ui/typography';
+import { SummaryCard } from '../SummaryCard';
+import { FindingsGrid } from '../FindingsGrid';
+import { ReportFooter } from '../ReportFooter';
+import type { ClarityReport as ClarityReportType } from '../../types';
+import { cn } from '@/lib/utils';
 
 interface ClarityReportProps {
   report: ClarityReportType;
@@ -27,21 +27,21 @@ export function ClarityReport({
 }: ClarityReportProps): JSX.Element {
   const handleDownload = () => {
     // TODO: Implement PDF download
-    console.log("Download report");
+    console.log('Download report');
   };
 
   const handleFindProvider = () => {
     // TODO: Navigate to provider matching
-    console.log("Find provider");
+    console.log('Find provider');
   };
 
   const handleSaveToJournal = () => {
     // TODO: Save to user's journal
-    console.log("Save to journal");
+    console.log('Save to journal');
   };
 
   return (
-    <div className={cn("relative min-h-screen bg-cream", className)}>
+    <div className={cn('relative min-h-screen bg-cream', className)}>
       {/* Decorative background shapes (static, no animation) */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-linear-to-br from-sage/20 to-transparent blur-3xl" />
@@ -52,15 +52,19 @@ export function ClarityReport({
       {/* Header */}
       <header
         className={cn(
-          "relative z-10 border-b border-dark/5",
-          "bg-cream/80 backdrop-blur-md"
+          'relative z-10 border-b border-dark/5',
+          'bg-cream/80 backdrop-blur-md'
         )}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-12">
           {/* Left: Badge */}
           <div className="flex items-center gap-2 rounded-full bg-sage/50 px-4 py-2">
             <Sparkles className="h-4 w-4 text-dark" />
-            <Typography size="caption" as="span" className="font-medium text-dark">
+            <Typography
+              size="caption"
+              as="span"
+              className="font-medium text-dark"
+            >
               Assessment Complete
             </Typography>
           </div>
@@ -113,7 +117,11 @@ export function ClarityReport({
               {/* Section header */}
               <div className="mb-8 flex items-end justify-between">
                 <div>
-                  <Typography size="caption" as="span" className="mb-2 block font-medium uppercase tracking-wider text-coral">
+                  <Typography
+                    size="caption"
+                    as="span"
+                    className="mb-2 block font-medium uppercase tracking-wider text-coral"
+                  >
                     Insights
                   </Typography>
                   <Typography size="h2" className="text-dark">
@@ -123,7 +131,10 @@ export function ClarityReport({
                     Patterns identified from your conversation
                   </Typography>
                 </div>
-                <Typography size="caption" className="hidden text-gray sm:block">
+                <Typography
+                  size="caption"
+                  className="hidden text-gray sm:block"
+                >
                   {report.findings.length} findings
                 </Typography>
               </div>

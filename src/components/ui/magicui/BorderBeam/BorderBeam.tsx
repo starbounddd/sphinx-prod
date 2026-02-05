@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface BorderBeamProps {
   size?: number;
@@ -21,14 +21,14 @@ export function BorderBeam({
   size = 100,
   duration = 8,
   delay = 0,
-  colorFrom = "var(--coral)",
-  colorTo = "var(--coral-dark)",
+  colorFrom = 'var(--coral)',
+  colorTo = 'var(--coral-dark)',
   className,
 }: BorderBeamProps) {
   return (
     <div
       className={cn(
-        "pointer-events-none absolute inset-0 rounded-[inherit]",
+        'pointer-events-none absolute inset-0 rounded-[inherit]',
         className
       )}
       style={{
@@ -38,9 +38,9 @@ export function BorderBeam({
           linear-gradient(#fff 0 0) content-box,
           linear-gradient(#fff 0 0)
         `,
-        maskComposite: "exclude",
-        WebkitMaskComposite: "xor",
-        padding: "1px",
+        maskComposite: 'exclude',
+        WebkitMaskComposite: 'xor',
+        padding: '1px',
         animation: `border-beam ${duration}s linear infinite`,
         animationDelay: `${delay}s`,
       }}
@@ -52,10 +52,10 @@ export function BorderBeam({
           width: `${size}px`,
           height: `${size}px`,
           background: `radial-gradient(circle, ${colorFrom} 0%, transparent 70%)`,
-          top: "50%",
-          left: "0",
-          transform: "translate(-50%, -50%)",
-          filter: "blur(4px)",
+          top: '50%',
+          left: '0',
+          transform: 'translate(-50%, -50%)',
+          filter: 'blur(4px)',
         }}
       />
     </div>

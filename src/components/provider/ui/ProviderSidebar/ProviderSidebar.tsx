@@ -1,16 +1,11 @@
-"use client";
+'use client';
 
-import type { JSX } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import {
-  LayoutDashboard,
-  Inbox,
-  Users,
-  Calendar,
-} from "lucide-react";
-import { Typography } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { LayoutDashboard, Inbox, Users, Calendar } from 'lucide-react';
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
 
 interface NavItemProps {
   href: string;
@@ -25,13 +20,13 @@ function NavItem({ href, icon, label, active = false, badge }: NavItemProps) {
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-4 rounded-xl px-4 py-3 font-medium transition-colors",
+        'flex items-center gap-4 rounded-xl px-4 py-3 font-medium transition-colors',
         active
-          ? "bg-lavender font-bold text-dark"
-          : "text-gray hover:bg-sage/50 hover:text-dark"
+          ? 'bg-lavender font-bold text-dark'
+          : 'text-gray hover:bg-sage/50 hover:text-dark'
       )}
     >
-      <span className={cn("text-current", active && "text-dark")}>{icon}</span>
+      <span className={cn('text-current', active && 'text-dark')}>{icon}</span>
       <span className="hidden lg:block">{label}</span>
       {badge && badge > 0 && (
         <span className="ml-auto hidden h-6 w-6 items-center justify-center rounded-full bg-coral text-xs font-bold text-dark lg:flex">
@@ -43,7 +38,7 @@ function NavItem({ href, icon, label, active = false, badge }: NavItemProps) {
 }
 
 interface ProviderSidebarProps {
-  activeTab?: "dashboard" | "inbox" | "patients" | "schedule";
+  activeTab?: 'dashboard' | 'inbox' | 'patients' | 'schedule';
   inboxCount?: number;
   providerName?: string;
   providerRole?: string;
@@ -55,10 +50,10 @@ interface ProviderSidebarProps {
  * Collapsible on mobile, full width on desktop
  */
 export function ProviderSidebar({
-  activeTab = "dashboard",
+  activeTab = 'dashboard',
   inboxCount = 0,
-  providerName = "Dr. Smith",
-  providerRole = "Psychiatrist",
+  providerName = 'Dr. Smith',
+  providerRole = 'Psychiatrist',
   providerAvatar,
 }: ProviderSidebarProps): JSX.Element {
   return (
@@ -80,26 +75,26 @@ export function ProviderSidebar({
           href="/provider"
           icon={<LayoutDashboard className="h-6 w-6" />}
           label="Dashboard"
-          active={activeTab === "dashboard"}
+          active={activeTab === 'dashboard'}
         />
         <NavItem
           href="/provider/inbox"
           icon={<Inbox className="h-6 w-6" />}
           label="Inbox"
-          active={activeTab === "inbox"}
+          active={activeTab === 'inbox'}
           badge={inboxCount}
         />
         <NavItem
           href="/provider/patients"
           icon={<Users className="h-6 w-6" />}
           label="Patients"
-          active={activeTab === "patients"}
+          active={activeTab === 'patients'}
         />
         <NavItem
           href="/provider/schedule"
           icon={<Calendar className="h-6 w-6" />}
           label="Schedule"
-          active={activeTab === "schedule"}
+          active={activeTab === 'schedule'}
         />
       </nav>
 

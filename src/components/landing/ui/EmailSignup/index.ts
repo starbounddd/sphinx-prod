@@ -1,1 +1,1 @@
-export { EmailSignup } from "./EmailSignup";
+export { EmailSignup } from './EmailSignup';

@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { QuoteSection } from "./QuoteSection";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { QuoteSection } from './QuoteSection';
 
 const meta: Meta<typeof QuoteSection> = {
-  title: "Landing/QuoteSection",
+  title: 'Landing/QuoteSection',
   component: QuoteSection,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;

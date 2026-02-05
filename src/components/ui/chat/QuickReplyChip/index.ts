@@ -1,1 +1,1 @@
-export { QuickReplyChip } from "./QuickReplyChip";
+export { QuickReplyChip } from './QuickReplyChip';

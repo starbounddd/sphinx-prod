@@ -1,6 +1,6 @@
-import type { JSX } from "react";
-import { QuickReplyChip } from "@/components/ui/chat";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { QuickReplyChip } from '@/components/ui/chat';
+import { cn } from '@/lib/utils';
 
 interface QuickReplyBarProps {
   options: string[];
@@ -21,12 +21,7 @@ export function QuickReplyBar({
   if (options.length === 0) return null;
 
   return (
-    <div
-      className={cn(
-        "flex flex-wrap gap-2 px-6 py-3",
-        className
-      )}
-    >
+    <div className={cn('flex flex-wrap gap-2 px-6 py-3', className)}>
       {options.map((option) => (
         <QuickReplyChip
           key={option}

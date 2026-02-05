@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { Hero } from "./Hero";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { Hero } from './Hero';
 
 const meta: Meta<typeof Hero> = {
-  title: "Landing/Hero",
+  title: 'Landing/Hero',
   component: Hero,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;

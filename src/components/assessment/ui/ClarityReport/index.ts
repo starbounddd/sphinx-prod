@@ -1,1 +1,1 @@
-export { ClarityReport } from "./ClarityReport";
+export { ClarityReport } from './ClarityReport';

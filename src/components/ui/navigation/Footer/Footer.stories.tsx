@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { Footer } from "./Footer";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { Footer } from './Footer';
 
 const meta: Meta<typeof Footer> = {
-  title: "Shared/Navigation/Footer",
+  title: 'Shared/Navigation/Footer',
   component: Footer,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;

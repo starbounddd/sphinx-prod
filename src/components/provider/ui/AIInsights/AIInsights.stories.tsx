@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { AIInsights } from "./AIInsights";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { AIInsights } from './AIInsights';
 
 const meta: Meta<typeof AIInsights> = {
-  title: "Provider/AIInsights",
+  title: 'Provider/AIInsights',
   component: AIInsights,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [
     (Story) => (
       <div className="w-[500px]">
@@ -23,13 +23,13 @@ type Story = StoryObj<typeof AIInsights>;
 export const Default: Story = {
   args: {
     children:
-      "Based on intake responses, this patient shows strong indicators for generalized anxiety disorder with comorbid insomnia. Recommend CBT-focused approach with sleep hygiene education.",
+      'Based on intake responses, this patient shows strong indicators for generalized anxiety disorder with comorbid insomnia. Recommend CBT-focused approach with sleep hygiene education.',
   },
 };
 
 export const ShortInsight: Story = {
   args: {
-    children: "High compatibility with your specialty in anxiety disorders.",
+    children: 'High compatibility with your specialty in anxiety disorders.',
   },
 };
 

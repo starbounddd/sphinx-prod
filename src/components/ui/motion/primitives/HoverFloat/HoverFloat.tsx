@@ -1,10 +1,13 @@
-"use client";
+'use client';
 
-import type { ReactNode } from "react";
-import { motion, type HTMLMotionProps } from "framer-motion";
-import { hoverFloatVariants, tapScaleVariants } from "../../config";
+import type { ReactNode } from 'react';
+import { motion, type HTMLMotionProps } from 'framer-motion';
+import { hoverFloatVariants, tapScaleVariants } from '../../config';
 
-interface HoverFloatProps extends Omit<HTMLMotionProps<"button">, "whileHover" | "whileTap"> {
+interface HoverFloatProps extends Omit<
+  HTMLMotionProps<'button'>,
+  'whileHover' | 'whileTap'
+> {
   children: ReactNode;
   disabled?: boolean;
 }

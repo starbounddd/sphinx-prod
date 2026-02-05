@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import type { ButtonHTMLAttributes, ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 interface ShimmerButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   shimmerColor?: string;
@@ -17,10 +17,10 @@ interface ShimmerButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * Based on Magic UI shimmer-button pattern
  */
 export function ShimmerButton({
-  shimmerColor = "rgba(255, 255, 255, 0.25)",
-  shimmerSize = "0.1em",
-  shimmerDuration = "2.5s",
-  background = "var(--color-primary-btn)",
+  shimmerColor = 'rgba(255, 255, 255, 0.25)',
+  shimmerSize = '0.1em',
+  shimmerDuration = '2.5s',
+  background = 'var(--color-primary-btn)',
   children,
   className,
   ...props
@@ -28,13 +28,13 @@ export function ShimmerButton({
   return (
     <button
       className={cn(
-        "group relative overflow-hidden rounded-full px-8 py-3",
-        "text-lg font-medium tracking-wide text-platinum",
-        "shadow-[0_4px_10px_rgba(0,0,0,0.2)]",
-        "transition-all duration-200 ease-out",
-        "hover:-translate-y-px hover:shadow-[0_6px_14px_rgba(0,0,0,0.25)]",
-        "active:translate-y-0 active:shadow-[0_2px_6px_rgba(0,0,0,0.2)]",
-        "disabled:pointer-events-none disabled:opacity-50",
+        'group relative overflow-hidden rounded-full px-8 py-3',
+        'text-lg font-medium tracking-wide text-platinum',
+        'shadow-[0_4px_10px_rgba(0,0,0,0.2)]',
+        'transition-all duration-200 ease-out',
+        'hover:-translate-y-px hover:shadow-[0_6px_14px_rgba(0,0,0,0.25)]',
+        'active:translate-y-0 active:shadow-[0_2px_6px_rgba(0,0,0,0.2)]',
+        'disabled:pointer-events-none disabled:opacity-50',
         className
       )}
       style={{ background }}

@@ -1,1 +1,1 @@
-export { WordFadeIn } from "./WordFadeIn";
+export { WordFadeIn } from './WordFadeIn';

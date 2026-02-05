@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { SlideIn } from "./SlideIn";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { SlideIn } from './SlideIn';
 
 const meta: Meta<typeof SlideIn> = {
-  title: "Shared/Motion/SlideIn",
+  title: 'Shared/Motion/SlideIn',
   component: SlideIn,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -15,7 +15,7 @@ type Story = StoryObj<typeof SlideIn>;
 
 export const FromUp: Story = {
   args: {
-    direction: "up",
+    direction: 'up',
     children: (
       <div className="rounded-xl bg-sage p-8 text-dark">
         Slides in from below
@@ -26,7 +26,7 @@ export const FromUp: Story = {
 
 export const FromLeft: Story = {
   args: {
-    direction: "left",
+    direction: 'left',
     children: (
       <div className="rounded-xl bg-lavender p-8 text-dark">
         Slides in from left
@@ -37,7 +37,7 @@ export const FromLeft: Story = {
 
 export const FromRight: Story = {
   args: {
-    direction: "right",
+    direction: 'right',
     children: (
       <div className="rounded-xl bg-coral p-8 text-white">
         Slides in from right
@@ -48,7 +48,7 @@ export const FromRight: Story = {
 
 export const WithDelay: Story = {
   args: {
-    direction: "up",
+    direction: 'up',
     delay: 0.3,
     children: (
       <div className="rounded-xl bg-cream p-8 text-dark">

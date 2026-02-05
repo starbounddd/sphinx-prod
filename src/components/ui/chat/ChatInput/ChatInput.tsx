@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import type { JSX } from "react";
-import { useEffect, useRef } from "react";
-import { Send } from "lucide-react";
-import { HoverScale } from "@/components/ui/motion";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { useEffect, useRef } from 'react';
+import { Send } from 'lucide-react';
+import { HoverScale } from '@/components/ui/motion';
+import { cn } from '@/lib/utils';
 
 interface ChatInputProps {
   value: string;
@@ -25,7 +25,7 @@ export function ChatInput({
   value,
   onChange,
   onSend,
-  placeholder = "Type here...",
+  placeholder = 'Type here...',
   disabled = false,
   className,
   maxRows = 4,
@@ -38,7 +38,7 @@ export function ChatInput({
     if (!textarea) return;
 
     // Reset height to auto to get the correct scrollHeight
-    textarea.style.height = "auto";
+    textarea.style.height = 'auto';
 
     // Calculate line height (approximately 24px per line)
     const lineHeight = 24;
@@ -50,7 +50,7 @@ export function ChatInput({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // Enter without Shift sends the message
-    if (e.key === "Enter" && !e.shiftKey && value.trim() && !disabled) {
+    if (e.key === 'Enter' && !e.shiftKey && value.trim() && !disabled) {
       e.preventDefault();
       onSend();
     }
@@ -61,7 +61,7 @@ export function ChatInput({
   return (
     <div
       className={cn(
-        "flex items-end gap-3 rounded-3xl border border-sage/30 bg-white/90 p-2 shadow-lg backdrop-blur-sm",
+        'flex items-end gap-3 rounded-3xl border border-sage/30 bg-white/90 p-2 shadow-lg backdrop-blur-sm',
         className
       )}
     >
@@ -74,9 +74,9 @@ export function ChatInput({
         disabled={disabled}
         rows={1}
         className={cn(
-          "flex-1 resize-none bg-transparent px-3 py-2 text-base text-dark placeholder:text-gray/60",
-          "focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-          "leading-6"
+          'flex-1 resize-none bg-transparent px-3 py-2 text-base text-dark placeholder:text-gray/60',
+          'focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+          'leading-6'
         )}
       />
       <HoverScale
@@ -84,9 +84,9 @@ export function ChatInput({
         onClick={onSend}
         disabled={isDisabledSend}
         className={cn(
-          "flex h-12 w-12 shrink-0 items-center justify-center rounded-full",
-          "bg-coral shadow-md",
-          "disabled:pointer-events-none disabled:opacity-50"
+          'flex h-12 w-12 shrink-0 items-center justify-center rounded-full',
+          'bg-coral shadow-md',
+          'disabled:pointer-events-none disabled:opacity-50'
         )}
         aria-label="Send message"
       >

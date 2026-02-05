@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { Section } from "./Section";
-import { Container } from "../Container";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { Section } from './Section';
+import { Container } from '../Container';
 
 const meta: Meta<typeof Section> = {
-  title: "Shared/Layout/Section",
+  title: 'Shared/Layout/Section',
   component: Section,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -26,7 +26,7 @@ export const Default: Story = {
 
 export const Dark: Story = {
   args: {
-    variant: "dark",
+    variant: 'dark',
     children: (
       <Container>
         <p>Dark section with dark background</p>
@@ -37,7 +37,7 @@ export const Dark: Story = {
 
 export const Muted: Story = {
   args: {
-    variant: "muted",
+    variant: 'muted',
     children: (
       <Container>
         <p>Muted section with lavender background</p>
@@ -48,7 +48,7 @@ export const Muted: Story = {
 
 export const Gradient: Story = {
   args: {
-    variant: "gradient",
+    variant: 'gradient',
     children: (
       <Container>
         <p>Gradient section (sage to lavender)</p>

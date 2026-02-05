@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { motion, type Variants, type HTMLMotionProps } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { motion, type Variants, type HTMLMotionProps } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
-type ElementType = "p" | "span" | "h1" | "h2" | "h3" | "div";
+type ElementType = 'p' | 'span' | 'h1' | 'h2' | 'h3' | 'div';
 
-interface WordFadeInProps extends Omit<HTMLMotionProps<"p">, "children"> {
+interface WordFadeInProps extends Omit<HTMLMotionProps<'p'>, 'children'> {
   words: string;
   delay?: number;
   className?: string;
@@ -27,14 +27,14 @@ const wordVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 8,
-    filter: "blur(4px)",
+    filter: 'blur(4px)',
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
+    filter: 'blur(0px)',
     transition: {
-      type: "spring",
+      type: 'spring',
       damping: 25,
       stiffness: 120,
     },
@@ -51,10 +51,10 @@ export function WordFadeIn({
   words,
   delay = 0.08,
   className,
-  as = "p",
+  as = 'p',
   ...props
 }: WordFadeInProps) {
-  const wordArray = words.split(" ");
+  const wordArray = words.split(' ');
 
   // Map element types to motion components
   const motionComponents = {
@@ -74,7 +74,7 @@ export function WordFadeIn({
       initial="hidden"
       animate="visible"
       custom={delay}
-      className={cn("flex flex-wrap", className)}
+      className={cn('flex flex-wrap', className)}
       {...props}
     >
       {wordArray.map((word, index) => (

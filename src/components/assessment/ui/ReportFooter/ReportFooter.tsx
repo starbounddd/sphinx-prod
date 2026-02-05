@@ -1,8 +1,8 @@
-import type { JSX } from "react";
-import { ArrowRight, Bookmark } from "lucide-react";
-import { PrimaryButton, GhostButton } from "@/components/ui/buttons";
-import { Typography } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { ArrowRight, Bookmark } from 'lucide-react';
+import { PrimaryButton, GhostButton } from '@/components/ui/buttons';
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
 
 interface ReportFooterProps {
   onFindProvider?: () => void;
@@ -12,7 +12,7 @@ interface ReportFooterProps {
    * 'inline' for desktop sidebar placement
    * 'sticky' for mobile bottom bar
    */
-  variant?: "inline" | "sticky";
+  variant?: 'inline' | 'sticky';
 }
 
 /**
@@ -22,14 +22,18 @@ export function ReportFooter({
   onFindProvider,
   onSaveToJournal,
   className,
-  variant = "sticky",
+  variant = 'sticky',
 }: ReportFooterProps): JSX.Element {
-  if (variant === "inline") {
+  if (variant === 'inline') {
     return (
-      <div className={cn("space-y-4", className)}>
+      <div className={cn('space-y-4', className)}>
         {/* Primary CTA with context */}
         <div className="rounded-2xl bg-white/50 p-6 backdrop-blur-sm">
-          <Typography size="caption" as="span" className="mb-3 block font-medium uppercase tracking-wider text-gray">
+          <Typography
+            size="caption"
+            as="span"
+            className="mb-3 block font-medium uppercase tracking-wider text-gray"
+          >
             Next Step
           </Typography>
           <PrimaryButton fullWidth onClick={onFindProvider}>
@@ -51,7 +55,11 @@ export function ReportFooter({
             <Bookmark className="h-5 w-5 text-dark" strokeWidth={1.5} />
           </div>
           <div>
-            <Typography size="body" as="span" className="block font-medium text-dark">
+            <Typography
+              size="body"
+              as="span"
+              className="block font-medium text-dark"
+            >
               Save to Journal
             </Typography>
             <Typography size="caption" as="span" className="text-gray">
@@ -67,8 +75,8 @@ export function ReportFooter({
   return (
     <div
       className={cn(
-        "sticky bottom-0 border-t border-dark/5",
-        "bg-cream/95 px-6 py-6 backdrop-blur-md",
+        'sticky bottom-0 border-t border-dark/5',
+        'bg-cream/95 px-6 py-6 backdrop-blur-md',
         className
       )}
     >

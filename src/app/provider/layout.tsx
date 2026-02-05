@@ -1,4 +1,4 @@
-import type { JSX, ReactNode } from "react";
+import type { JSX, ReactNode } from 'react';
 
 interface ProviderLayoutProps {
   children: ReactNode;
@@ -12,8 +12,6 @@ export default function ProviderLayout({
   children,
 }: ProviderLayoutProps): JSX.Element {
   return (
-    <div className="flex h-screen overflow-hidden bg-cream">
-      {children}
-    </div>
+    <div className="flex h-screen overflow-hidden bg-cream">{children}</div>
   );
 }

@@ -1,11 +1,13 @@
-"use client";
+'use client';
 
-import type { ReactNode } from "react";
-import { motion, type HTMLMotionProps } from "framer-motion";
-import { hoverLiftVariants, tapScaleVariants } from "../../config";
+import type { ReactNode } from 'react';
+import { motion, type HTMLMotionProps } from 'framer-motion';
+import { hoverLiftVariants, tapScaleVariants } from '../../config';
 
-interface HoverCardProps
-  extends Omit<HTMLMotionProps<"div">, "whileHover" | "whileTap"> {
+interface HoverCardProps extends Omit<
+  HTMLMotionProps<'div'>,
+  'whileHover' | 'whileTap'
+> {
   children: ReactNode;
   /** Enable tap/press feedback */
   enableTap?: boolean;

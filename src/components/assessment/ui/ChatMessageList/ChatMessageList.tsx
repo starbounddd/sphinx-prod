@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import type { JSX } from "react";
-import { useEffect, useRef } from "react";
-import { ChatMessage } from "@/components/ui/chat";
-import type { ChatMessage as ChatMessageType } from "../../types";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { useEffect, useRef } from 'react';
+import { ChatMessage } from '@/components/ui/chat';
+import type { ChatMessage as ChatMessageType } from '../../types';
+import { cn } from '@/lib/utils';
 
 interface ChatMessageListProps {
   messages: ChatMessageType[];
@@ -27,11 +27,11 @@ export function ChatMessageList({
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   return (
-    <div className={cn("flex flex-col gap-4 overflow-y-auto", className)}>
+    <div className={cn('flex flex-col gap-4 overflow-y-auto', className)}>
       {messages.map((message) => (
         <div
           key={message.id}
@@ -42,7 +42,7 @@ export function ChatMessageList({
 
           {/* AI messages column */}
           <div>
-            {message.role === "ai" && (
+            {message.role === 'ai' && (
               <ChatMessage variant="ai">{message.content}</ChatMessage>
             )}
           </div>
@@ -52,7 +52,7 @@ export function ChatMessageList({
 
           {/* User messages column */}
           <div>
-            {message.role === "user" && (
+            {message.role === 'user' && (
               <ChatMessage variant="user">{message.content}</ChatMessage>
             )}
           </div>

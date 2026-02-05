@@ -1,1 +1,1 @@
-export { Stagger } from "./Stagger";
+export { Stagger } from './Stagger';

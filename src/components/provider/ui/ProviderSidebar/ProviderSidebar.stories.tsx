@@ -1,16 +1,16 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { ProviderSidebar } from "./ProviderSidebar";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ProviderSidebar } from './ProviderSidebar';
 
 const meta: Meta<typeof ProviderSidebar> = {
-  title: "Provider/ProviderSidebar",
+  title: 'Provider/ProviderSidebar',
   component: ProviderSidebar,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div style={{ height: "100vh", display: "flex" }}>
+      <div style={{ height: '100vh', display: 'flex' }}>
         <Story />
       </div>
     ),
@@ -22,38 +22,38 @@ type Story = StoryObj<typeof ProviderSidebar>;
 
 export const Dashboard: Story = {
   args: {
-    activeTab: "dashboard",
+    activeTab: 'dashboard',
     inboxCount: 3,
-    providerName: "Dr. Smith",
-    providerRole: "Psychiatrist",
+    providerName: 'Dr. Smith',
+    providerRole: 'Psychiatrist',
   },
 };
 
 export const Inbox: Story = {
   args: {
-    activeTab: "inbox",
+    activeTab: 'inbox',
     inboxCount: 5,
-    providerName: "Dr. Chen",
-    providerRole: "Psychologist",
+    providerName: 'Dr. Chen',
+    providerRole: 'Psychologist',
   },
 };
 
 export const Patients: Story = {
   args: {
-    activeTab: "patients",
+    activeTab: 'patients',
     inboxCount: 0,
-    providerName: "Dr. Johnson",
-    providerRole: "Therapist",
+    providerName: 'Dr. Johnson',
+    providerRole: 'Therapist',
   },
 };
 
 export const WithAvatar: Story = {
   args: {
-    activeTab: "dashboard",
+    activeTab: 'dashboard',
     inboxCount: 2,
-    providerName: "Dr. Williams",
-    providerRole: "Clinical Psychologist",
+    providerName: 'Dr. Williams',
+    providerRole: 'Clinical Psychologist',
     providerAvatar:
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face",
+      'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face',
   },
 };

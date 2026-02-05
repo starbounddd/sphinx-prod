@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { BouncingDots } from "./BouncingDots";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { BouncingDots } from './BouncingDots';
 
 const meta: Meta<typeof BouncingDots> = {
-  title: "Shared/Motion/BouncingDots",
+  title: 'Shared/Motion/BouncingDots',
   component: BouncingDots,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -22,14 +22,14 @@ export const Default: Story = {
 export const FourDots: Story = {
   args: {
     count: 4,
-    dotClassName: "h-2 w-2 rounded-full bg-sage",
+    dotClassName: 'h-2 w-2 rounded-full bg-sage',
   },
 };
 
 export const CustomStyle: Story = {
   args: {
     count: 3,
-    dotClassName: "h-3 w-3 rounded-full bg-dark",
+    dotClassName: 'h-3 w-3 rounded-full bg-dark',
   },
 };
 

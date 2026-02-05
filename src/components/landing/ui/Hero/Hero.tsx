@@ -1,6 +1,6 @@
-import type { JSX } from "react";
-import { PrimaryButton, SecondaryButton } from "@/components/ui/buttons";
-import { Typography } from "@/components/ui/typography";
+import type { JSX } from 'react';
+import { PrimaryButton, SecondaryButton } from '@/components/ui/buttons';
+import { Typography } from '@/components/ui/typography';
 
 /* ==========================================================================
    Hero Section - Landing page above-the-fold content
@@ -27,7 +27,11 @@ export function Hero(): JSX.Element {
         </Typography>
 
         {/* Value proposition */}
-        <Typography size="body" color="muted" className="mx-auto mb-12 max-w-[640px]">
+        <Typography
+          size="body"
+          color="muted"
+          className="mx-auto mb-12 max-w-[640px]"
+        >
           Sphinx uses AI to clarify your mental struggles.
           <br />
           Not a diagnosis—just a clear path to the right support.

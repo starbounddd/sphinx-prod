@@ -1,1 +1,1 @@
-export { BorderBeam } from "./BorderBeam";
+export { BorderBeam } from './BorderBeam';

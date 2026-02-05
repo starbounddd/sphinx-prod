@@ -1,7 +1,7 @@
-import type { JSX } from "react";
-import { Bell, Plus } from "lucide-react";
-import { PrimaryButton } from "@/components/ui/buttons";
-import { Typography } from "@/components/ui/typography";
+import type { JSX } from 'react';
+import { Bell, Plus } from 'lucide-react';
+import { PrimaryButton } from '@/components/ui/buttons';
+import { Typography } from '@/components/ui/typography';
 
 interface ProviderHeaderProps {
   title: string;
@@ -21,7 +21,10 @@ export function ProviderHeader({
 }: ProviderHeaderProps): JSX.Element {
   return (
     <header className="flex w-full items-center justify-between border-b border-sage/50 bg-white/50 px-8 py-6 backdrop-blur-sm">
-      <Typography size="h2" className="text-2xl font-semibold text-dark lg:text-3xl">
+      <Typography
+        size="h2"
+        className="text-2xl font-semibold text-dark lg:text-3xl"
+      >
         {title}
       </Typography>
 
@@ -36,7 +39,10 @@ export function ProviderHeader({
 
         {/* New Patient Button */}
         {showNewPatient && (
-          <PrimaryButton onClick={onNewPatient} className="gap-2 px-5 py-2.5 text-sm">
+          <PrimaryButton
+            onClick={onNewPatient}
+            className="gap-2 px-5 py-2.5 text-sm"
+          >
             <Plus className="h-4 w-4" />
             New Patient
           </PrimaryButton>

@@ -1,8 +1,8 @@
-import type { JSX } from "react";
-import { Heart } from "lucide-react";
-import { Card } from "@/components/ui/shadcn/card";
-import { Typography } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { Heart } from 'lucide-react';
+import { Card } from '@/components/ui/shadcn/card';
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
 
 interface SummaryCardProps {
   userQuote: string;
@@ -25,18 +25,26 @@ export function SummaryCard({
   return (
     <Card
       className={cn(
-        "overflow-hidden rounded-3xl border-0 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]",
+        'overflow-hidden rounded-3xl border-0 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]',
         className
       )}
     >
       {/* Top section - User quote */}
       <div className="bg-linear-to-br from-cream to-sage/30 p-8">
         <div className="mb-3">
-          <Typography size="caption" as="span" className="inline-block rounded-full bg-sage px-4 py-1 font-medium text-dark">
+          <Typography
+            size="caption"
+            as="span"
+            className="inline-block rounded-full bg-sage px-4 py-1 font-medium text-dark"
+          >
             You said:
           </Typography>
         </div>
-        <Typography font="handwritten" size="h3" className="leading-relaxed text-gray">
+        <Typography
+          font="handwritten"
+          size="h3"
+          className="leading-relaxed text-gray"
+        >
           "{userQuote}"
         </Typography>
       </div>
@@ -51,7 +59,11 @@ export function SummaryCard({
       {/* Bottom section - Analysis */}
       <div className="bg-white p-8 pt-10">
         <div className="mb-3">
-          <Typography size="caption" as="span" className="inline-block rounded-full bg-lavender px-4 py-1 font-medium text-dark">
+          <Typography
+            size="caption"
+            as="span"
+            className="inline-block rounded-full bg-lavender px-4 py-1 font-medium text-dark"
+          >
             What this means:
           </Typography>
         </div>
@@ -61,7 +73,7 @@ export function SummaryCard({
               <span className="relative z-10">{analysisHighlight}</span>
               <span className="absolute inset-x-[-4px] bottom-0 top-1/2 -z-0 rounded bg-coral/30" />
             </span>
-          )}{" "}
+          )}{' '}
           {analysis}
         </Typography>
       </div>

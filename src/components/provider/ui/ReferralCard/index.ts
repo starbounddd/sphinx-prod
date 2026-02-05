@@ -1,1 +1,1 @@
-export { ReferralCard } from "./ReferralCard";
+export { ReferralCard } from './ReferralCard';

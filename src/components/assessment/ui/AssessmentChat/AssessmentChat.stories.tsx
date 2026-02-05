@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { AssessmentChat } from "./AssessmentChat";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { AssessmentChat } from './AssessmentChat';
 
 const meta: Meta<typeof AssessmentChat> = {
-  title: "Assessment/AssessmentChat",
+  title: 'Assessment/AssessmentChat',
   component: AssessmentChat,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
     nextjs: {
       appDirectory: true,
       navigation: {
@@ -13,7 +13,7 @@ const meta: Meta<typeof AssessmentChat> = {
       },
     },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
