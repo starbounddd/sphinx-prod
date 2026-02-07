@@ -6,6 +6,14 @@ import { useRouter } from 'next/navigation';
 export default function LoginPage() {
   const supabase = createClient();
   const router = useRouter();
+  async function syncUserToPostgres() {
+    const res = await fetch('/api/auth/sync-user', { method: 'POST', credentials: 'include' });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      console.error('Failed to sync user to database', body.error, body.details ?? '');
+    }
+  }
+
   async function handleSignUp(e: any) {
     e.preventDefault();
 
@@ -17,10 +25,14 @@ export default function LoginPage() {
       password,
     });
 
-    console.log({ data, error });
     if (error) {
       alert(error.message);
-    } else {
+      return;
+    }
+    if (data.user) {
+      // Have to add to give Supabase time to set the session cookie before the API reads it
+      await new Promise((r) => setTimeout(r, 300));
+      await syncUserToPostgres();
       alert('Check your email to confirm!');
     }
   }
@@ -36,11 +48,14 @@ export default function LoginPage() {
       password,
     });
 
-    console.log({ data, error });
     if (error) {
       alert(error.message);
+      return;
     }
-    router.push('/');
+    if (data.user) {
+      await syncUserToPostgres();
+      router.push('/');
+    }
   }
 
   return (

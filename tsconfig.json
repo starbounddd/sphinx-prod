@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,10 +23,18 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@/shared/*": ["./src/shared/*"],
-      "@/features/*": ["./src/features/*"],
-      "@/assets/*": ["./src/assets/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@/shared/*": [
+        "./src/shared/*"
+      ],
+      "@/features/*": [
+        "./src/features/*"
+      ],
+      "@/assets/*": [
+        "./src/assets/*"
+      ]
     }
   },
   "include": [
@@ -35,5 +47,7 @@
     "node_modules/storybook/dist/manager/globals-runtime.js",
     "node_modules/storybook/dist/manager/globals-runtime.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
