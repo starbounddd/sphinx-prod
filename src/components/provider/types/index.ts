@@ -11,7 +11,7 @@ export interface PatientMatch {
 
 export interface PatientTag {
   label: string;
-  variant: "primary" | "secondary" | "tertiary";
+  variant: 'primary' | 'secondary' | 'tertiary';
 }
 
 export interface PatientStats {

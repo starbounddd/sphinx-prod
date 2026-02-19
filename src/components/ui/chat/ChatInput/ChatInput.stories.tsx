@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { useState } from "react";
-import { ChatInput } from "./ChatInput";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { useState } from 'react';
+import { ChatInput } from './ChatInput';
 
 const meta: Meta<typeof ChatInput> = {
-  title: "Shared/Chat/ChatInput",
+  title: 'Shared/Chat/ChatInput',
   component: ChatInput,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -16,10 +16,10 @@ type Story = StoryObj<typeof ChatInput>;
 
 export const Default: Story = {
   args: {
-    value: "",
+    value: '',
     onChange: () => {},
     onSend: () => {},
-    placeholder: "Type your message...",
+    placeholder: 'Type your message...',
   },
 };
 
@@ -33,24 +33,24 @@ export const WithValue: Story = {
 
 export const Disabled: Story = {
   args: {
-    value: "",
+    value: '',
     onChange: () => {},
     onSend: () => {},
     disabled: true,
-    placeholder: "Please wait...",
+    placeholder: 'Please wait...',
   },
 };
 
 // Interactive story with state
 function InteractiveChatInput() {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const handleSend = () => {
-    console.log("Sent:", value);
-    setValue("");
+    console.log('Sent:', value);
+    setValue('');
   };
 
   return (
-    <div style={{ width: "400px" }}>
+    <div style={{ width: '400px' }}>
       <ChatInput
         value={value}
         onChange={setValue}

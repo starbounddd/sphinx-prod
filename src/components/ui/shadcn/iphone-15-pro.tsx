@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
-import { SVGProps, ReactNode } from "react";
+import { cn } from '@/lib/utils';
+import { SVGProps, ReactNode } from 'react';
 
 export interface Iphone15ProProps extends SVGProps<SVGSVGElement> {
   src?: string;
@@ -16,7 +16,7 @@ export default function Iphone15Pro({
 }: Iphone15ProProps) {
   return (
     <svg
-      className={cn("size-full", className)}
+      className={cn('size-full', className)}
       viewBox="0 0 433 882"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -65,10 +65,14 @@ export default function Iphone15Pro({
       />
 
       {/* Screen content */}
-      <foreignObject x="21" y="13" width="391" height="856" clipPath="url(#roundedScreen)">
-        <div
-          className="size-full overflow-hidden rounded-[54px] bg-white dark:bg-neutral-900"
-        >
+      <foreignObject
+        x="21"
+        y="13"
+        width="391"
+        height="856"
+        clipPath="url(#roundedScreen)"
+      >
+        <div className="size-full overflow-hidden rounded-[54px] bg-white dark:bg-neutral-900">
           {src && (
             // eslint-disable-next-line @next/next/no-img-element
             <img

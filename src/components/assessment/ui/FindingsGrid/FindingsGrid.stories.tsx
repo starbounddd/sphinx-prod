@@ -1,15 +1,15 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { FindingsGrid } from "./FindingsGrid";
-import type { Finding } from "../../types";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { FindingsGrid } from './FindingsGrid';
+import type { Finding } from '../../types';
 
 const meta: Meta<typeof FindingsGrid> = {
-  title: "Assessment/FindingsGrid",
+  title: 'Assessment/FindingsGrid',
   component: FindingsGrid,
   parameters: {
-    layout: "padded",
-    backgrounds: { default: "cream" },
+    layout: 'padded',
+    backgrounds: { default: 'cream' },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [
     (Story) => (
       <div className="mx-auto max-w-3xl">
@@ -24,28 +24,29 @@ type Story = StoryObj<typeof FindingsGrid>;
 
 const mockFindings: Finding[] = [
   {
-    id: "1",
-    icon: "zap",
-    title: "High Energy Periods",
-    description: "You tend to feel most energized in the morning hours.",
+    id: '1',
+    icon: 'zap',
+    title: 'High Energy Periods',
+    description: 'You tend to feel most energized in the morning hours.',
   },
   {
-    id: "2",
-    icon: "clock",
-    title: "Sleep Patterns",
-    description: "Your sleep schedule appears irregular, impacting mood.",
+    id: '2',
+    icon: 'clock',
+    title: 'Sleep Patterns',
+    description: 'Your sleep schedule appears irregular, impacting mood.',
   },
   {
-    id: "3",
-    icon: "activity",
-    title: "Stress Triggers",
-    description: "Work-related situations seem to be your primary stress trigger.",
+    id: '3',
+    icon: 'activity',
+    title: 'Stress Triggers',
+    description:
+      'Work-related situations seem to be your primary stress trigger.',
   },
   {
-    id: "4",
-    icon: "calendar",
-    title: "Weekly Patterns",
-    description: "Sundays and Mondays appear to be more challenging days.",
+    id: '4',
+    icon: 'calendar',
+    title: 'Weekly Patterns',
+    description: 'Sundays and Mondays appear to be more challenging days.',
   },
 ];
 

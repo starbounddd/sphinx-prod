@@ -1,1 +1,1 @@
-export { Section, type SectionProps } from "./Section";
+export { Section, type SectionProps } from './Section';

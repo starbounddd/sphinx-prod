@@ -1,11 +1,13 @@
-"use client";
+'use client';
 
-import type { ReactNode } from "react";
-import { motion, type HTMLMotionProps } from "framer-motion";
-import { stagger as staggerConfig } from "../../config";
+import type { ReactNode } from 'react';
+import { motion, type HTMLMotionProps } from 'framer-motion';
+import { stagger as staggerConfig } from '../../config';
 
-interface StaggerProps
-  extends Omit<HTMLMotionProps<"div">, "variants" | "initial" | "animate"> {
+interface StaggerProps extends Omit<
+  HTMLMotionProps<'div'>,
+  'variants' | 'initial' | 'animate'
+> {
   children: ReactNode;
   /** Delay between each child animation (seconds) */
   staggerDelay?: number;

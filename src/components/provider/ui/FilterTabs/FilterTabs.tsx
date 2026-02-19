@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import type { JSX } from "react";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { cn } from '@/lib/utils';
 
 interface FilterTab {
   id: string;
@@ -26,7 +26,7 @@ export function FilterTabs({
   className,
 }: FilterTabsProps): JSX.Element {
   return (
-    <div className={cn("flex gap-3 overflow-x-auto pb-2", className)}>
+    <div className={cn('flex gap-3 overflow-x-auto pb-2', className)}>
       {tabs.map((tab) => {
         const isActive = tab.id === activeTab;
         return (
@@ -34,10 +34,10 @@ export function FilterTabs({
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={cn(
-              "whitespace-nowrap rounded-full px-5 py-2 text-sm font-bold transition-all",
+              'whitespace-nowrap rounded-full px-5 py-2 text-sm font-bold transition-all',
               isActive
-                ? "bg-coral text-dark shadow-md shadow-coral/25"
-                : "border border-sage bg-white text-gray hover:border-coral hover:text-dark"
+                ? 'bg-coral text-dark shadow-md shadow-coral/25'
+                : 'border border-sage bg-white text-gray hover:border-coral hover:text-dark'
             )}
           >
             {tab.label}

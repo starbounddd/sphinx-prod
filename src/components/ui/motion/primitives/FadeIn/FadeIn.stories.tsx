@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { FadeIn } from "./FadeIn";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { FadeIn } from './FadeIn';
 
 const meta: Meta<typeof FadeIn> = {
-  title: "Shared/Motion/FadeIn",
+  title: 'Shared/Motion/FadeIn',
   component: FadeIn,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;

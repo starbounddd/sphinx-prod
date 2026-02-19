@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { useState } from "react";
-import { QuickReplyChip } from "./QuickReplyChip";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { useState } from 'react';
+import { QuickReplyChip } from './QuickReplyChip';
 
 const meta: Meta<typeof QuickReplyChip> = {
-  title: "Shared/Chat/QuickReplyChip",
+  title: 'Shared/Chat/QuickReplyChip',
   component: QuickReplyChip,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -17,13 +17,13 @@ type Story = StoryObj<typeof QuickReplyChip>;
 export const Default: Story = {
   args: {
     children: "Yes, that's right",
-    onClick: () => console.log("Clicked"),
+    onClick: () => console.log('Clicked'),
   },
 };
 
 export const Selected: Story = {
   args: {
-    children: "Selected option",
+    children: 'Selected option',
     onClick: () => {},
     selected: true,
   },
@@ -31,7 +31,7 @@ export const Selected: Story = {
 
 export const Disabled: Story = {
   args: {
-    children: "Disabled chip",
+    children: 'Disabled chip',
     onClick: () => {},
     disabled: true,
   },
@@ -40,7 +40,7 @@ export const Disabled: Story = {
 // Interactive story with multiple chips
 function InteractiveChips() {
   const [selected, setSelected] = useState<string | null>(null);
-  const options = ["Feeling anxious", "Sleep issues", "Work stress", "Other"];
+  const options = ['Feeling anxious', 'Sleep issues', 'Work stress', 'Other'];
 
   return (
     <div className="flex flex-wrap gap-2">

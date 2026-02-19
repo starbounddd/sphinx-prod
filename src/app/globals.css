@@ -24,11 +24,17 @@
   --animate-border-beam: border-beam calc(var(--duration) * 1s) linear infinite;
 
   @keyframes shimmer-slide {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(200%); }
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(200%);
+    }
   }
   @keyframes border-beam {
-    100% { transform: rotate(360deg); }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
   /* Colors - Primitives */
@@ -189,8 +195,8 @@
     transition: box-shadow 0.3s ease;
     &:focus-within {
       box-shadow:
-        0 10px 40px -10px theme("colors.coral / 30%"),
-        0 0 0 1px theme("colors.coral / 10%");
+        0 10px 40px -10px theme('colors.coral / 30%'),
+        0 0 0 1px theme('colors.coral / 10%');
     }
   }
 
@@ -202,7 +208,7 @@
     pointer-events: none;
 
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       width: 100%;
       height: 100%;

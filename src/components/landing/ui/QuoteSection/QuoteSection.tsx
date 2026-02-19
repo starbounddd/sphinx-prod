@@ -1,23 +1,25 @@
-import type { JSX } from "react";
-import { Container, Section } from "@/components/ui/layout";
-import { Typography } from "@/components/ui/typography";
-import { QuoteCard } from "./QuoteCard";
+import type { JSX } from 'react';
+import { Container, Section } from '@/components/ui/layout';
+import { Typography } from '@/components/ui/typography';
+import { QuoteCard } from './QuoteCard';
 
 const quotes = [
   {
-    quote: "I just feel overwhelmed and my chest hurts...",
-    analysis: "Potential physical symptoms of anxiety triggered by stress",
-    variant: "sage" as const,
+    quote: 'I just feel overwhelmed and my chest hurts...',
+    analysis: 'Potential physical symptoms of anxiety triggered by stress',
+    variant: 'sage' as const,
   },
   {
     quote: "Nothing feels worth it anymore, I'm so tired...",
-    analysis: "Signs consistent with low mood and fatigue, common in depression",
-    variant: "lavender" as const,
+    analysis:
+      'Signs consistent with low mood and fatigue, common in depression',
+    variant: 'lavender' as const,
   },
   {
     quote: "I can't stop thinking about that thing I said...",
-    analysis: "Repetitive thought patterns suggesting rumination or social anxiety",
-    variant: "coral" as const,
+    analysis:
+      'Repetitive thought patterns suggesting rumination or social anxiety',
+    variant: 'coral' as const,
   },
 ];
 

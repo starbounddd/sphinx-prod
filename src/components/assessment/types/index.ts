@@ -2,7 +2,7 @@
    Chat Types
    ========================================================================== */
 
-export type MessageRole = "ai" | "user";
+export type MessageRole = 'ai' | 'user';
 
 export interface ChatMessage {
   id: string;
@@ -24,7 +24,7 @@ export interface AssessmentState {
    Report Types
    ========================================================================== */
 
-export type FindingIconName = "zap" | "clock" | "activity" | "calendar";
+export type FindingIconName = 'zap' | 'clock' | 'activity' | 'calendar';
 
 export interface Finding {
   id: string;

@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { Stagger } from "./Stagger";
-import { ScaleIn } from "../ScaleIn";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { Stagger } from './Stagger';
+import { ScaleIn } from '../ScaleIn';
 
 const meta: Meta<typeof Stagger> = {
-  title: "Shared/Motion/Stagger",
+  title: 'Shared/Motion/Stagger',
   component: Stagger,
   parameters: {
-    layout: "padded",
+    layout: 'padded',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -16,7 +16,7 @@ type Story = StoryObj<typeof Stagger>;
 
 export const Default: Story = {
   args: {
-    className: "grid grid-cols-2 gap-4",
+    className: 'grid grid-cols-2 gap-4',
     children: (
       <>
         <ScaleIn>
@@ -39,7 +39,7 @@ export const Default: Story = {
 export const SlowStagger: Story = {
   args: {
     staggerDelay: 0.3,
-    className: "flex gap-4",
+    className: 'flex gap-4',
     children: (
       <>
         <ScaleIn>

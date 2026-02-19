@@ -1,11 +1,13 @@
-"use client";
+'use client';
 
-import type { ReactNode } from "react";
-import { motion, type HTMLMotionProps } from "framer-motion";
-import { scaleUpVariants } from "../../config";
+import type { ReactNode } from 'react';
+import { motion, type HTMLMotionProps } from 'framer-motion';
+import { scaleUpVariants } from '../../config';
 
-interface ScaleInProps
-  extends Omit<HTMLMotionProps<"div">, "variants" | "initial" | "animate"> {
+interface ScaleInProps extends Omit<
+  HTMLMotionProps<'div'>,
+  'variants' | 'initial' | 'animate'
+> {
   children: ReactNode;
 }
 

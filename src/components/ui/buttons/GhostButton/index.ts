@@ -1,1 +1,1 @@
-export { GhostButton } from "./GhostButton";
+export { GhostButton } from './GhostButton';

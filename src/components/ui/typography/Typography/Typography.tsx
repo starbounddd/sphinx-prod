@@ -1,22 +1,28 @@
-import type { HTMLAttributes, JSX } from "react";
-import { cn } from "@/lib/utils";
-import { type TypographyFont, fontStyles } from "../font";
-import { type TypographySize, type TypographyElement, sizeStyles, defaultElements, handwrittenOverrides } from "../size";
+import type { HTMLAttributes, JSX } from 'react';
+import { cn } from '@/lib/utils';
+import { type TypographyFont, fontStyles } from '../font';
+import {
+  type TypographySize,
+  type TypographyElement,
+  sizeStyles,
+  defaultElements,
+  handwrittenOverrides,
+} from '../size';
 
-export type TypographyColor = "default" | "muted" | "coral" | "inherit";
-export type TypographyAlign = "left" | "center" | "right";
+export type TypographyColor = 'default' | 'muted' | 'coral' | 'inherit';
+export type TypographyAlign = 'left' | 'center' | 'right';
 
 const colorStyles: Record<TypographyColor, string> = {
-  default: "text-foreground",
-  muted: "text-muted-foreground",
-  coral: "text-coral",
-  inherit: "text-inherit",
+  default: 'text-foreground',
+  muted: 'text-muted-foreground',
+  coral: 'text-coral',
+  inherit: 'text-inherit',
 };
 
 const alignStyles: Record<TypographyAlign, string> = {
-  left: "text-left",
-  center: "text-center",
-  right: "text-right",
+  left: 'text-left',
+  center: 'text-center',
+  right: 'text-right',
 };
 
 export interface TypographyProps extends HTMLAttributes<HTMLElement> {
@@ -28,17 +34,18 @@ export interface TypographyProps extends HTMLAttributes<HTMLElement> {
 }
 
 export function Typography({
-  font = "text",
-  size = "body",
+  font = 'text',
+  size = 'body',
   as,
-  color = "default",
+  color = 'default',
   align,
   className,
   children,
   ...props
 }: TypographyProps): JSX.Element {
   const Tag = as || defaultElements[size];
-  const fontOverride = font === "handwritten" ? handwrittenOverrides[size] : undefined;
+  const fontOverride =
+    font === 'handwritten' ? handwrittenOverrides[size] : undefined;
 
   return (
     <Tag

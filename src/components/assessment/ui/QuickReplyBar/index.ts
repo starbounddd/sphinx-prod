@@ -1,1 +1,1 @@
-export { QuickReplyBar } from "./QuickReplyBar";
+export { QuickReplyBar } from './QuickReplyBar';

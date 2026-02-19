@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { TertiaryButton } from "./TertiaryButton";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { TertiaryButton } from './TertiaryButton';
 
 const meta: Meta<typeof TertiaryButton> = {
-  title: "Shared/Buttons/TertiaryButton",
+  title: 'Shared/Buttons/TertiaryButton',
   component: TertiaryButton,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -15,18 +15,18 @@ type Story = StoryObj<typeof TertiaryButton>;
 
 export const Default: Story = {
   args: {
-    children: "Browse Options",
+    children: 'Browse Options',
   },
 };
 
 export const FullWidth: Story = {
   args: {
-    children: "See All Features",
+    children: 'See All Features',
     fullWidth: true,
   },
   decorators: [
     (Story) => (
-      <div style={{ width: "300px" }}>
+      <div style={{ width: '300px' }}>
         <Story />
       </div>
     ),
@@ -35,7 +35,7 @@ export const FullWidth: Story = {
 
 export const Disabled: Story = {
   args: {
-    children: "Coming Soon",
+    children: 'Coming Soon',
     disabled: true,
   },
 };

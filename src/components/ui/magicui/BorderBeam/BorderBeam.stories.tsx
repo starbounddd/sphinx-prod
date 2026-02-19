@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { BorderBeam } from "./BorderBeam";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { BorderBeam } from './BorderBeam';
 
 const meta: Meta<typeof BorderBeam> = {
-  title: "Shared/MagicUI/BorderBeam",
+  title: 'Shared/MagicUI/BorderBeam',
   component: BorderBeam,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [
     (Story) => (
       <div className="relative h-40 w-64 overflow-hidden rounded-2xl border border-sage bg-white p-6">
@@ -36,8 +36,8 @@ export const FastAnimation: Story = {
 
 export const CustomColors: Story = {
   args: {
-    colorFrom: "#6366f1",
-    colorTo: "#8b5cf6",
+    colorFrom: '#6366f1',
+    colorTo: '#8b5cf6',
   },
 };
 

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import type { JSX, ReactNode } from "react";
-import { SlideIn } from "@/components/ui/motion";
-import { WordFadeIn } from "@/components/ui/magicui";
-import { Typography } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
+import type { JSX, ReactNode } from 'react';
+import { SlideIn } from '@/components/ui/motion';
+import { WordFadeIn } from '@/components/ui/magicui';
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
 
 interface ChatMessageProps {
-  variant: "ai" | "user";
+  variant: 'ai' | 'user';
   children: ReactNode;
   className?: string;
   /** Enable word-by-word fade-in animation for AI messages (requires string children) */
@@ -27,19 +27,20 @@ export function ChatMessage({
   className,
   animateWords = false,
 }: ChatMessageProps): JSX.Element {
-  const isAI = variant === "ai";
+  const isAI = variant === 'ai';
 
   // Determine if we should use WordFadeIn animation
-  const shouldAnimateWords = animateWords && isAI && typeof children === "string";
+  const shouldAnimateWords =
+    animateWords && isAI && typeof children === 'string';
 
   return (
     <SlideIn
-      direction={isAI ? "left" : "right"}
+      direction={isAI ? 'left' : 'right'}
       className={cn(
-        "rounded-2xl px-4 py-3 shadow-sm",
+        'rounded-2xl px-4 py-3 shadow-sm',
         isAI
-          ? "rounded-tl-sm bg-sage backdrop-blur-xs"
-          : "rounded-tr-sm bg-coral/80 backdrop-blur-xs",
+          ? 'rounded-tl-sm bg-sage backdrop-blur-xs'
+          : 'rounded-tr-sm bg-coral/80 backdrop-blur-xs',
         className
       )}
     >

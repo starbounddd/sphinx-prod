@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { SecondaryButton } from "./SecondaryButton";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { SecondaryButton } from './SecondaryButton';
 
 const meta: Meta<typeof SecondaryButton> = {
-  title: "Shared/Buttons/SecondaryButton",
+  title: 'Shared/Buttons/SecondaryButton',
   component: SecondaryButton,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -15,18 +15,18 @@ type Story = StoryObj<typeof SecondaryButton>;
 
 export const Default: Story = {
   args: {
-    children: "Learn More",
+    children: 'Learn More',
   },
 };
 
 export const FullWidth: Story = {
   args: {
-    children: "View Details",
+    children: 'View Details',
     fullWidth: true,
   },
   decorators: [
     (Story) => (
-      <div style={{ width: "300px" }}>
+      <div style={{ width: '300px' }}>
         <Story />
       </div>
     ),
@@ -35,7 +35,7 @@ export const FullWidth: Story = {
 
 export const Disabled: Story = {
   args: {
-    children: "Unavailable",
+    children: 'Unavailable',
     disabled: true,
   },
 };

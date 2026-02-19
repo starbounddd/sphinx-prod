@@ -1,17 +1,19 @@
-"use client";
+'use client';
 
-import type { ReactNode } from "react";
-import { motion, type HTMLMotionProps } from "framer-motion";
+import type { ReactNode } from 'react';
+import { motion, type HTMLMotionProps } from 'framer-motion';
 import {
   slideLeftVariants,
   slideRightVariants,
   slideUpVariants,
-} from "../../config";
+} from '../../config';
 
-interface SlideInProps
-  extends Omit<HTMLMotionProps<"div">, "variants" | "initial" | "animate"> {
+interface SlideInProps extends Omit<
+  HTMLMotionProps<'div'>,
+  'variants' | 'initial' | 'animate'
+> {
   children: ReactNode;
-  direction?: "left" | "right" | "up";
+  direction?: 'left' | 'right' | 'up';
   delay?: number;
 }
 
@@ -27,7 +29,7 @@ const DIRECTION_VARIANTS = {
  */
 export function SlideIn({
   children,
-  direction = "up",
+  direction = 'up',
   delay = 0,
   ...props
 }: SlideInProps) {

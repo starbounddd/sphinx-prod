@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import type { JSX } from "react";
-import { ChatInput } from "@/components/ui/chat";
-import { AssessmentHeader } from "../AssessmentHeader";
-import { ChatMessageList } from "../ChatMessageList";
-import { ThinkingIndicator } from "../ThinkingIndicator";
-import { QuickReplyBar } from "../QuickReplyBar";
-import { useAssessmentChat } from "../../hooks";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { ChatInput } from '@/components/ui/chat';
+import { AssessmentHeader } from '../AssessmentHeader';
+import { ChatMessageList } from '../ChatMessageList';
+import { ThinkingIndicator } from '../ThinkingIndicator';
+import { QuickReplyBar } from '../QuickReplyBar';
+import { useAssessmentChat } from '../../hooks';
+import { cn } from '@/lib/utils';
 
 interface AssessmentChatProps {
   className?: string;
@@ -18,7 +18,9 @@ interface AssessmentChatProps {
  * Uses 1:2:1 grid layout for messages (AI left, empty middle, User right)
  * Features decorative corner elements
  */
-export function AssessmentChat({ className }: AssessmentChatProps): JSX.Element {
+export function AssessmentChat({
+  className,
+}: AssessmentChatProps): JSX.Element {
   const {
     messages,
     isThinking,
@@ -34,14 +36,19 @@ export function AssessmentChat({ className }: AssessmentChatProps): JSX.Element 
   if (isComplete) {
     // Use window.location to navigate — avoids the typedRoutes restriction on router.push.
     // This performs a full-page navigation to the report route.
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       // use assign() to navigate without assigning to a property (avoids immutability lint rule)
-      window.location.assign("/assessment/report");
+      window.location.assign('/assessment/report');
     }
   }
 
   return (
-    <div className={cn("relative flex h-screen flex-col overflow-hidden", className)}>
+    <div
+      className={cn(
+        'relative flex h-screen flex-col overflow-hidden',
+        className
+      )}
+    >
       {/* Decorative corner flourishes */}
       <div className="corner-flourish top-left" />
       <div className="corner-flourish bottom-right" />

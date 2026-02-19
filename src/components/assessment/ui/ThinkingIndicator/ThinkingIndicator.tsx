@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import type { JSX } from "react";
-import { BouncingDots } from "@/components/ui/motion";
-import { BorderBeam } from "@/components/ui/magicui";
-import { Typography } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { BouncingDots } from '@/components/ui/motion';
+import { BorderBeam } from '@/components/ui/magicui';
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
 
 interface ThinkingIndicatorProps {
   className?: string;
@@ -19,7 +19,7 @@ export function ThinkingIndicator({
   return (
     <div
       className={cn(
-        "relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white/60 px-5 py-3 shadow-md backdrop-blur-sm",
+        'relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white/60 px-5 py-3 shadow-md backdrop-blur-sm',
         className
       )}
     >

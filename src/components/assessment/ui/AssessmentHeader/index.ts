@@ -1,1 +1,1 @@
-export { AssessmentHeader } from "./AssessmentHeader";
+export { AssessmentHeader } from './AssessmentHeader';

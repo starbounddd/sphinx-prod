@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { GhostButton } from "./GhostButton";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { GhostButton } from './GhostButton';
 
 const meta: Meta<typeof GhostButton> = {
-  title: "Shared/Buttons/GhostButton",
+  title: 'Shared/Buttons/GhostButton',
   component: GhostButton,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -15,18 +15,18 @@ type Story = StoryObj<typeof GhostButton>;
 
 export const Default: Story = {
   args: {
-    children: "Cancel",
+    children: 'Cancel',
   },
 };
 
 export const FullWidth: Story = {
   args: {
-    children: "Skip",
+    children: 'Skip',
     fullWidth: true,
   },
   decorators: [
     (Story) => (
-      <div style={{ width: "300px" }}>
+      <div style={{ width: '300px' }}>
         <Story />
       </div>
     ),

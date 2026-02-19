@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { CTASection } from "./CTASection";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { CTASection } from './CTASection';
 
 const meta: Meta<typeof CTASection> = {
-  title: "Landing/CTASection",
+  title: 'Landing/CTASection',
   component: CTASection,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;

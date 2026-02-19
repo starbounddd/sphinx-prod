@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { Navbar } from "./Navbar";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { Navbar } from './Navbar';
 
 const meta: Meta<typeof Navbar> = {
-  title: "Shared/Navigation/Navbar",
+  title: 'Shared/Navigation/Navbar',
   component: Navbar,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;

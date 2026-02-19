@@ -1,41 +1,41 @@
-import type { JSX } from "react";
-import Link from "next/link";
-import { Twitter, Linkedin, Instagram } from "lucide-react";
-import { Container } from "@/components/ui/layout";
-import { Separator } from "@/components/ui/shadcn/separator";
-import { Typography } from "@/components/ui/typography";
+import type { JSX } from 'react';
+import Link from 'next/link';
+import { Twitter, Linkedin, Instagram } from 'lucide-react';
+import { Container } from '@/components/ui/layout';
+import { Separator } from '@/components/ui/shadcn/separator';
+import { Typography } from '@/components/ui/typography';
 
 const footerLinks = {
   product: {
-    title: "Product",
+    title: 'Product',
     links: [
-      { href: "#", label: "How it Works" },
-      { href: "#", label: "Pricing" },
-      { href: "#", label: "FAQ" },
+      { href: '#', label: 'How it Works' },
+      { href: '#', label: 'Pricing' },
+      { href: '#', label: 'FAQ' },
     ],
   },
   company: {
-    title: "Company",
+    title: 'Company',
     links: [
-      { href: "#", label: "About" },
-      { href: "#", label: "Blog" },
-      { href: "#", label: "Careers" },
+      { href: '#', label: 'About' },
+      { href: '#', label: 'Blog' },
+      { href: '#', label: 'Careers' },
     ],
   },
   legal: {
-    title: "Legal",
+    title: 'Legal',
     links: [
-      { href: "#", label: "Privacy Policy" },
-      { href: "#", label: "Terms of Service" },
-      { href: "#", label: "HIPAA Compliance" },
+      { href: '#', label: 'Privacy Policy' },
+      { href: '#', label: 'Terms of Service' },
+      { href: '#', label: 'HIPAA Compliance' },
     ],
   },
 };
 
 const socialLinks = [
-  { href: "#", label: "Twitter", icon: Twitter },
-  { href: "#", label: "LinkedIn", icon: Linkedin },
-  { href: "#", label: "Instagram", icon: Instagram },
+  { href: '#', label: 'Twitter', icon: Twitter },
+  { href: '#', label: 'LinkedIn', icon: Linkedin },
+  { href: '#', label: 'Instagram', icon: Instagram },
 ];
 
 export function Footer(): JSX.Element {
@@ -63,7 +63,11 @@ export function Footer(): JSX.Element {
                 {section.links.map((link) => (
                   <li key={link.label}>
                     <Link href={link.href}>
-                      <Typography size="body-sm" as="span" className="text-muted-foreground transition-colors hover:text-foreground">
+                      <Typography
+                        size="body-sm"
+                        as="span"
+                        className="text-muted-foreground transition-colors hover:text-foreground"
+                      >
                         {link.label}
                       </Typography>
                     </Link>

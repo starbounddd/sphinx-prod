@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import type { JSX } from "react";
-import { Stagger, ScaleIn } from "@/components/ui/motion";
-import { FindingCard } from "../FindingCard";
-import type { Finding } from "../../types";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { Stagger, ScaleIn } from '@/components/ui/motion';
+import { FindingCard } from '../FindingCard';
+import type { Finding } from '../../types';
+import { cn } from '@/lib/utils';
 
 interface FindingsGridProps {
   findings: Finding[];
@@ -23,7 +23,7 @@ export function FindingsGrid({
   return (
     <Stagger
       staggerDelay={0.1}
-      className={cn("grid gap-4 sm:grid-cols-2 sm:gap-6", className)}
+      className={cn('grid gap-4 sm:grid-cols-2 sm:gap-6', className)}
     >
       {findings.map((finding) => (
         <ScaleIn key={finding.id}>

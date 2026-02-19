@@ -1,13 +1,13 @@
-import type { JSX } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { PrimaryButton } from "@/components/ui/buttons";
-import { Typography } from "@/components/ui/typography";
+import type { JSX } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { PrimaryButton } from '@/components/ui/buttons';
+import { Typography } from '@/components/ui/typography';
 
 const navLinks = [
-  { href: "#about", label: "About" },
-  { href: "#providers", label: "For Providers" },
-  { href: "#login", label: "Login" },
+  { href: '#about', label: 'About' },
+  { href: '#providers', label: 'For Providers' },
+  { href: '#login', label: 'Login' },
 ];
 
 export function Navbar(): JSX.Element {
@@ -28,14 +28,21 @@ export function Navbar(): JSX.Element {
           {navLinks.map((link) => (
             // Use a plain anchor for same-page hash links to avoid Next's typed Link href restrictions
             <a key={link.href} href={link.href} className="group">
-              <Typography size="body-sm" as="span" className="font-medium text-dark transition-colors duration-200 group-hover:text-primary-btn">
+              <Typography
+                size="body-sm"
+                as="span"
+                className="font-medium text-dark transition-colors duration-200 group-hover:text-primary-btn"
+              >
                 {link.label}
               </Typography>
             </a>
           ))}
         </div>
 
-        <PrimaryButton href="/assessment" className="px-6 py-2.5 text-sm shrink-0">
+        <PrimaryButton
+          href="/assessment"
+          className="px-6 py-2.5 text-sm shrink-0"
+        >
           Start Assessment
         </PrimaryButton>
       </nav>

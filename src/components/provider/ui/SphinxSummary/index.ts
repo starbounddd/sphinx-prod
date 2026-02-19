@@ -1,1 +1,1 @@
-export { SphinxSummary, type SphinxSummaryProps } from "./SphinxSummary";
+export { SphinxSummary, type SphinxSummaryProps } from './SphinxSummary';

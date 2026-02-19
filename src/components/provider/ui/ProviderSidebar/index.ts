@@ -1,1 +1,1 @@
-export { ProviderSidebar } from "./ProviderSidebar";
+export { ProviderSidebar } from './ProviderSidebar';

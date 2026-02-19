@@ -1,1 +1,1 @@
-export { PatientTag } from "./PatientTag";
+export { PatientTag } from './PatientTag';

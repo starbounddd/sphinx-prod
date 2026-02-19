@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import type { JSX } from "react";
-import { Zap, Clock, Activity, Calendar } from "lucide-react";
-import { HoverCard } from "@/components/ui/motion";
-import { Card } from "@/components/ui/shadcn/card";
-import { Typography } from "@/components/ui/typography";
-import type { FindingIconName } from "../../types";
-import { cn } from "@/lib/utils";
+import type { JSX } from 'react';
+import { Zap, Clock, Activity, Calendar } from 'lucide-react';
+import { HoverCard } from '@/components/ui/motion';
+import { Card } from '@/components/ui/shadcn/card';
+import { Typography } from '@/components/ui/typography';
+import type { FindingIconName } from '../../types';
+import { cn } from '@/lib/utils';
 
 const ICON_MAP = {
   zap: Zap,
@@ -16,10 +16,10 @@ const ICON_MAP = {
 } as const;
 
 const ICON_COLORS: Record<FindingIconName, string> = {
-  zap: "bg-coral/15 text-coral",
-  clock: "bg-sage text-dark",
-  activity: "bg-lavender text-dark",
-  calendar: "bg-cream text-dark",
+  zap: 'bg-coral/15 text-coral',
+  clock: 'bg-sage text-dark',
+  activity: 'bg-lavender text-dark',
+  calendar: 'bg-cream text-dark',
 };
 
 interface FindingCardProps {
@@ -45,8 +45,8 @@ export function FindingCard({
     <HoverCard className={className}>
       <Card
         className={cn(
-          "group relative flex gap-4 rounded-3xl border-0 bg-white p-6",
-          "shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]"
+          'group relative flex gap-4 rounded-3xl border-0 bg-white p-6',
+          'shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]'
         )}
       >
         {/* Subtle gradient overlay on hover */}
@@ -55,8 +55,8 @@ export function FindingCard({
         {/* Icon */}
         <div
           className={cn(
-            "relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl",
-            "transition-transform duration-300 group-hover:scale-105",
+            'relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl',
+            'transition-transform duration-300 group-hover:scale-105',
             ICON_COLORS[icon]
           )}
         >

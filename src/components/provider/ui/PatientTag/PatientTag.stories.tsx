@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { PatientTag } from "./PatientTag";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { PatientTag } from './PatientTag';
 
 const meta: Meta<typeof PatientTag> = {
-  title: "Provider/PatientTag",
+  title: 'Provider/PatientTag',
   component: PatientTag,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -15,22 +15,22 @@ type Story = StoryObj<typeof PatientTag>;
 
 export const Primary: Story = {
   args: {
-    label: "Anxiety Disorder",
-    variant: "primary",
+    label: 'Anxiety Disorder',
+    variant: 'primary',
   },
 };
 
 export const Secondary: Story = {
   args: {
-    label: "Motivated",
-    variant: "secondary",
+    label: 'Motivated',
+    variant: 'secondary',
   },
 };
 
 export const Tertiary: Story = {
   args: {
-    label: "Age 28",
-    variant: "tertiary",
+    label: 'Age 28',
+    variant: 'tertiary',
   },
 };
 

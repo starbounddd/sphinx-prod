@@ -1,1 +1,6 @@
-export { Typography, type TypographyProps, type TypographyColor, type TypographyAlign } from "./Typography";
+export {
+  Typography,
+  type TypographyProps,
+  type TypographyColor,
+  type TypographyAlign,
+} from './Typography';

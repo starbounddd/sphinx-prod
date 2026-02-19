@@ -1,5 +1,5 @@
 // Export all primitives
-export * from "./primitives";
+export * from './primitives';
 
 // Export config for advanced usage
-export * from "./config";
+export * from './config';

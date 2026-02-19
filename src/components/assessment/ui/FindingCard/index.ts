@@ -1,1 +1,1 @@
-export { FindingCard } from "./FindingCard";
+export { FindingCard } from './FindingCard';

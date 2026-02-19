@@ -1,1 +1,1 @@
-export { FindingsGrid } from "./FindingsGrid";
+export { FindingsGrid } from './FindingsGrid';

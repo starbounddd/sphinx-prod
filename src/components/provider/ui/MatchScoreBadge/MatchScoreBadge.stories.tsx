@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { MatchScoreBadge } from "./MatchScoreBadge";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { MatchScoreBadge } from './MatchScoreBadge';
 
 const meta: Meta<typeof MatchScoreBadge> = {
-  title: "Provider/MatchScoreBadge",
+  title: 'Provider/MatchScoreBadge',
   component: MatchScoreBadge,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;

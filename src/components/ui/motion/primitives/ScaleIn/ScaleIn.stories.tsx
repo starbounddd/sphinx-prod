@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { ScaleIn } from "./ScaleIn";
-import { Stagger } from "../Stagger";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ScaleIn } from './ScaleIn';
+import { Stagger } from '../Stagger';
 
 const meta: Meta<typeof ScaleIn> = {
-  title: "Shared/Motion/ScaleIn",
+  title: 'Shared/Motion/ScaleIn',
   component: ScaleIn,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;

@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { PrimaryButton } from "./PrimaryButton";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { PrimaryButton } from './PrimaryButton';
 
 const meta: Meta<typeof PrimaryButton> = {
-  title: "Shared/Buttons/PrimaryButton",
+  title: 'Shared/Buttons/PrimaryButton',
   component: PrimaryButton,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -15,32 +15,32 @@ type Story = StoryObj<typeof PrimaryButton>;
 
 export const Default: Story = {
   args: {
-    children: "Get Started",
+    children: 'Get Started',
   },
 };
 
 export const WithArrow: Story = {
   args: {
-    children: "Continue",
+    children: 'Continue',
     showArrow: true,
   },
 };
 
 export const Shimmer: Story = {
   args: {
-    children: "Start Assessment",
+    children: 'Start Assessment',
     shimmer: true,
   },
 };
 
 export const FullWidth: Story = {
   args: {
-    children: "Submit",
+    children: 'Submit',
     fullWidth: true,
   },
   decorators: [
     (Story) => (
-      <div style={{ width: "300px" }}>
+      <div style={{ width: '300px' }}>
         <Story />
       </div>
     ),
@@ -49,7 +49,7 @@ export const FullWidth: Story = {
 
 export const Disabled: Story = {
   args: {
-    children: "Processing...",
+    children: 'Processing...',
     disabled: true,
   },
 };

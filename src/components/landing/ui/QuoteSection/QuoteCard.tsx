@@ -1,9 +1,9 @@
-import type { JSX } from "react";
-import { cn } from "@/lib/utils";
-import { Card } from "@/components/ui/shadcn/card";
-import { Typography } from "@/components/ui/typography";
+import type { JSX } from 'react';
+import { cn } from '@/lib/utils';
+import { Card } from '@/components/ui/shadcn/card';
+import { Typography } from '@/components/ui/typography';
 
-type QuoteCardVariant = "sage" | "lavender" | "coral";
+type QuoteCardVariant = 'sage' | 'lavender' | 'coral';
 
 interface QuoteCardProps {
   quote: string;
@@ -13,27 +13,27 @@ interface QuoteCardProps {
 }
 
 const variantStyles: Record<QuoteCardVariant, string> = {
-  sage: "bg-sage",
-  lavender: "bg-lavender",
-  coral: "bg-coral/30",
+  sage: 'bg-sage',
+  lavender: 'bg-lavender',
+  coral: 'bg-coral/30',
 };
 
 export function QuoteCard({
   quote,
   analysis,
-  variant = "sage",
+  variant = 'sage',
   className,
 }: QuoteCardProps): JSX.Element {
   return (
     <Card
       className={cn(
-        "flex flex-col overflow-hidden rounded-3xl border-0 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]",
+        'flex flex-col overflow-hidden rounded-3xl border-0 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)]',
         className
       )}
     >
       <div
         className={cn(
-          "flex min-h-[240px] items-center justify-center px-6 py-16",
+          'flex min-h-[240px] items-center justify-center px-6 py-16',
           variantStyles[variant]
         )}
       >

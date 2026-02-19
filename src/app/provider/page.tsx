@@ -1,57 +1,57 @@
-"use client";
+'use client';
 
-import type { JSX } from "react";
-import { useState } from "react";
+import type { JSX } from 'react';
+import { useState } from 'react';
 import {
   ProviderSidebar,
   ProviderHeader,
   FilterTabs,
   ReferralCard,
-} from "@/components/provider/ui";
+} from '@/components/provider/ui';
 
 const FILTER_TABS = [
-  { id: "all", label: "All Referrals" },
-  { id: "high-risk", label: "High Risk" },
-  { id: "anxiety", label: "Anxiety Disorders" },
-  { id: "depression", label: "Depression" },
+  { id: 'all', label: 'All Referrals' },
+  { id: 'high-risk', label: 'High Risk' },
+  { id: 'anxiety', label: 'Anxiety Disorders' },
+  { id: 'depression', label: 'Depression' },
 ];
 
 const MOCK_REFERRALS = [
   {
-    id: "1",
-    patientInitials: "JD",
-    patientName: "Jane Doe",
-    referredBy: "Dr. Sarah Chen (GP)",
+    id: '1',
+    patientInitials: 'JD',
+    patientName: 'Jane Doe',
+    referredBy: 'Dr. Sarah Chen (GP)',
     age: 28,
-    paymentType: "insured" as const,
+    paymentType: 'insured' as const,
     intakeNote:
       "I've been feeling constantly on edge for the past 3 months. It's affecting my sleep and my ability to focus at work. I tried meditation but my mind won't quiet down.",
     sphinxSummary: {
-      symptoms: ["Generalized Anxiety", "Insomnia", "Brain Fog"],
-      riskLevel: "moderate" as const,
-      riskLabel: "Moderate Distress",
+      symptoms: ['Generalized Anxiety', 'Insomnia', 'Brain Fog'],
+      riskLevel: 'moderate' as const,
+      riskLabel: 'Moderate Distress',
       aiInsight:
-        "Patient exhibits patterns of catastrophic thinking in journal entries from past 2 weeks.",
+        'Patient exhibits patterns of catastrophic thinking in journal entries from past 2 weeks.',
     },
-    status: "active" as const,
+    status: 'active' as const,
   },
   {
-    id: "2",
-    patientInitials: "MK",
-    patientName: "Michael Key",
-    referredBy: "Self-Referral",
+    id: '2',
+    patientInitials: 'MK',
+    patientName: 'Michael Key',
+    referredBy: 'Self-Referral',
     age: 34,
-    paymentType: "self-pay" as const,
+    paymentType: 'self-pay' as const,
     intakeNote:
       "Looking for help with recent mood swings. I feel great for a few days then crash hard. It's confusing.",
     sphinxSummary: {
-      symptoms: ["Mood Lability", "Impulsivity"],
-      riskLevel: "high" as const,
-      riskLabel: "High Variability",
+      symptoms: ['Mood Lability', 'Impulsivity'],
+      riskLevel: 'high' as const,
+      riskLabel: 'High Variability',
       aiInsight:
-        "AI detected rapid sentiment shifts within 48-hour windows over the last month.",
+        'AI detected rapid sentiment shifts within 48-hour windows over the last month.',
     },
-    status: "active" as const,
+    status: 'active' as const,
   },
 ];
 
@@ -60,14 +60,14 @@ const MOCK_REFERRALS = [
  * Main view for providers to review and accept patient referrals
  */
 export default function ProviderDashboard(): JSX.Element {
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilter, setActiveFilter] = useState('all');
 
   const handleAccept = (id: string) => {
-    console.log("Accepted referral:", id);
+    console.log('Accepted referral:', id);
   };
 
   const handleDecline = (id: string) => {
-    console.log("Declined referral:", id);
+    console.log('Declined referral:', id);
   };
 
   return (
@@ -83,10 +83,7 @@ export default function ProviderDashboard(): JSX.Element {
 
       {/* Main Content */}
       <main className="relative flex h-full flex-grow flex-col overflow-hidden">
-        <ProviderHeader
-          title="Incoming Referrals"
-          notificationCount={1}
-        />
+        <ProviderHeader title="Incoming Referrals" notificationCount={1} />
 
         {/* Scrollable Content */}
         <div className="flex-grow overflow-y-auto bg-cream p-4 lg:p-8">

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 interface AssessmentLayoutProps {
   children: ReactNode;
@@ -9,9 +9,5 @@ interface AssessmentLayoutProps {
  * Provides full-screen experience for chat and report
  */
 export default function AssessmentLayout({ children }: AssessmentLayoutProps) {
-  return (
-    <div className="min-h-screen bg-cream">
-      {children}
-    </div>
-  );
+  return <div className="min-h-screen bg-cream">{children}</div>;
 }
