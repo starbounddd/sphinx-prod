@@ -1,3 +1,10 @@
+    "eslint-plugin-storybook": "^10.2.1",
+    "@chromatic-com/storybook": "^5.0.0",
+    "@storybook/addon-a11y": "^10.2.1",
+    "@storybook/addon-docs": "^10.2.1",
+    "@storybook/addon-onboarding": "^10.2.1",
+    "@storybook/addon-vitest": "^10.2.1",
+    "@storybook/nextjs-vite": "^10.2.1",
 {
   "name": "sphinx-frontend",
   "version": "0.1.0",
@@ -7,6 +14,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "chromatic": "npx chromatic --project-token=chpt_8237a5fc0bd5760",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "node --import tsx prisma/seed.ts"
@@ -48,6 +58,7 @@
     "playwright": "^1.58.0",
     "prettier": "^3.8.1",
     "prisma": "^5.0.0",
+    "storybook": "^10.2.1",
     "tailwindcss": "^4",
     "tsx": "^4.0.0",
     "typescript": "^5",

@@ -8,14 +8,16 @@ import { createClient } from '@/lib/supabase/client';
 interface SignOutButtonProps {
   children?: ReactNode;
   className?: string;
-  redirectTo?: string;
+  redirectTo?: string | null;
   onSignedOut?: () => void;
 }
 
 export function SignOutButton({
   children = 'Sign Out',
   className,
-  redirectTo = '/login',
+  // By default, after signing out return the user to the main app page
+  // (landing/home). Pass `redirectTo={null}` to disable redirect.
+  redirectTo = '/',
   onSignedOut,
 }: SignOutButtonProps): JSX.Element {
   const [loading, setLoading] = useState(false);

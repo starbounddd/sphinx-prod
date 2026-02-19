@@ -1,12 +1,12 @@
 {
   "survey_id": "wellbeing_checkin",
   "name": "Wellbeing Check-In",
-  "version": "1.0",
-  "description": "A short, non-clinical self-reflection survey focused on general emotional strain and stress over the past two weeks.",
+  "version": "1.1",
+  "description": "A short, non-clinical self-reflection survey focused on emotional and behavioral experiences over the past two weeks.",
   "timeframe": "past_2_weeks",
-  "estimated_duration_minutes": 3,
+  "estimated_duration_minutes": 5,
   "is_active": true,
-  "instructions": "This short check-in asks about how you’ve been feeling over the past two weeks. There are no right or wrong answers. This is not a diagnosis or medical assessment.",
+  "instructions": "This check-in asks about how you’ve been feeling over the past two weeks. There are no right or wrong answers. This is not a diagnosis or medical assessment.",
   "scales": {
     "frequency_0_4": {
       "type": "likert",
@@ -21,113 +21,163 @@
   },
   "questions": [
     {
-      "id": "emotional_overwhelm",
+      "id": "depression_low_mood",
       "order": 1,
-      "text": "I’ve felt overwhelmed by everyday responsibilities.",
+      "text": "A persistently low or down mood (for example, not taking pleasure in things you normally do)?",
       "type": "scale",
       "scale_ref": "frequency_0_4",
-      "domain": "emotional_load"
+      "domain": "depression"
     },
     {
-      "id": "difficulty_relaxing",
+      "id": "anger_irritability",
       "order": 2,
-      "text": "I’ve had difficulty relaxing, even during downtime.",
+      "text": "Increased anger and irritability in general?",
       "type": "scale",
       "scale_ref": "frequency_0_4",
-      "domain": "emotional_load"
+      "domain": "anger"
     },
     {
-      "id": "mental_exhaustion",
+      "id": "mania_low_sleep_energy",
       "order": 3,
-      "text": "I’ve felt mentally exhausted or burned out.",
+      "text": "Feeling energized despite having not slept much?",
       "type": "scale",
       "scale_ref": "frequency_0_4",
-      "domain": "emotional_load"
+      "domain": "mania"
     },
     {
-      "id": "low_mood",
+      "id": "mania_risk_projects",
       "order": 4,
-      "text": "I’ve felt low, discouraged, or unmotivated.",
+      "text": "Beginning new projects and an increased propensity to take risks?",
       "type": "scale",
       "scale_ref": "frequency_0_4",
-      "domain": "mood_motivation"
+      "domain": "mania"
     },
     {
-      "id": "loss_of_interest",
+      "id": "anxiety_nervous",
       "order": 5,
-      "text": "I’ve lost interest in things I usually enjoy.",
+      "text": "Feeling consistently nervous, anxious, panicked, or frightened?",
       "type": "scale",
       "scale_ref": "frequency_0_4",
-      "domain": "mood_motivation"
+      "domain": "anxiety"
     },
     {
-      "id": "difficulty_starting_tasks",
+      "id": "anxiety_avoidance",
       "order": 6,
-      "text": "I’ve had trouble finding motivation to start tasks.",
+      "text": "Deliberately avoiding situations that trigger anxiety or nervousness?",
       "type": "scale",
       "scale_ref": "frequency_0_4",
-      "domain": "mood_motivation"
+      "domain": "anxiety"
     },
     {
-      "id": "increased_worry",
+      "id": "somatic_pain",
       "order": 7,
-      "text": "I’ve found myself worrying more than usual.",
+      "text": "Experiencing aches or bodily pain that seem not to have a specific cause?",
       "type": "scale",
       "scale_ref": "frequency_0_4",
-      "domain": "stress_worry"
+      "domain": "somatic_symptoms"
     },
     {
-      "id": "difficulty_controlling_worry",
+      "id": "suicidal_thoughts",
       "order": 8,
-      "text": "I’ve had trouble stopping or controlling my worries.",
+      "text": "Feeling suicidal or okay with not existing, or thoughts of self-harm?",
       "type": "scale",
       "scale_ref": "frequency_0_4",
-      "domain": "stress_worry"
+      "domain": "suicidal_tendencies"
     },
     {
-      "id": "sleep_disruption",
+      "id": "psychosis_hearing_voices",
       "order": 9,
-      "text": "My sleep has felt unsatisfying or disrupted.",
+      "text": "Hearing things that others are not able to hear (e.g., voices when you are alone)?",
       "type": "scale",
       "scale_ref": "frequency_0_4",
-      "domain": "daily_functioning"
+      "domain": "psychosis"
     },
     {
-      "id": "daily_impact",
+      "id": "psychosis_thought_broadcast",
       "order": 10,
-      "text": "My stress or mood has made daily activities harder.",
+      "text": "Thinking that someone else can hear your thoughts or you can hear theirs?",
       "type": "scale",
       "scale_ref": "frequency_0_4",
-      "domain": "daily_functioning"
+      "domain": "psychosis"
     },
     {
-      "id": "manageable_signal",
+      "id": "sleep_difficulty",
       "order": 11,
-      "text": "Have you felt like stress or emotions have been hard to manage lately?",
-      "type": "yes_no",
-      "domain": "safety_signal"
+      "text": "Difficulty with sleep that has affected your quality of sleep (for example, consistent inability to fall asleep)?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "sleep_problems"
+    },
+    {
+      "id": "memory_difficulty",
+      "order": 12,
+      "text": "Difficulty remembering information such as important locations or internalizing new information?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "memory"
+    },
+    {
+      "id": "repetitive_compulsive",
+      "order": 13,
+      "text": "Feeling a compulsive need to perform the same tasks or mental tasks repeatedly (includes thinking the same thoughts)?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "repetitive_thoughts"
+    },
+    {
+      "id": "dissociation_detached",
+      "order": 14,
+      "text": "Feeling detached from yourself and your own experiences, or not feeling like anything is real?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "dissociation"
+    },
+    {
+      "id": "personality_identity",
+      "order": 15,
+      "text": "Difficulty in understanding yourself and who you truly are?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "personality"
+    },
+    {
+      "id": "personality_relationships",
+      "order": 16,
+      "text": "Inability to form relationships with other people or ever feel close to them or comfortable with them?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "personality"
+    },
+    {
+      "id": "substance_use_behavior",
+      "order": 17,
+      "text": "Engaging in any of the following activities: drinking more than four times a day, smoking, or utilizing any non-prescribed drugs?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "substance_use"
     }
   ],
   "scoring": {
     "method": "sum",
     "included_question_ids": [
-      "emotional_overwhelm",
-      "difficulty_relaxing",
-      "mental_exhaustion",
-      "low_mood",
-      "loss_of_interest",
-      "difficulty_starting_tasks",
-      "increased_worry",
-      "difficulty_controlling_worry",
-      "sleep_disruption",
-      "daily_impact"
+      "depression_low_mood",
+      "anger_irritability",
+      "mania_low_sleep_energy",
+      "mania_risk_projects",
+      "anxiety_nervous",
+      "anxiety_avoidance",
+      "somatic_pain",
+      "suicidal_thoughts",
+      "psychosis_hearing_voices",
+      "psychosis_thought_broadcast",
+      "sleep_difficulty",
+      "memory_difficulty",
+      "repetitive_compulsive",
+      "dissociation_detached",
+      "personality_identity",
+      "personality_relationships",
+      "substance_use_behavior"
     ],
-    "score_range": { "min": 0, "max": 40 },
-    "severity_bands": [
-      { "label": "low", "min": 0, "max": 10 },
-      { "label": "mild", "min": 11, "max": 20 },
-      { "label": "moderate", "min": 21, "max": 30 },
-      { "label": "elevated", "min": 31, "max": 40 }
-    ]
+    "score_range": { "min": 0, "max": 68 }
   }
 }
