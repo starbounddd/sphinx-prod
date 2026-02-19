@@ -1,1 +1,0 @@
-export { PatientStats } from './PatientStats';

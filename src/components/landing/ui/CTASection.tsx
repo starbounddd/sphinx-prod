@@ -1,7 +1,7 @@
 import type { JSX } from 'react';
 import { Container, Section } from '@/components/ui/layout';
 import { Typography } from '@/components/ui/typography';
-import { EmailSignup } from '../EmailSignup';
+import { EmailSignup } from './EmailSignup';
 
 export function CTASection(): JSX.Element {
   return (

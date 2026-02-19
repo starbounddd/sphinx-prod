@@ -4,11 +4,11 @@ import type { JSX, ReactNode } from 'react';
 import { Clock, UserCheck, FileText } from 'lucide-react';
 import { PrimaryButton, SecondaryButton } from '@/components/ui/buttons';
 import { Typography } from '@/components/ui/typography';
-import { MatchScoreBadge } from '../MatchScoreBadge';
-import { PatientTag } from '../PatientTag';
-import { AIInsights } from '../AIInsights';
-import { PatientStats } from '../PatientStats';
-import { KeyContext } from '../KeyContext';
+import { MatchScoreBadge } from './MatchScoreBadge';
+import { PatientTag } from './PatientTag';
+import { AIInsights } from './AIInsights';
+import { PatientStats } from './PatientStats';
+import { KeyContext } from './KeyContext';
 import { cn } from '@/lib/utils';
 
 interface PatientMatchCardProps {

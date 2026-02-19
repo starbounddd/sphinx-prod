@@ -7,7 +7,7 @@ import {
   TertiaryButton,
 } from '@/components/ui/buttons';
 import { Typography } from '@/components/ui/typography';
-import { SphinxSummary, type SphinxSummaryProps } from '../SphinxSummary';
+import { SphinxSummary, type SphinxSummaryProps } from './SphinxSummary';
 import { cn } from '@/lib/utils';
 
 interface ReferralCardProps {
