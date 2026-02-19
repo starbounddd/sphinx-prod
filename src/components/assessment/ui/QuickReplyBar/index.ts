@@ -1,1 +1,0 @@
-export { QuickReplyBar } from './QuickReplyBar';

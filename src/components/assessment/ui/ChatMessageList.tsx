@@ -3,7 +3,7 @@
 import type { JSX } from 'react';
 import { useEffect, useRef } from 'react';
 import { ChatMessage } from '@/components/ui/chat';
-import type { ChatMessage as ChatMessageType } from '../../types';
+import type { ChatMessage as ChatMessageType } from '../types';
 import { cn } from '@/lib/utils';
 
 interface ChatMessageListProps {

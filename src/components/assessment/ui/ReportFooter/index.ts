@@ -1,1 +1,0 @@
-export { ReportFooter } from './ReportFooter';

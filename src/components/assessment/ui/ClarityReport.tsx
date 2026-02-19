@@ -5,10 +5,10 @@ import { Download, Sparkles } from 'lucide-react';
 import { SlideIn } from '@/components/ui/motion';
 import { SecondaryButton } from '@/components/ui/buttons';
 import { Typography } from '@/components/ui/typography';
-import { SummaryCard } from '../SummaryCard';
-import { FindingsGrid } from '../FindingsGrid';
-import { ReportFooter } from '../ReportFooter';
-import type { ClarityReport as ClarityReportType } from '../../types';
+import { SummaryCard } from './SummaryCard';
+import { FindingsGrid } from './FindingsGrid';
+import { ReportFooter } from './ReportFooter';
+import type { ClarityReport as ClarityReportType } from '../types';
 import { cn } from '@/lib/utils';
 
 interface ClarityReportProps {

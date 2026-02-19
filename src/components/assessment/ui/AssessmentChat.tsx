@@ -2,11 +2,11 @@
 
 import type { JSX } from 'react';
 import { ChatInput } from '@/components/ui/chat';
-import { AssessmentHeader } from '../AssessmentHeader';
-import { ChatMessageList } from '../ChatMessageList';
-import { ThinkingIndicator } from '../ThinkingIndicator';
-import { QuickReplyBar } from '../QuickReplyBar';
-import { useAssessmentChat } from '../../hooks';
+import { AssessmentHeader } from '@/components/assessment/ui';
+import { ChatMessageList } from './ChatMessageList';
+import { ThinkingIndicator } from './ThinkingIndicator';
+import { QuickReplyBar } from './QuickReplyBar';
+import { useAssessmentChat } from '../hooks/useAssessmentChat';
 import { cn } from '@/lib/utils';
 
 interface AssessmentChatProps {

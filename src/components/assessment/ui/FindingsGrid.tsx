@@ -2,8 +2,8 @@
 
 import type { JSX } from 'react';
 import { Stagger, ScaleIn } from '@/components/ui/motion';
-import { FindingCard } from '../FindingCard';
-import type { Finding } from '../../types';
+import { FindingCard } from './FindingCard';
+import type { Finding } from '../types';
 import { cn } from '@/lib/utils';
 
 interface FindingsGridProps {

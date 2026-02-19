@@ -5,7 +5,7 @@ import { Zap, Clock, Activity, Calendar } from 'lucide-react';
 import { HoverCard } from '@/components/ui/motion';
 import { Card } from '@/components/ui/shadcn/card';
 import { Typography } from '@/components/ui/typography';
-import type { FindingIconName } from '../../types';
+import type { FindingIconName } from '../types';
 import { cn } from '@/lib/utils';
 
 const ICON_MAP = {

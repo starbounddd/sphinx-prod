@@ -1,1 +1,0 @@
-export { FindingsGrid } from './FindingsGrid';
