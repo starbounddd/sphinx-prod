@@ -1,12 +1,12 @@
 {
   "survey_id": "wellbeing_checkin",
   "name": "Wellbeing Check-In",
-  "version": "1.0",
-  "description": "A short, non-clinical self-reflection survey focused on general emotional strain and stress over the past two weeks.",
+  "version": "1.1",
+  "description": "A short, non-clinical self-reflection survey focused on emotional and behavioral experiences over the past two weeks.",
   "timeframe": "past_2_weeks",
-  "estimated_duration_minutes": 3,
+  "estimated_duration_minutes": 5,
   "is_active": true,
-  "instructions": "This short check-in asks about how you’ve been feeling over the past two weeks. There are no right or wrong answers. This is not a diagnosis or medical assessment.",
+  "instructions": "This check-in asks about how you’ve been feeling over the past two weeks. There are no right or wrong answers. This is not a diagnosis or medical assessment.",
   "scales": {
     "frequency_0_4": {
       "type": "likert",
@@ -20,52 +20,164 @@
     }
   },
   "questions": [
-    { "id": "depression_persistent_low_mood", "order": 1, "text": "Depression – A persistently low or down mood (for example, not taking pleasure in things you normally do)?", "type": "yes_no", "domain": "depression" },
-    { "id": "anger_increased_irritability", "order": 2, "text": "Anger – Increased anger and irritability in general?", "type": "yes_no", "domain": "anger" },
-    { "id": "mania_feeling_energized_no_sleep", "order": 3, "text": "Mania – Feeling energized despite having not slept much?", "type": "yes_no", "domain": "mania" },
-    { "id": "mania_beginning_new_projects_risk", "order": 4, "text": "Mania – Beginning new projects and an increased propensity to take risks?", "type": "yes_no", "domain": "mania" },
-    { "id": "anxiety_consistently_nervous", "order": 5, "text": "Anxiety – Feeling consistently nervous, anxious, panicked, or frightened?", "type": "yes_no", "domain": "anxiety" },
-    { "id": "anxiety_avoid_triggers", "order": 6, "text": "Anxiety – Deliberately avoiding situations that trigger anxiety or nervousness?", "type": "yes_no", "domain": "anxiety" },
-    { "id": "somatic_aches_pain", "order": 7, "text": "Somatic Symptoms – Experiencing aches or bodily pain that seem not to have a specific cause?", "type": "yes_no", "domain": "somatic" },
-    { "id": "suicidal_tendencies_thoughts_self_harm", "order": 8, "text": "Suicidal Tendencies – Feeling suicidal or okay with not existing, or thoughts of self-harm?", "type": "yes_no", "domain": "suicidal" },
-    { "id": "psychosis_hearing_things", "order": 9, "text": "Psychosis – Hearing things that others are not able to hear (e.g., voices when you are alone)?", "type": "yes_no", "domain": "psychosis" },
-    { "id": "psychosis_thoughts_heard_by_others", "order": 10, "text": "Psychosis – Thinking that someone else can hear your thoughts or you can hear theirs?", "type": "yes_no", "domain": "psychosis" },
-    { "id": "sleep_difficulty_quality", "order": 11, "text": "Sleep Problems – Difficulty with sleep that has affected your quality of sleep (for example, consistent inability to fall asleep)?", "type": "yes_no", "domain": "sleep" },
-    { "id": "memory_difficulty_remembering", "order": 12, "text": "Memory – Difficulty remembering information such as important locations or internalizing new information?", "type": "yes_no", "domain": "memory" },
-    { "id": "repetitive_thoughts_compulsions", "order": 13, "text": "Repetitive Thoughts – Feeling a compulsive need to perform the same tasks or mental tasks repeatedly (includes thinking the same thoughts)?", "type": "yes_no", "domain": "repetitive_thoughts" },
-    { "id": "dissociation_detached_from_self", "order": 14, "text": "Dissociation – Feeling detached from yourself and your own experiences, or not feeling like anything is real?", "type": "yes_no", "domain": "dissociation" },
-    { "id": "personality_difficulty_understanding_self", "order": 15, "text": "Personality – Difficulty in understanding yourself and who you truly are?", "type": "yes_no", "domain": "personality" },
-    { "id": "personality_inability_form_relationships", "order": 16, "text": "Personality – Inability to form relationships with other people or ever feel close to them or comfortable with them?", "type": "yes_no", "domain": "personality" },
-    { "id": "substance_use_high_risk_behaviors", "order": 17, "text": "Substance Use – Engaging in any of the following activities: drinking more than four times a day, smoking, or utilizing any non-prescribed drugs?", "type": "yes_no", "domain": "substance_use" }
+    {
+      "id": "depression_low_mood",
+      "order": 1,
+      "text": "A persistently low or down mood (for example, not taking pleasure in things you normally do)?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "depression"
+    },
+    {
+      "id": "anger_irritability",
+      "order": 2,
+      "text": "Increased anger and irritability in general?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "anger"
+    },
+    {
+      "id": "mania_low_sleep_energy",
+      "order": 3,
+      "text": "Feeling energized despite having not slept much?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "mania"
+    },
+    {
+      "id": "mania_risk_projects",
+      "order": 4,
+      "text": "Beginning new projects and an increased propensity to take risks?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "mania"
+    },
+    {
+      "id": "anxiety_nervous",
+      "order": 5,
+      "text": "Feeling consistently nervous, anxious, panicked, or frightened?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "anxiety"
+    },
+    {
+      "id": "anxiety_avoidance",
+      "order": 6,
+      "text": "Deliberately avoiding situations that trigger anxiety or nervousness?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "anxiety"
+    },
+    {
+      "id": "somatic_pain",
+      "order": 7,
+      "text": "Experiencing aches or bodily pain that seem not to have a specific cause?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "somatic_symptoms"
+    },
+    {
+      "id": "suicidal_thoughts",
+      "order": 8,
+      "text": "Feeling suicidal or okay with not existing, or thoughts of self-harm?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "suicidal_tendencies"
+    },
+    {
+      "id": "psychosis_hearing_voices",
+      "order": 9,
+      "text": "Hearing things that others are not able to hear (e.g., voices when you are alone)?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "psychosis"
+    },
+    {
+      "id": "psychosis_thought_broadcast",
+      "order": 10,
+      "text": "Thinking that someone else can hear your thoughts or you can hear theirs?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "psychosis"
+    },
+    {
+      "id": "sleep_difficulty",
+      "order": 11,
+      "text": "Difficulty with sleep that has affected your quality of sleep (for example, consistent inability to fall asleep)?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "sleep_problems"
+    },
+    {
+      "id": "memory_difficulty",
+      "order": 12,
+      "text": "Difficulty remembering information such as important locations or internalizing new information?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "memory"
+    },
+    {
+      "id": "repetitive_compulsive",
+      "order": 13,
+      "text": "Feeling a compulsive need to perform the same tasks or mental tasks repeatedly (includes thinking the same thoughts)?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "repetitive_thoughts"
+    },
+    {
+      "id": "dissociation_detached",
+      "order": 14,
+      "text": "Feeling detached from yourself and your own experiences, or not feeling like anything is real?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "dissociation"
+    },
+    {
+      "id": "personality_identity",
+      "order": 15,
+      "text": "Difficulty in understanding yourself and who you truly are?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "personality"
+    },
+    {
+      "id": "personality_relationships",
+      "order": 16,
+      "text": "Inability to form relationships with other people or ever feel close to them or comfortable with them?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "personality"
+    },
+    {
+      "id": "substance_use_behavior",
+      "order": 17,
+      "text": "Engaging in any of the following activities: drinking more than four times a day, smoking, or utilizing any non-prescribed drugs?",
+      "type": "scale",
+      "scale_ref": "frequency_0_4",
+      "domain": "substance_use"
+    }
   ],
   "scoring": {
-    "method": "count_yes",
+    "method": "sum",
     "included_question_ids": [
-      "depression_persistent_low_mood",
-      "anger_increased_irritability",
-      "mania_feeling_energized_no_sleep",
-      "mania_beginning_new_projects_risk",
-      "anxiety_consistently_nervous",
-      "anxiety_avoid_triggers",
-      "somatic_aches_pain",
-      "suicidal_tendencies_thoughts_self_harm",
-      "psychosis_hearing_things",
-      "psychosis_thoughts_heard_by_others",
-      "sleep_difficulty_quality",
-      "memory_difficulty_remembering",
-      "repetitive_thoughts_compulsions",
-      "dissociation_detached_from_self",
-      "personality_difficulty_understanding_self",
-      "personality_inability_form_relationships",
-      "substance_use_high_risk_behaviors"
+      "depression_low_mood",
+      "anger_irritability",
+      "mania_low_sleep_energy",
+      "mania_risk_projects",
+      "anxiety_nervous",
+      "anxiety_avoidance",
+      "somatic_pain",
+      "suicidal_thoughts",
+      "psychosis_hearing_voices",
+      "psychosis_thought_broadcast",
+      "sleep_difficulty",
+      "memory_difficulty",
+      "repetitive_compulsive",
+      "dissociation_detached",
+      "personality_identity",
+      "personality_relationships",
+      "substance_use_behavior"
     ],
-    "score_range": { "min": 0, "max": 17 },
-    "severity_bands": [
-      { "label": "none", "min": 0, "max": 0 },
-      { "label": "low", "min": 1, "max": 3 },
-      { "label": "moderate", "min": 4, "max": 7 },
-      { "label": "high", "min": 8, "max": 12 },
-      { "label": "very_high", "min": 13, "max": 17 }
-    ]
+    "score_range": { "min": 0, "max": 68 }
   }
 }

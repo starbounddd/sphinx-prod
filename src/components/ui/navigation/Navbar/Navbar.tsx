@@ -47,10 +47,10 @@ export async function Navbar(): Promise<JSX.Element> {
           </div>
 
           <PrimaryButton
-              href="/assessment"
+              href="/screening"
               className="px-6 py-2.5 text-sm shrink-0"
           >
-            Start Assessment
+            Start Screening
           </PrimaryButton>
 
           {/* Client-side auth-aware render to keep interactivity and correct session state */}

@@ -39,7 +39,7 @@ export function Hero(): JSX.Element {
 
         {/* CTA button group */}
         <div className="flex flex-wrap items-center justify-center gap-8 pt-4">
-          <PrimaryButton href="/assessment" showArrow shimmer>
+          <PrimaryButton href="/screening" showArrow shimmer>
             Start Free Check-in
           </PrimaryButton>
           <SecondaryButton href="#providers">For Providers</SecondaryButton>
