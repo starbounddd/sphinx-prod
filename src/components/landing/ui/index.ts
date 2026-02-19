@@ -1,5 +1,5 @@
 export { Hero } from './Hero';
-export { QuoteSection } from './QuoteSection';
+export { QuoteSection } from './QuoteSection/QuoteSection';
 export { PhoneShowcase } from './PhoneShowcase';
 export { FeatureGrid } from './FeatureGrid';
 export { CTASection } from './CTASection';

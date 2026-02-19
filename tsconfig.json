@@ -43,9 +43,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts",
-    "node_modules/storybook/dist/manager/globals-runtime.js",
-    "node_modules/storybook/dist/manager/globals-runtime.js"
+    "**/*.mts"
   ],
   "exclude": [
     "node_modules"

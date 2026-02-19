@@ -1,1 +1,0 @@
-export { FindingCard } from './FindingCard';

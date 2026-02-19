@@ -13,3 +13,11 @@ export const SURVEY_LIMITS = {
   maxAnswersPerQuestion: 50,
   maxResponseLength: 5000,
 };
+
+export const ERROR_MESSAGES = {
+  networkError: 'Network error. Please check your connection and try again.',
+  serverError: 'Server error. Please try again later.',
+  validationError: 'Validation error. Please check your input and try again.',
+  unauthorized: 'Unauthorized. Please log in to continue.',
+  syncFailure: 'Failed to sync user to database. Please try again.',
+};

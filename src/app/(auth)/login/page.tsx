@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
+import { ERROR_MESSAGES} from "@/utils/constants";
 
 export default function LoginPage() {
   const supabase = createClient();
@@ -10,7 +11,7 @@ export default function LoginPage() {
     const res = await fetch('/api/auth/sync-user', { method: 'POST', credentials: 'include' });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
-      console.error('Failed to sync user to database', body.error, body.details ?? '');
+      console.error(ERROR_MESSAGES.syncFailure, body.error, body.details ?? '');
     }
   }
 
@@ -52,11 +53,18 @@ export default function LoginPage() {
       alert(error.message);
       return;
     }
+
     if (data.user) {
+      // give Supabase a moment to set the cookie (same reason as signup)
+      await new Promise((r) => setTimeout(r, 100));
+
       await syncUserToPostgres();
+
+      router.refresh();
       router.push('/');
     }
   }
+
 
   return (
     <div>
