@@ -6,7 +6,6 @@ import {
   FeatureGrid,
   CTASection,
 } from '@/components/landing/ui';
-import { AuthCTA } from '@/components/ui/navigation/AuthCTA/AuthCTA';
 
 export default function LandingPage() {
   return (
@@ -14,7 +13,6 @@ export default function LandingPage() {
       <Navbar />
       <main className="pt-24">
         <Hero />
-        <AuthCTA />
         <QuoteSection />
         <PhoneShowcase />
         <FeatureGrid />

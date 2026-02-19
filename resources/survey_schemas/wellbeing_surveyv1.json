@@ -20,114 +20,52 @@
     }
   },
   "questions": [
-    {
-      "id": "emotional_overwhelm",
-      "order": 1,
-      "text": "I’ve felt overwhelmed by everyday responsibilities.",
-      "type": "scale",
-      "scale_ref": "frequency_0_4",
-      "domain": "emotional_load"
-    },
-    {
-      "id": "difficulty_relaxing",
-      "order": 2,
-      "text": "I’ve had difficulty relaxing, even during downtime.",
-      "type": "scale",
-      "scale_ref": "frequency_0_4",
-      "domain": "emotional_load"
-    },
-    {
-      "id": "mental_exhaustion",
-      "order": 3,
-      "text": "I’ve felt mentally exhausted or burned out.",
-      "type": "scale",
-      "scale_ref": "frequency_0_4",
-      "domain": "emotional_load"
-    },
-    {
-      "id": "low_mood",
-      "order": 4,
-      "text": "I’ve felt low, discouraged, or unmotivated.",
-      "type": "scale",
-      "scale_ref": "frequency_0_4",
-      "domain": "mood_motivation"
-    },
-    {
-      "id": "loss_of_interest",
-      "order": 5,
-      "text": "I’ve lost interest in things I usually enjoy.",
-      "type": "scale",
-      "scale_ref": "frequency_0_4",
-      "domain": "mood_motivation"
-    },
-    {
-      "id": "difficulty_starting_tasks",
-      "order": 6,
-      "text": "I’ve had trouble finding motivation to start tasks.",
-      "type": "scale",
-      "scale_ref": "frequency_0_4",
-      "domain": "mood_motivation"
-    },
-    {
-      "id": "increased_worry",
-      "order": 7,
-      "text": "I’ve found myself worrying more than usual.",
-      "type": "scale",
-      "scale_ref": "frequency_0_4",
-      "domain": "stress_worry"
-    },
-    {
-      "id": "difficulty_controlling_worry",
-      "order": 8,
-      "text": "I’ve had trouble stopping or controlling my worries.",
-      "type": "scale",
-      "scale_ref": "frequency_0_4",
-      "domain": "stress_worry"
-    },
-    {
-      "id": "sleep_disruption",
-      "order": 9,
-      "text": "My sleep has felt unsatisfying or disrupted.",
-      "type": "scale",
-      "scale_ref": "frequency_0_4",
-      "domain": "daily_functioning"
-    },
-    {
-      "id": "daily_impact",
-      "order": 10,
-      "text": "My stress or mood has made daily activities harder.",
-      "type": "scale",
-      "scale_ref": "frequency_0_4",
-      "domain": "daily_functioning"
-    },
-    {
-      "id": "manageable_signal",
-      "order": 11,
-      "text": "Have you felt like stress or emotions have been hard to manage lately?",
-      "type": "yes_no",
-      "domain": "safety_signal"
-    }
+    { "id": "depression_persistent_low_mood", "order": 1, "text": "Depression – A persistently low or down mood (for example, not taking pleasure in things you normally do)?", "type": "yes_no", "domain": "depression" },
+    { "id": "anger_increased_irritability", "order": 2, "text": "Anger – Increased anger and irritability in general?", "type": "yes_no", "domain": "anger" },
+    { "id": "mania_feeling_energized_no_sleep", "order": 3, "text": "Mania – Feeling energized despite having not slept much?", "type": "yes_no", "domain": "mania" },
+    { "id": "mania_beginning_new_projects_risk", "order": 4, "text": "Mania – Beginning new projects and an increased propensity to take risks?", "type": "yes_no", "domain": "mania" },
+    { "id": "anxiety_consistently_nervous", "order": 5, "text": "Anxiety – Feeling consistently nervous, anxious, panicked, or frightened?", "type": "yes_no", "domain": "anxiety" },
+    { "id": "anxiety_avoid_triggers", "order": 6, "text": "Anxiety – Deliberately avoiding situations that trigger anxiety or nervousness?", "type": "yes_no", "domain": "anxiety" },
+    { "id": "somatic_aches_pain", "order": 7, "text": "Somatic Symptoms – Experiencing aches or bodily pain that seem not to have a specific cause?", "type": "yes_no", "domain": "somatic" },
+    { "id": "suicidal_tendencies_thoughts_self_harm", "order": 8, "text": "Suicidal Tendencies – Feeling suicidal or okay with not existing, or thoughts of self-harm?", "type": "yes_no", "domain": "suicidal" },
+    { "id": "psychosis_hearing_things", "order": 9, "text": "Psychosis – Hearing things that others are not able to hear (e.g., voices when you are alone)?", "type": "yes_no", "domain": "psychosis" },
+    { "id": "psychosis_thoughts_heard_by_others", "order": 10, "text": "Psychosis – Thinking that someone else can hear your thoughts or you can hear theirs?", "type": "yes_no", "domain": "psychosis" },
+    { "id": "sleep_difficulty_quality", "order": 11, "text": "Sleep Problems – Difficulty with sleep that has affected your quality of sleep (for example, consistent inability to fall asleep)?", "type": "yes_no", "domain": "sleep" },
+    { "id": "memory_difficulty_remembering", "order": 12, "text": "Memory – Difficulty remembering information such as important locations or internalizing new information?", "type": "yes_no", "domain": "memory" },
+    { "id": "repetitive_thoughts_compulsions", "order": 13, "text": "Repetitive Thoughts – Feeling a compulsive need to perform the same tasks or mental tasks repeatedly (includes thinking the same thoughts)?", "type": "yes_no", "domain": "repetitive_thoughts" },
+    { "id": "dissociation_detached_from_self", "order": 14, "text": "Dissociation – Feeling detached from yourself and your own experiences, or not feeling like anything is real?", "type": "yes_no", "domain": "dissociation" },
+    { "id": "personality_difficulty_understanding_self", "order": 15, "text": "Personality – Difficulty in understanding yourself and who you truly are?", "type": "yes_no", "domain": "personality" },
+    { "id": "personality_inability_form_relationships", "order": 16, "text": "Personality – Inability to form relationships with other people or ever feel close to them or comfortable with them?", "type": "yes_no", "domain": "personality" },
+    { "id": "substance_use_high_risk_behaviors", "order": 17, "text": "Substance Use – Engaging in any of the following activities: drinking more than four times a day, smoking, or utilizing any non-prescribed drugs?", "type": "yes_no", "domain": "substance_use" }
   ],
   "scoring": {
-    "method": "sum",
+    "method": "count_yes",
     "included_question_ids": [
-      "emotional_overwhelm",
-      "difficulty_relaxing",
-      "mental_exhaustion",
-      "low_mood",
-      "loss_of_interest",
-      "difficulty_starting_tasks",
-      "increased_worry",
-      "difficulty_controlling_worry",
-      "sleep_disruption",
-      "daily_impact"
+      "depression_persistent_low_mood",
+      "anger_increased_irritability",
+      "mania_feeling_energized_no_sleep",
+      "mania_beginning_new_projects_risk",
+      "anxiety_consistently_nervous",
+      "anxiety_avoid_triggers",
+      "somatic_aches_pain",
+      "suicidal_tendencies_thoughts_self_harm",
+      "psychosis_hearing_things",
+      "psychosis_thoughts_heard_by_others",
+      "sleep_difficulty_quality",
+      "memory_difficulty_remembering",
+      "repetitive_thoughts_compulsions",
+      "dissociation_detached_from_self",
+      "personality_difficulty_understanding_self",
+      "personality_inability_form_relationships",
+      "substance_use_high_risk_behaviors"
     ],
-    "score_range": { "min": 0, "max": 40 },
+    "score_range": { "min": 0, "max": 17 },
     "severity_bands": [
-      { "label": "low", "min": 0, "max": 10 },
-      { "label": "mild", "min": 11, "max": 20 },
-      { "label": "moderate", "min": 21, "max": 30 },
-      { "label": "elevated", "min": 31, "max": 40 }
+      { "label": "none", "min": 0, "max": 0 },
+      { "label": "low", "min": 1, "max": 3 },
+      { "label": "moderate", "min": 4, "max": 7 },
+      { "label": "high", "min": 8, "max": 12 },
+      { "label": "very_high", "min": 13, "max": 17 }
     ]
   }
 }

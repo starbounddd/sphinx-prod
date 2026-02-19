@@ -41,20 +41,12 @@ export async function updateSession(request: NextRequest) {
 
   const user = data?.claims;
 
-  // Only redirect unauthenticated requests that target protected UI routes.
-  // Public pages (like the landing page) should not be force-redirected.
-  const protectedPrefixes = ['/provider', '/assessment', '/dashboard'];
-
-  const isAuthRoute =
-    request.nextUrl.pathname.startsWith('/login') ||
-    request.nextUrl.pathname.startsWith('/auth');
-
-  const isProtectedRoute = protectedPrefixes.some((p) =>
-    request.nextUrl.pathname.startsWith(p)
-  );
-
-  if (!user && !isAuthRoute && isProtectedRoute) {
-    // no user and trying to access a protected UI route -> redirect to login
+  if (
+    !user &&
+    !request.nextUrl.pathname.startsWith('/login') &&
+    !request.nextUrl.pathname.startsWith('/auth')
+  ) {
+    // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     return NextResponse.redirect(url);
