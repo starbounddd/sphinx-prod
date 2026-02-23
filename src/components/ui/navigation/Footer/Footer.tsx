@@ -25,9 +25,9 @@ const footerLinks = {
   legal: {
     title: 'Legal',
     links: [
-      { href: '#', label: 'Privacy Policy' },
-      { href: '#', label: 'Terms of Service' },
-      { href: '#', label: 'HIPAA Compliance' },
+      { href: '/legal/privacy', label: 'Privacy Policy' },
+      { href: '/legal/service', label: 'Terms of Service' },
+      { href: '/legal/HIPAA', label: 'HIPAA Compliance' },
     ],
   },
 };
