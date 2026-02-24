@@ -1,11 +1,13 @@
 'use client';
 
-import type { JSX } from 'react';
+import { type JSX, useEffect } from 'react';
 import { ChatInput } from '@/components/ui/chat';
-import { AssessmentHeader } from '@/components/assessment/ui';
+import { AssessmentHeader } from './AssessmentHeader';
+import { ChatSidebar } from './ChatSidebar';
 import { ChatMessageList } from './ChatMessageList';
 import { ThinkingIndicator } from './ThinkingIndicator';
 import { QuickReplyBar } from './QuickReplyBar';
+import { ChatDisclaimer } from './ChatDisclaimer';
 import { useAssessmentChat } from '../hooks/useAssessmentChat';
 import { cn } from '@/lib/utils';
 
@@ -14,9 +16,13 @@ interface AssessmentChatProps {
 }
 
 /**
- * Main assessment chat container
- * Uses 1:2:1 grid layout for messages (AI left, empty middle, User right)
- * Features decorative corner elements
+ * Main assessment chat page layout.
+ *
+ * Structure:
+ *   4px top accent gradient bar
+ *   flex row [ 280px sidebar | main chat area ]
+ *
+ * Matches the Pencil design (node FrXME).
  */
 export function AssessmentChat({
   className,
@@ -25,70 +31,84 @@ export function AssessmentChat({
     messages,
     isThinking,
     isComplete,
+    currentStep,
     inputValue,
     setInputValue,
     currentQuickReplies,
     handleQuickReply,
     handleSend,
+    domainStatuses,
+    currentDomain,
+    dataPersisted,
   } = useAssessmentChat();
 
-  // Navigate to report when assessment is complete
-  if (isComplete) {
-    // Use window.location to navigate — avoids the typedRoutes restriction on router.push.
-    // This performs a full-page navigation to the report route.
-    if (typeof window !== 'undefined') {
-      // use assign() to navigate without assigning to a property (avoids immutability lint rule)
+  // Navigate to report after data has been persisted to localStorage
+  useEffect(() => {
+    if (isComplete && dataPersisted) {
       window.location.assign('/assessment/report');
     }
-  }
+  }, [isComplete, dataPersisted]);
 
   return (
     <div
       className={cn(
-        'relative flex h-screen flex-col overflow-hidden',
-        className
+        'relative flex h-screen flex-col overflow-hidden bg-white',
+        className,
       )}
     >
-      {/* Decorative corner flourishes */}
-      <div className="corner-flourish top-left" />
-      <div className="corner-flourish bottom-right" />
+      {/* 4px accent gradient bar */}
+      <div className="h-1 w-full shrink-0 bg-linear-to-r from-[#0D9488] to-[#FFB7B2]" />
 
-      {/* Header */}
-      <AssessmentHeader />
+      {/* Main layout: sidebar + chat area */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left sidebar */}
+        <ChatSidebar
+          domainStatuses={domainStatuses}
+          currentDomain={currentDomain}
+          questionCount={currentStep}
+        />
 
-      {/* Messages area - full width with 1:2:1 grid inside */}
-      <div className="relative z-10 flex-1 overflow-y-auto">
-        <ChatMessageList messages={messages} className="py-6" />
+        {/* Main chat area */}
+        <div className="flex flex-1 flex-col overflow-hidden">
+          {/* Header */}
+          <AssessmentHeader
+            currentDomain={currentDomain}
+            questionCount={currentStep}
+          />
 
-        {/* Thinking indicator - centered */}
-        {isThinking && (
-          <div className="flex justify-center px-6 py-4">
-            <ThinkingIndicator />
+          {/* Messages area */}
+          <ChatMessageList messages={messages} className="flex-1" />
+
+          {/* Thinking indicator */}
+          {isThinking && (
+            <div className="px-8 pb-4">
+              <ThinkingIndicator />
+            </div>
+          )}
+
+          {/* Bottom area: chips + input + disclaimer */}
+          <div className="flex shrink-0 flex-col gap-3 border-t border-gray-200 bg-white px-8 pb-6">
+            {/* Suggestion chips */}
+            {!isThinking && currentQuickReplies.length > 0 && (
+              <QuickReplyBar
+                options={currentQuickReplies}
+                onSelect={handleQuickReply}
+                className="pt-3"
+              />
+            )}
+
+            {/* Input row */}
+            <ChatInput
+              value={inputValue}
+              onChange={setInputValue}
+              onSend={handleSend}
+              disabled={isThinking}
+              placeholder="Type your response..."
+            />
+
+            {/* Disclaimer */}
+            <ChatDisclaimer />
           </div>
-        )}
-      </div>
-
-      {/* Bottom bar with input - centered layout */}
-      <div className="relative z-10 bg-linear-to-t from-cream via-cream/95 to-cream/0 pb-8 pt-6">
-        {/* Quick replies - centered */}
-        {!isThinking && currentQuickReplies.length > 0 && (
-          <QuickReplyBar
-            options={currentQuickReplies}
-            onSelect={handleQuickReply}
-            className="justify-center pb-5"
-          />
-        )}
-
-        {/* Centered input container with glow effect */}
-        <div className="mx-auto max-w-xl px-6">
-          <ChatInput
-            value={inputValue}
-            onChange={setInputValue}
-            onSend={handleSend}
-            disabled={isThinking}
-            placeholder="Share what's on your mind..."
-            className="input-glow"
-          />
         </div>
       </div>
     </div>

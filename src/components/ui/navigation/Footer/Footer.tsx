@@ -61,7 +61,7 @@ export function Footer(): JSX.Element {
               <ul className="mt-4 space-y-3">
                 {section.links.map((link) => (
                   <li key={link.label}>
-                    <Link href={link.href}>
+                    <Link href={link.href as any}>
                       <Typography
                         size="body-sm"
                         as="span"
@@ -87,7 +87,7 @@ export function Footer(): JSX.Element {
             {socialLinks.map((link) => (
               <Link
                 key={link.label}
-                href={link.href}
+                href={link.href as any}
                 className="text-muted-foreground transition-colors hover:text-foreground"
                 aria-label={link.label}
               >

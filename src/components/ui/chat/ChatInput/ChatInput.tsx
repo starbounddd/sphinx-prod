@@ -2,8 +2,7 @@
 
 import type { JSX } from 'react';
 import { useEffect, useRef } from 'react';
-import { Send } from 'lucide-react';
-import { HoverScale } from '@/components/ui/motion';
+import { Send, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ChatInputProps {
@@ -17,15 +16,14 @@ interface ChatInputProps {
 }
 
 /**
- * Chat input with textarea
- * - Enter to send, Shift+Enter for new line
- * - Auto-resize up to maxRows
+ * Chat input with textarea + send button.
+ * Card-style container with MessageCircle icon, matching the Pencil design.
  */
 export function ChatInput({
   value,
   onChange,
   onSend,
-  placeholder = 'Type here...',
+  placeholder = 'Type your response...',
   disabled = false,
   className,
   maxRows = 4,
@@ -37,19 +35,13 @@ export function ChatInput({
     const textarea = textareaRef.current;
     if (!textarea) return;
 
-    // Reset height to auto to get the correct scrollHeight
     textarea.style.height = 'auto';
-
-    // Calculate line height (approximately 24px per line)
     const lineHeight = 24;
     const maxHeight = lineHeight * maxRows;
-
-    // Set height to scrollHeight, capped at maxHeight
     textarea.style.height = `${Math.min(textarea.scrollHeight, maxHeight)}px`;
   }, [value, maxRows]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // Enter without Shift sends the message
     if (e.key === 'Enter' && !e.shiftKey && value.trim() && !disabled) {
       e.preventDefault();
       onSend();
@@ -59,39 +51,43 @@ export function ChatInput({
   const isDisabledSend = disabled || !value.trim();
 
   return (
-    <div
-      className={cn(
-        'flex items-end gap-3 rounded-3xl border border-sage/30 bg-white/90 p-2 shadow-lg backdrop-blur-sm',
-        className
-      )}
-    >
-      <textarea
-        ref={textareaRef}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder={placeholder}
-        disabled={disabled}
-        rows={1}
-        className={cn(
-          'flex-1 resize-none bg-transparent px-3 py-2 text-base text-dark placeholder:text-gray/60',
-          'focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',
-          'leading-6'
-        )}
-      />
-      <HoverScale
+    <div className={cn('flex w-full items-center gap-3', className)}>
+      {/* Text input card */}
+      <div className="flex flex-1 items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 shadow-[0_2px_8px_rgba(41,37,36,0.03)]"
+        style={{ height: 48 }}
+      >
+        <MessageCircle className="h-[18px] w-[18px] shrink-0 text-muted-foreground" />
+        <textarea
+          ref={textareaRef}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          disabled={disabled}
+          rows={1}
+          className={cn(
+            'flex-1 resize-none bg-transparent py-3 text-sm text-foreground placeholder:text-muted-foreground',
+            'focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+            'leading-6',
+          )}
+        />
+      </div>
+
+      {/* Send button */}
+      <button
         type="button"
         onClick={onSend}
         disabled={isDisabledSend}
         className={cn(
-          'flex h-12 w-12 shrink-0 items-center justify-center rounded-full',
-          'bg-coral shadow-md',
-          'disabled:pointer-events-none disabled:opacity-50'
+          'flex h-12 w-12 shrink-0 items-center justify-center rounded-xl',
+          'bg-[#0D9488] text-white transition-opacity',
+          'hover:opacity-90',
+          'disabled:pointer-events-none disabled:opacity-50',
         )}
         aria-label="Send message"
       >
-        <Send className="h-5 w-5 text-white" />
-      </HoverScale>
+        <Send className="h-[18px] w-[18px]" />
+      </button>
     </div>
   );
 }

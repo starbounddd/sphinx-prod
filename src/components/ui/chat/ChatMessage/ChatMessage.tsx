@@ -1,60 +1,54 @@
 'use client';
 
 import type { JSX, ReactNode } from 'react';
-import { SlideIn } from '@/components/ui/motion';
-import { WordFadeIn } from '@/components/ui/magicui';
-import { Typography } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
 
 interface ChatMessageProps {
   variant: 'ai' | 'user';
   children: ReactNode;
   className?: string;
-  /** Enable word-by-word fade-in animation for AI messages (requires string children) */
-  animateWords?: boolean;
+  /** Timestamp text to render below the bubble (e.g. "2:35 PM") */
+  timestamp?: string;
 }
 
 /**
- * Chat message bubble component with entrance animations
- * AI messages: sage background with left slide animation
- * User messages: coral background with right slide animation
+ * Chat message bubble component.
  *
- * Set animateWords={true} for word-by-word reveal on AI messages
+ * AI  messages: white card with border, rounded-2xl with small bottom-left corner
+ * User messages: teal primary background, rounded-2xl with small bottom-right corner
  */
 export function ChatMessage({
   variant,
   children,
   className,
-  animateWords = false,
+  timestamp,
 }: ChatMessageProps): JSX.Element {
   const isAI = variant === 'ai';
 
-  // Determine if we should use WordFadeIn animation
-  const shouldAnimateWords =
-    animateWords && isAI && typeof children === 'string';
-
   return (
-    <SlideIn
-      direction={isAI ? 'left' : 'right'}
-      className={cn(
-        'rounded-2xl px-4 py-3 shadow-sm',
-        isAI
-          ? 'rounded-tl-sm bg-sage backdrop-blur-xs'
-          : 'rounded-tr-sm bg-coral/80 backdrop-blur-xs',
-        className
+    <div className="flex flex-col gap-1">
+      <div
+        className={cn(
+          'px-4 py-3 text-sm leading-relaxed',
+          isAI
+            ? 'rounded-2xl rounded-bl-sm border border-gray-200 bg-white text-foreground shadow-[0_2px_8px_rgba(41,37,36,0.03)]'
+            : 'rounded-2xl rounded-br-sm bg-[#0D9488] text-white',
+          className,
+        )}
+      >
+        {children}
+      </div>
+
+      {timestamp && (
+        <span
+          className={cn(
+            'text-[11px] text-muted-foreground',
+            !isAI && 'text-right',
+          )}
+        >
+          {timestamp}
+        </span>
       )}
-    >
-      {shouldAnimateWords ? (
-        <WordFadeIn
-          words={children}
-          delay={0.06}
-          className="text-base leading-relaxed text-dark"
-        />
-      ) : (
-        <Typography font="chat" size="body" className="text-dark">
-          {children}
-        </Typography>
-      )}
-    </SlideIn>
+    </div>
   );
 }

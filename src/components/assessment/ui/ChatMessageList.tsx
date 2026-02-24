@@ -2,6 +2,7 @@
 
 import type { JSX } from 'react';
 import { useEffect, useRef } from 'react';
+import { Bot } from 'lucide-react';
 import { ChatMessage } from '@/components/ui/chat';
 import type { ChatMessage as ChatMessageType } from '../types';
 import { cn } from '@/lib/utils';
@@ -12,12 +13,12 @@ interface ChatMessageListProps {
 }
 
 /**
- * Chat messages with 0.5:1.5:2:1.5:0.5 grid layout
- * - Spacer (0.5fr): Left margin
- * - AI column (1.5fr): AI messages
- * - Middle (2fr): Empty space
- * - User column (1.5fr): User messages
- * - Spacer (0.5fr): Right margin
+ * Vertical chat message list.
+ *
+ * AI messages:  left-aligned with teal bot avatar + white card bubble + timestamp
+ * User messages: right-aligned teal bubble + timestamp
+ *
+ * The list is flex with justify-end so messages anchor to the bottom.
  */
 export function ChatMessageList({
   messages,
@@ -30,37 +31,43 @@ export function ChatMessageList({
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  const formatTime = (date: Date) =>
+    new Date(date).toLocaleTimeString([], {
+      hour: 'numeric',
+      minute: '2-digit',
+    });
+
   return (
-    <div className={cn('flex flex-col gap-4 overflow-y-auto', className)}>
-      {messages.map((message) => (
-        <div
-          key={message.id}
-          className="grid grid-cols-[0.5fr_1.5fr_2fr_1.5fr_0.5fr] gap-4"
-        >
-          {/* Left spacer */}
-          <div />
+    <div
+      className={cn(
+        'flex flex-1 flex-col justify-end gap-5 overflow-y-auto px-8 py-6',
+        className,
+      )}
+    >
+      {messages.map((message) => {
+        const isAI = message.role === 'ai';
+        const time = formatTime(message.timestamp);
 
-          {/* AI messages column */}
-          <div>
-            {message.role === 'ai' && (
-              <ChatMessage variant="ai">{message.content}</ChatMessage>
-            )}
+        return isAI ? (
+          /* AI message — left aligned with avatar */
+          <div key={message.id} className="flex items-start gap-3">
+            {/* Teal avatar circle */}
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0D9488]">
+              <Bot className="h-5 w-5 text-white" />
+            </div>
+            <ChatMessage variant="ai" timestamp={time} className="max-w-[420px]">
+              {message.content}
+            </ChatMessage>
           </div>
-
-          {/* Middle - empty space */}
-          <div />
-
-          {/* User messages column */}
-          <div>
-            {message.role === 'user' && (
-              <ChatMessage variant="user">{message.content}</ChatMessage>
-            )}
+        ) : (
+          /* User message — right aligned */
+          <div key={message.id} className="flex justify-end">
+            <ChatMessage variant="user" timestamp={time} className="max-w-[340px]">
+              {message.content}
+            </ChatMessage>
           </div>
-
-          {/* Right spacer */}
-          <div />
-        </div>
-      ))}
+        );
+      })}
       <div ref={bottomRef} />
     </div>
   );

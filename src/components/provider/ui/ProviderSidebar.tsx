@@ -18,7 +18,7 @@ interface NavItemProps {
 function NavItem({ href, icon, label, active = false, badge }: NavItemProps) {
   return (
     <Link
-      href={href}
+      href={href as any}
       className={cn(
         'flex items-center gap-4 rounded-xl px-4 py-3 font-medium transition-colors',
         active
@@ -102,7 +102,7 @@ export function ProviderSidebar({
       <div className="mt-auto flex flex-col gap-4">
         <div className="h-px w-full bg-sage/50" />
         <Link
-          href="/provider/settings"
+          href={"/provider/settings" as any}
           className="flex items-center gap-4 px-4 py-2 text-gray transition-colors hover:text-dark"
         >
           <div className="h-8 w-8 shrink-0 overflow-hidden rounded-full bg-sage">

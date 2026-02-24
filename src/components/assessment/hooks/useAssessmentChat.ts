@@ -20,6 +20,37 @@ export function useAssessmentChat() {
   const [currentDomain, setCurrentDomain] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [report, setReport] = useState<any>(null);
+  const [dataPersisted, setDataPersisted] = useState(false);
+
+  // ------------------------------------------------------------------
+  // Persist chat data to localStorage when assessment completes
+  // ------------------------------------------------------------------
+  useEffect(() => {
+    if (!state.isComplete || dataPersisted) return;
+
+    try {
+      localStorage.setItem(
+        'sphinx_chat_messages',
+        JSON.stringify(state.messages)
+      );
+      if (report) {
+        localStorage.setItem('sphinx_chat_report', JSON.stringify(report));
+      }
+      localStorage.setItem(
+        'sphinx_assessment_metadata',
+        JSON.stringify({
+          threadId,
+          completedAt: new Date().toISOString(),
+          totalQuestions: state.currentStep,
+          domainStatuses,
+        })
+      );
+      setDataPersisted(true);
+    } catch (err) {
+      console.error('Failed to persist assessment data:', err);
+      setDataPersisted(true); // still allow redirect
+    }
+  }, [state.isComplete, state.messages, state.currentStep, report, domainStatuses, threadId, dataPersisted]);
 
   // ------------------------------------------------------------------
   // Init: read screening answers from localStorage and call the API
@@ -165,5 +196,6 @@ export function useAssessmentChat() {
     report,
     threadId,
     isInitialized,
+    dataPersisted,
   };
 }
