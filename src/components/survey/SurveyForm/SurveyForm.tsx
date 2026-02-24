@@ -164,6 +164,9 @@ export function SurveyForm({ survey }: SurveyFormProps): JSX.Element {
                 <Typography size="h3">Results</Typography>
                 <p className="mt-2">Score: {score}</p>
                 <p>Severity: {getSeverity(score ?? 0) ?? 'N/A'}</p>
+                <PrimaryButton
+                href="/assessment"> Go to Assessment
+                </PrimaryButton>
               </div>
             )}
           </div>
