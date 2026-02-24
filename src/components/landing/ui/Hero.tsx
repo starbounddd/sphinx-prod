@@ -12,13 +12,13 @@ import { Typography } from '@/components/ui/typography';
  */
 export function Hero(): JSX.Element {
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
+    <section className="hero-section">
       {/* Background decorations */}
-      <div className="pointer-events-none absolute -left-[100px] -top-[200px] h-[600px] w-[600px] rounded-[240px_480px_510px_390px] bg-sage/50 blur-[40px]" />
-      <div className="pointer-events-none absolute -bottom-[150px] -right-[50px] h-[500px] w-[500px] rounded-[200px_400px_425px_325px] bg-coral/50 blur-[40px]" />
+      <div className="hero-deco-left" />
+      <div className="hero-deco-right" />
 
       {/* Main content */}
-      <div className="relative z-10 mx-auto max-w-[900px] px-4 text-center">
+      <div className="hero-content">
         {/* Headline */}
         <Typography size="h1" className="mb-8 text-dark">
           Find the words
@@ -38,7 +38,7 @@ export function Hero(): JSX.Element {
         </Typography>
 
         {/* CTA button group */}
-        <div className="flex flex-wrap items-center justify-center gap-8 pt-4">
+        <div className="hero-cta-group">
           <PrimaryButton href="/screening" showArrow shimmer>
             Start Free Check-in
           </PrimaryButton>
@@ -46,7 +46,7 @@ export function Hero(): JSX.Element {
         </div>
 
         {/* Trust indicators */}
-        <Typography size="body-sm" color="muted" className="mt-6">
+        <Typography size="body-sm" color="muted" className="hero-trust">
           No signup required · 3-minute check-in · Completely anonymous
         </Typography>
       </div>

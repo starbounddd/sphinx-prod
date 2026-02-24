@@ -14,7 +14,7 @@ export default function LandingPage() {
       <main className="pt-24">
         <Hero />
         <QuoteSection />
-        <PhoneShowcase />
+        {/*<PhoneShowcase />*/}
         <FeatureGrid />
         <CTASection />
       </main>

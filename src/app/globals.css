@@ -1,7 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+@import "tailwindcss";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -9,6 +6,11 @@
   --font-sans: var(--font-outfit);
   --font-chat: var(--font-inter);
   --font-handwritten: var(--font-reenie);
+
+  /* Fallback font tokens (in case font loader doesn't define them) */
+  --font-outfit: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  --font-inter: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  --font-reenie: 'Reenie Beanie', cursive;
 
   /* Radius */
   --radius-sm: calc(var(--radius) - 4px);
@@ -21,6 +23,7 @@
 
   /* Animations */
   --animate-shimmer-slide: shimmer-slide 2.5s ease-in-out infinite;
+  --duration: 1; /* default animation duration multiplier */
   --animate-border-beam: border-beam calc(var(--duration) * 1s) linear infinite;
 
   @keyframes shimmer-slide {
@@ -51,21 +54,21 @@
   --color-primary-btn-dark: #e55a5a;
   --color-platinum: #f1f2f6;
   --color-red: #dc2626;
-  --Color-orange: #ea580c;
+  --color-orange: #ea580c; /* normalized name */
   --color-teal: #0d9488;
-  --color-orange: #ea580c;
   --color-amber: #d97706;
   --color-emerald: #10b981;
   --color-amber-light: #fff9e6;
   --color-stone: #f5f5f4;
+  --color-slate: #94a3b8; /* fallback slate color */
 
   /* Colors - Semantic */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
+  --color-card: var(--color-white);
+  --color-card-foreground: var(--color-dark);
+  --color-popover: var(--color-white);
+  --color-popover-foreground: var(--color-dark);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
@@ -75,7 +78,7 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-foreground: var(--destructive-foreground, var(--color-white));
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -180,12 +183,39 @@
     --sidebar-ring: #737373;
   }
 
-  * {
-    @apply border-border outline-ring/50;
+  /* Reset and sensible base rules */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html, body, #__next {
+    height: 100%;
   }
 
   body {
-    @apply bg-background text-foreground;
+    font-family: var(--font-sans), system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--background);
+    color: var(--foreground);
+    line-height: 1.4;
+  }
+
+  img, picture, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Remove the overly-broad border applied to every element which caused a boxed/sloppy UI.
+     Instead, use specific utility classes (e.g., .card, .panel, .input) or rely on component styles. */
+  /* ...existing code removed... */
+
+  /* Focus styles for interactive elements */
+  :where(button, a, input, textarea, select):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(0,0,0,0.04);
   }
 }
 
@@ -195,8 +225,8 @@
     transition: box-shadow 0.3s ease;
     &:focus-within {
       box-shadow:
-        0 10px 40px -10px theme('colors.coral / 30%'),
-        0 0 0 1px theme('colors.coral / 10%');
+        0 10px 40px -10px rgba(255,107,107,0.25),
+        0 0 0 1px rgba(255,107,107,0.12);
     }
   }
 
@@ -226,5 +256,54 @@
       bottom: 0;
       right: 0;
     }
+  }
+
+  /* Small helper for cards and panels so components don't need to repeat long utility stacks */
+  .card {
+    @apply bg-card text-card-foreground rounded-2xl shadow p-6;
+  }
+
+  .inline-pill {
+    @apply inline-flex items-center justify-center rounded-full px-4 py-2 border;
+  }
+
+  /* Hero helpers: centralize the hero layout and decoration styles */
+  .hero-section {
+    @apply relative flex min-h-screen items-center justify-center overflow-hidden;
+  }
+
+  .hero-deco-left {
+    @apply pointer-events-none absolute;
+    left: -100px;
+    top: -200px;
+    height: 600px;
+    width: 600px;
+    border-radius: 240px 480px 510px 390px;
+    background-color: rgba(212,228,212,0.5); /* sage/50 */
+    filter: blur(40px);
+  }
+
+  .hero-deco-right {
+    @apply pointer-events-none absolute;
+    right: -50px;
+    bottom: -150px;
+    height: 500px;
+    width: 500px;
+    border-radius: 200px 400px 425px 325px;
+    background-color: rgba(255,183,178,0.5); /* coral/50 */
+    filter: blur(40px);
+  }
+
+  .hero-content {
+    @apply relative z-10 mx-auto px-4 text-center;
+    max-width: 900px;
+  }
+
+  .hero-cta-group {
+    @apply flex flex-wrap items-center justify-center gap-8 pt-4;
+  }
+
+  .hero-trust {
+    @apply mt-6 text-sm text-muted-foreground;
   }
 }

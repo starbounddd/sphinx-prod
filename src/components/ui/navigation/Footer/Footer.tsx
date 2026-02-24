@@ -10,7 +10,7 @@ const footerLinks = {
     title: 'Product',
     links: [
       { href: '#', label: 'How it Works' },
-      { href: '#', label: 'Pricing' },
+      // { href: '#', label: 'Pricing' },
       { href: '#', label: 'FAQ' },
     ],
   },
@@ -19,7 +19,6 @@ const footerLinks = {
     links: [
       { href: '#', label: 'About' },
       { href: '#', label: 'Blog' },
-      { href: '#', label: 'Careers' },
     ],
   },
   legal: {
