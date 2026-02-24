@@ -1,123 +1,153 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { ChatMessage, AssessmentState } from '../types';
-
-// Initial AI message
-const INITIAL_MESSAGES: ChatMessage[] = [
-  {
-    id: '1',
-    role: 'ai',
-    content:
-      "Hi there. I'm here to help you understand what you're feeling. There's no rush, and nothing you say is wrong.",
-    timestamp: new Date(),
-  },
-  {
-    id: '2',
-    role: 'ai',
-    content:
-      "Can you tell me what's been on your mind lately? Even if it's unclear or hard to put into words.",
-    timestamp: new Date(),
-    quickReplies: ['I feel overwhelmed', "I'm anxious", "I don't know"],
-  },
-];
-
-// Mock AI responses - in production, this would call an API
-const AI_RESPONSES: Record<
-  string,
-  { content: string; quickReplies?: string[] }
-> = {
-  'I feel overwhelmed': {
-    content:
-      "I hear you. When you say you feel 'stuck', does it feel more like a lack of motivation, or a fear of moving forward?",
-    quickReplies: ["It's physical", "It's mental", "I don't know"],
-  },
-  "I'm anxious": {
-    content:
-      'Thank you for sharing that. Can you tell me more about when these feelings of anxiety started?',
-    quickReplies: ['Recently', 'A few months ago', "It's always been there"],
-  },
-  "I don't know": {
-    content:
-      "That's completely okay. Sometimes feelings are hard to name. Let me ask a different way - what's been different about your days lately?",
-    quickReplies: ['Sleep issues', 'Work stress', 'Relationships'],
-  },
-  default: {
-    content:
-      'Thank you for sharing that with me. Can you tell me more about how that affects your daily life?',
-    quickReplies: ["It's very disruptive", 'Somewhat', 'Not much'],
-  },
-};
 
 export function useAssessmentChat() {
   const [state, setState] = useState<AssessmentState>({
-    messages: INITIAL_MESSAGES,
+    messages: [],
     isThinking: false,
     currentStep: 1,
     isComplete: false,
   });
 
   const [inputValue, setInputValue] = useState('');
+  const [threadId] = useState(() => crypto.randomUUID());
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [domainStatuses, setDomainStatuses] = useState<Record<string, string>>(
+    {}
+  );
+  const [currentDomain, setCurrentDomain] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [report, setReport] = useState<any>(null);
 
-  // Get current quick replies from the last AI message
-  const currentQuickReplies =
-    state.messages.filter((m) => m.role === 'ai').at(-1)?.quickReplies ?? [];
+  // ------------------------------------------------------------------
+  // Init: read screening answers from localStorage and call the API
+  // ------------------------------------------------------------------
+  useEffect(() => {
+    if (isInitialized) return;
 
-  const sendMessage = useCallback(
-    (content: string) => {
-      if (!content.trim() || state.isThinking) return;
+    const stored = localStorage.getItem('sphinx_screening_answers');
+    if (!stored) return; // no screening data yet
 
-      // Add user message
-      const userMessage: ChatMessage = {
-        id: `user-${Date.now()}`,
-        role: 'user',
-        content: content.trim(),
-        timestamp: new Date(),
-      };
+    const screeningAnswers: Record<string, number> = JSON.parse(stored);
+    initAssessment(screeningAnswers);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInitialized]);
 
-      setState((prev) => ({
-        ...prev,
-        messages: [...prev.messages, userMessage],
-        isThinking: true,
-      }));
+  async function initAssessment(screeningAnswers: Record<string, number>) {
+    setState((prev) => ({ ...prev, isThinking: true }));
 
-      setInputValue('');
+    try {
+      const res = await fetch('/api/assessment/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ threadId, screeningAnswers }),
+      });
 
-      // Simulate AI thinking delay
-      setTimeout(() => {
-        const response = AI_RESPONSES[content.trim()] ?? AI_RESPONSES.default;
+      const data = await res.json();
 
-        const aiMessage: ChatMessage = {
+      if (data.success) {
+        const aiMsg: ChatMessage = {
           id: `ai-${Date.now()}`,
           role: 'ai',
-          content: response.content,
+          content: data.message.content,
           timestamp: new Date(),
-          quickReplies: response.quickReplies,
+          quickReplies: data.message.quickReplies,
         };
 
         setState((prev) => ({
           ...prev,
-          messages: [...prev.messages, aiMessage],
+          messages: [aiMsg],
           isThinking: false,
-          currentStep: prev.currentStep + 1,
-          // Complete after 5 exchanges for demo
-          isComplete: prev.currentStep >= 4,
+          currentStep: data.message.questionCount || 1,
+          isComplete: data.message.isComplete,
         }));
-      }, 1500);
-    },
-    [state.isThinking]
-  );
 
+        setDomainStatuses(data.message.domainStatuses || {});
+        setCurrentDomain(data.message.currentDomain);
+        setIsInitialized(true);
+      }
+    } catch (error) {
+      console.error('Failed to initialize assessment:', error);
+      setState((prev) => ({ ...prev, isThinking: false }));
+    }
+  }
+
+  // ------------------------------------------------------------------
+  // Send a user message and receive an AI reply
+  // ------------------------------------------------------------------
+  async function sendMessage(content: string) {
+    if (!content.trim() || state.isThinking) return;
+
+    const userMsg: ChatMessage = {
+      id: `user-${Date.now()}`,
+      role: 'user',
+      content: content.trim(),
+      timestamp: new Date(),
+    };
+
+    setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, userMsg],
+      isThinking: true,
+    }));
+
+    setInputValue('');
+
+    try {
+      const res = await fetch('/api/assessment/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ threadId, message: content.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        const aiMsg: ChatMessage = {
+          id: `ai-${Date.now()}`,
+          role: 'ai',
+          content: data.message.content,
+          timestamp: new Date(),
+          quickReplies: data.message.quickReplies,
+        };
+
+        setState((prev) => ({
+          ...prev,
+          messages: [...prev.messages, aiMsg],
+          isThinking: false,
+          currentStep: data.message.questionCount,
+          isComplete: data.message.isComplete,
+        }));
+
+        setDomainStatuses(data.message.domainStatuses || {});
+        setCurrentDomain(data.message.currentDomain);
+        if (data.message.report) setReport(data.message.report);
+      }
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      setState((prev) => ({ ...prev, isThinking: false }));
+    }
+  }
+
+  // ------------------------------------------------------------------
+  // Convenience handlers
+  // ------------------------------------------------------------------
   const handleQuickReply = useCallback(
-    (option: string) => {
-      sendMessage(option);
-    },
-    [sendMessage]
+    (option: string) => sendMessage(option),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
-  const handleSend = useCallback(() => {
-    sendMessage(inputValue);
-  }, [inputValue, sendMessage]);
+  const handleSend = useCallback(
+    () => sendMessage(inputValue),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [inputValue]
+  );
+
+  const currentQuickReplies =
+    state.messages.filter((m) => m.role === 'ai').at(-1)?.quickReplies ?? [];
 
   return {
     messages: state.messages,
@@ -129,5 +159,11 @@ export function useAssessmentChat() {
     currentQuickReplies,
     handleQuickReply,
     handleSend,
+    // New fields for sidebar / header
+    domainStatuses,
+    currentDomain,
+    report,
+    threadId,
+    isInitialized,
   };
 }

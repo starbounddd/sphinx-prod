@@ -88,6 +88,11 @@ export function SurveyForm({ survey }: SurveyFormProps): JSX.Element {
   function handleSubmit(e?: React.FormEvent) {
     e?.preventDefault();
     const total = computeScore();
+
+    // Persist screening data so the assessment page can pick it up
+    localStorage.setItem('sphinx_screening_answers', JSON.stringify(answers));
+    localStorage.setItem('sphinx_screening_score', String(total));
+
     setScore(total);
     setSubmitted(true);
   }
