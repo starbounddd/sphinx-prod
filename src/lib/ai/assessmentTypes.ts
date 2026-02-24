@@ -145,6 +145,20 @@ export const AssessmentGraphState = Annotation.Root({
     default: () => '',
   }),
 
+  /** Dimensions covered per domain — merges incoming keys into existing record */
+  dimensionsCovered: Annotation<Record<string, string[]>>({
+    reducer: (prev, next) => {
+      const merged = { ...prev };
+      for (const [domain, dims] of Object.entries(next)) {
+        const existing = merged[domain] || [];
+        const combined = new Set([...existing, ...dims]);
+        merged[domain] = [...combined];
+      }
+      return merged;
+    },
+    default: () => ({}),
+  }),
+
   /** Final structured report (generated at assessment end) */
   report: Annotation<any | null>({
     reducer: (_prev, next) => next,

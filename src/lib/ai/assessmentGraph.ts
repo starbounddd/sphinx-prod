@@ -62,19 +62,16 @@ function parseJsonResponse(text: string): any {
 }
 
 /**
- * Get the list of assessment dimensions already touched for a domain.
+ * Get the list of assessment dimensions already touched for a domain,
+ * reading from the dimensionsCovered state field.
  */
 function getDimensionsCovered(
-  domainAssessments: Record<string, DomainAssessment>,
+  dimensionsCoveredState: Record<string, string[]>,
   domain: SymptomDomain,
 ): AssessmentDimension[] {
-  // We track dimensions in evidence notes by convention; here we use a
-  // simple heuristic — if there are evidence notes, we assume some
-  // dimensions are covered. The real tracking comes from extractEvidence.
-  // This is a placeholder until we store dimensions explicitly.
-  // For now we return an empty array; the extractEvidence call accumulates
-  // dimension data through repeated invocations.
-  return [];
+  const dims = dimensionsCoveredState[domain];
+  if (!dims) return [];
+  return dims as AssessmentDimension[];
 }
 
 /* ==========================================================================
@@ -221,6 +218,14 @@ async function processResponse(
       };
     }
 
+    // Store dimensions touched into state for tracking
+    const dimensionsTouched: string[] = evidence.dimensionsTouched || [];
+    if (dimensionsTouched.length > 0) {
+      updates.dimensionsCovered = {
+        [currentDomain]: dimensionsTouched,
+      };
+    }
+
     // Extract chief complaint from early messages
     if (!state.chiefComplaint && evidence.chiefComplaint) {
       updates.chiefComplaint = evidence.chiefComplaint;
@@ -256,7 +261,7 @@ async function generateQuestion(
   }
 
   const dimensionsCovered = getDimensionsCovered(
-    state.domainAssessments,
+    state.dimensionsCovered,
     currentDomain,
   );
 
@@ -479,7 +484,7 @@ function routeAfterProcessing(state: AssessmentGraphStateType): string {
 
   const questionsAsked = currentAssessment.questionsAsked;
   const dimensionsCovered = getDimensionsCovered(
-    state.domainAssessments,
+    state.dimensionsCovered,
     currentDomain,
   );
 
@@ -536,6 +541,29 @@ export function createAssessmentGraph() {
 }
 
 /* ==========================================================================
+   Module-level Singleton
+   ========================================================================== */
+
+/** Cached graph instance so the MemorySaver checkpointer (and its thread
+ *  state) persists across calls within the same server process. */
+let _graph: ReturnType<typeof createAssessmentGraph> | null = null;
+
+function getAssessmentGraph() {
+  if (!_graph) {
+    _graph = createAssessmentGraph();
+  }
+  return _graph;
+}
+
+/**
+ * Reset the singleton graph instance.
+ * Primarily useful in tests to start with a clean MemorySaver.
+ */
+export function resetAssessmentGraph() {
+  _graph = null;
+}
+
+/* ==========================================================================
    Convenience Runner
    ========================================================================== */
 
@@ -544,6 +572,9 @@ export function createAssessmentGraph() {
  *
  * - If no `userMessage` is provided, initializes a fresh assessment session.
  * - If `userMessage` is provided, processes the user's response and continues.
+ *
+ * The compiled graph (and its MemorySaver checkpointer) is kept as a
+ * module-level singleton so that thread state persists across calls.
  *
  * @param threadId          Unique thread identifier for session persistence
  * @param userMessage       The user's message (omit for initialization)
@@ -556,7 +587,7 @@ export async function runAssessmentTurn(
   screeningResults?: ScreeningResult[],
   flaggedDomains?: SymptomDomain[],
 ): Promise<AssessmentGraphStateType> {
-  const graph = createAssessmentGraph();
+  const graph = getAssessmentGraph();
   const config = { configurable: { thread_id: threadId } };
 
   if (!userMessage) {
