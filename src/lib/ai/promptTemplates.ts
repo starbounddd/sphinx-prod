@@ -183,11 +183,14 @@ Only include scoring values you can reasonably infer. Use null for dimensions wi
     chiefComplaint: string,
     domainAssessments: Record<string, DomainAssessment>,
   ): string {
-    const domainSummaries = Object.values(domainAssessments)
-      .filter((a) => a.status !== 'pending')
+    // Only include domains that were actually assessed with real evidence
+    const assessedDomains = Object.values(domainAssessments)
+      .filter((a) => a.status !== 'pending' && a.evidenceNotes.length > 0);
+
+    const domainSummaries = assessedDomains
       .map((a) => {
         const label = DOMAIN_LABELS[a.domain];
-        return `- ${label} (screening: ${a.screeningScore}/4): ${a.evidenceNotes.join('; ') || 'No evidence gathered'}
+        return `- ${label} (screening: ${a.screeningScore}/4): ${a.evidenceNotes.join('; ')}
     Scoring: impact=${a.scoring.functionalImpact}, control=${a.scoring.control}, duration="${a.scoring.duration}", frequency=${a.scoring.frequency}, confidence=${a.scoring.confidence}`;
       })
       .join('\n');
@@ -196,8 +199,8 @@ Only include scoring values you can reasonably infer. Use null for dimensions wi
 
 Chief complaint: ${chiefComplaint || 'Not explicitly stated'}
 
-Domain assessments:
-${domainSummaries}
+Domain assessments (ONLY domains that were discussed in the conversation):
+${domainSummaries || 'No domains were assessed in the conversation.'}
 
 Generate a comprehensive report as JSON with this exact structure:
 {
@@ -232,6 +235,8 @@ Generate a comprehensive report as JSON with this exact structure:
 }
 
 Guidelines for the report:
+- ONLY generate domain entries for domains listed above that were actually discussed in the conversation. Do NOT invent or fabricate information for domains that were not assessed.
+- The "summary" field must ONLY contain observations from the actual conversation. If no evidence was gathered for a domain, do NOT include that domain.
 - Use warm, empathetic language throughout. The person will read this.
 - Findings should be strengths-based where possible (e.g., "Shows strong self-awareness").
 - Include 3-5 findings, mixing areas of concern with protective factors.

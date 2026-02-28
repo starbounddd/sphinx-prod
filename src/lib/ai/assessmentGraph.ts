@@ -10,16 +10,14 @@ import {
   type DomainScoring,
   type ScreeningResult,
   type AssessmentDimension,
+  DOMAIN_LABELS,
 } from './assessmentTypes';
 import { validateAIReport } from './reportSchema';
 import { promptTemplates } from './promptTemplates';
+import { calculateDomainScores } from './domains';
 import {
   routeEntry,
   routeAfterProcessing,
-  MAX_QUESTIONS,
-  MAX_DURATION_MINUTES,
-  QUESTIONS_PER_DOMAIN,
-  MIN_DIMENSIONS_TO_TRANSITION,
 } from './routingLogic';
 
 /* ==========================================================================
@@ -49,8 +47,37 @@ function defaultScoring(): DomainScoring {
   };
 }
 
-function elapsedMinutes(startTime: string): number {
-  return (Date.now() - new Date(startTime).getTime()) / 60_000;
+/**
+ * Derive a rough functionalImpact (0-3) from a screening score (0-4).
+ * This is a coarse mapping used for domains that were not assessed via chat.
+ */
+function impactFromScreeningScore(screeningScore: number): number {
+  if (screeningScore >= 3.5) return 3;
+  if (screeningScore >= 2.5) return 2;
+  if (screeningScore >= 2) return 1;
+  return 0;
+}
+
+/**
+ * Build domain scores from screening results stored in graph state.
+ * Returns a Record of all domains that scored >= threshold.
+ */
+function getAllFlaggedDomainsFromScreening(
+  screeningResults: ScreeningResult[],
+  threshold: number = 2,
+): Record<SymptomDomain, number> {
+  const answers: Record<string, number> = {};
+  for (const r of screeningResults) {
+    answers[r.questionId] = r.score;
+  }
+  const allScores = calculateDomainScores(answers);
+  const result = {} as Record<SymptomDomain, number>;
+  for (const [domain, score] of Object.entries(allScores)) {
+    if (score >= threshold) {
+      result[domain as SymptomDomain] = score;
+    }
+  }
+  return result;
 }
 
 /**
@@ -403,7 +430,7 @@ async function generateReportNode(
 ): Promise<Partial<AssessmentGraphStateType>> {
   const model = getModel();
 
-  // Mark any in-progress domain as completed
+  // Mark any in-progress domain as completed (only if it has evidence)
   const updatedAssessments: Record<string, DomainAssessment> = {};
   for (const [domain, assessment] of Object.entries(state.domainAssessments)) {
     if (assessment.status === 'in_progress') {
@@ -411,12 +438,11 @@ async function generateReportNode(
     }
   }
 
+  const mergedAssessments = { ...state.domainAssessments, ...updatedAssessments };
+
   const systemMsg = new SystemMessage(promptTemplates.systemPrompt);
   const reportPrompt = new HumanMessage(
-    promptTemplates.generateReport(
-      state.chiefComplaint,
-      { ...state.domainAssessments, ...updatedAssessments },
-    ),
+    promptTemplates.generateReport(state.chiefComplaint, mergedAssessments),
   );
 
   const response = await model.invoke([systemMsg, reportPrompt]);
@@ -437,6 +463,39 @@ async function generateReportNode(
     }
   } catch {
     report = null;
+  }
+
+  // ---- Append ALL flagged domains (not just top 5) with screening-only data ----
+  if (report) {
+    const allFlaggedScores = getAllFlaggedDomainsFromScreening(state.screeningResults);
+    const assessedDomainKeys = new Set(report.domains.map((d) => d.domain));
+
+    // Also strip clinical notes from assessed domains that had NO actual evidence
+    for (const d of report.domains) {
+      const assessment = mergedAssessments[d.domain];
+      if (!assessment || assessment.evidenceNotes.length === 0) {
+        // AI should not have generated notes for this domain — clear them
+        d.summary = '';
+      }
+    }
+
+    // Append screening-only entries for all other flagged domains
+    for (const [domain, screeningScore] of Object.entries(allFlaggedScores)) {
+      if (!assessedDomainKeys.has(domain)) {
+        const label = DOMAIN_LABELS[domain as SymptomDomain] ?? domain;
+        report.domains.push({
+          domain,
+          label,
+          screeningScore,
+          functionalImpact: impactFromScreeningScore(screeningScore),
+          control: 0,
+          duration: '',
+          frequency: 0,
+          confidence: 0,
+          summary: '', // No clinical notes — not assessed via chat
+        });
+      }
+    }
   }
 
   const closingMessage =
