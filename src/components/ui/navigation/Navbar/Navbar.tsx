@@ -1,23 +1,21 @@
 import type { JSX } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { PrimaryButton } from '@/components/ui/buttons';
 import { AuthStatus } from '@/components/ui/navigation/AuthStatus/AuthStatus';
 import { Typography } from '@/components/ui/typography';
 import { createClient } from '@/lib/supabase/server';
+import { NavbarCTAButton } from './NavbarCTAButton';
+import { NavbarLoginButton } from './NavbarLoginButton';
 
 const baseNavLinks = [
   { href: '/about', label: 'About' },
   { href: '/providers', label: 'For Providers' },
-  { href: '/login', label: 'Login' },
 ];
 
 export async function Navbar(): Promise<JSX.Element> {
   const supabase = await createClient();
   const { data: { session } } = await supabase.auth.getSession();
   const isSignedIn = !!session;
-
-  const navLinks = baseNavLinks.filter((l) => !(isSignedIn && l.href === '/login'));
 
   return (
       <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-center px-4 pt-8 pb-8">
@@ -33,7 +31,7 @@ export async function Navbar(): Promise<JSX.Element> {
           </Link>
 
           <div className="flex flex-1 items-center justify-center gap-8">
-            {navLinks.map((link) => (
+            {baseNavLinks.map((link) => (
                 <a key={link.href} href={link.href} className="group">
                   <Typography
                       size="body-sm"
@@ -44,14 +42,10 @@ export async function Navbar(): Promise<JSX.Element> {
                   </Typography>
                 </a>
             ))}
+            {!isSignedIn && <NavbarLoginButton />}
           </div>
 
-          <PrimaryButton
-              href="/screening"
-              className="px-6 py-2.5 text-sm shrink-0"
-          >
-            Start Screening
-          </PrimaryButton>
+          <NavbarCTAButton isSignedIn={isSignedIn} />
 
           {/* Client-side auth-aware render to keep interactivity and correct session state */}
           <AuthStatus />

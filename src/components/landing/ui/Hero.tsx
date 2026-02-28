@@ -1,6 +1,6 @@
 import type { JSX } from 'react';
-import { PrimaryButton, SecondaryButton } from '@/components/ui/buttons';
 import { Typography } from '@/components/ui/typography';
+import { HeroCTA } from './HeroCTA';
 
 /* ==========================================================================
    Hero Section - Landing page above-the-fold content
@@ -38,12 +38,7 @@ export function Hero(): JSX.Element {
         </Typography>
 
         {/* CTA button group */}
-        <div className="hero-cta-group">
-          <PrimaryButton href="/screening" showArrow shimmer>
-            Start Free Check-in
-          </PrimaryButton>
-          <SecondaryButton href="#providers">For Providers</SecondaryButton>
-        </div>
+        <HeroCTA />
 
         {/* Trust indicators */}
         <Typography size="body-sm" color="muted" className="hero-trust">

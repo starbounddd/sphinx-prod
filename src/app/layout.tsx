@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Outfit, Inter, Reenie_Beanie } from 'next/font/google';
 import './globals.css';
+import { AuthModalProvider } from '@/contexts/AuthModalContext';
+import { AuthModalLoader } from '@/components/ui/AuthModal/AuthModalLoader';
 
 const outfit = Outfit({
   variable: '--font-outfit',
@@ -36,7 +38,10 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${inter.variable} ${reenieBeanie.variable} font-sans antialiased`}
       >
-        {children}
+        <AuthModalProvider>
+          {children}
+          <AuthModalLoader />
+        </AuthModalProvider>
       </body>
     </html>
   );
