@@ -2,10 +2,10 @@ import type { JSX } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { AuthStatus } from '@/components/ui/navigation/AuthStatus/AuthStatus';
-import { Typography } from '@/components/ui/typography';
 import { createClient } from '@/lib/supabase/server';
 import { NavbarCTAButton } from './NavbarCTAButton';
 import { NavbarLoginButton } from './NavbarLoginButton';
+import { NavbarMobileMenu } from './NavbarMobileMenu';
 
 const baseNavLinks = [
   { href: '/about', label: 'About' },
@@ -18,38 +18,45 @@ export async function Navbar(): Promise<JSX.Element> {
   const isSignedIn = !!session;
 
   return (
-      <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-center px-4 pt-8 pb-8">
-        <nav className="flex w-full max-w-6xl items-center justify-between gap-8 rounded-full border border-dark/8 bg-cream/90 px-8 py-4 shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.05)] backdrop-blur-[10px]">
-          <Link href="/" className="shrink-0">
-            <Image
-                src="/images/logo/sphinx-logo.svg"
-                alt="Sphinx"
-                width={72}
-                height={23}
-                priority
-            />
-          </Link>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-dark/8 bg-cream/90 backdrop-blur-[10px]">
+      <nav className="mx-auto flex h-20 max-w-7xl items-center px-6">
+        {/* Left: Logo */}
+        <Link href="/" className="shrink-0">
+          <Image
+            src="/images/logo/sphinx_logo.png"
+            alt="Sphinx"
+            width={100}
+            height={100}
+            priority
+            className="h-[100px] w-[100px] object-contain"
+          />
+        </Link>
 
-          <div className="flex flex-1 items-center justify-center gap-8">
-            {baseNavLinks.map((link) => (
-                <a key={link.href} href={link.href} className="group">
-                  <Typography
-                      size="body-sm"
-                      as="span"
-                      className="font-medium text-dark transition-colors duration-200 group-hover:text-primary-btn"
-                  >
-                    {link.label}
-                  </Typography>
-                </a>
-            ))}
-            {!isSignedIn && <NavbarLoginButton />}
-          </div>
-
+        {/* Center: Nav links + Start Screening */}
+        <div className="hidden flex-1 items-center justify-center gap-8 md:flex">
+          {baseNavLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-base font-medium text-dark/70 transition-colors duration-200 hover:text-dark"
+            >
+              {link.label}
+            </a>
+          ))}
           <NavbarCTAButton isSignedIn={isSignedIn} />
+        </div>
 
-          {/* Client-side auth-aware render to keep interactivity and correct session state */}
+        {/* Right: Login / Sign Out */}
+        <div className="hidden items-center gap-3 md:flex">
+          {!isSignedIn && <NavbarLoginButton />}
           <AuthStatus />
-        </nav>
-      </header>
+        </div>
+
+        {/* Mobile menu */}
+        <div className="ml-auto md:hidden">
+          <NavbarMobileMenu links={baseNavLinks} isSignedIn={isSignedIn} />
+        </div>
+      </nav>
+    </header>
   );
 }
