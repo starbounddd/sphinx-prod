@@ -45,3 +45,13 @@ logs/
 *.log
 .agent-logs/
 .playwright-mcp/
+
+# AI Agent Skills & Settings
+.agents/
+.agent/
+.claude/
+skills/
+skills-lock.json
+
+# Backup files
+*.backup

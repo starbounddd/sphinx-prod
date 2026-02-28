@@ -656,19 +656,64 @@ export function calculateDomainScores(
 }
 
 /**
- * Identify domains whose average screening score meets or exceeds the threshold,
- * sorted in descending order of severity (highest score first).
+ * Domain specificity tiers - determines clinical priority
+ * High: symptoms present in few diagnoses (most specific)
+ * Medium: symptoms present in medium number of diagnoses
+ * Low: symptoms present in many diagnoses (least specific)
+ */
+const DOMAIN_SPECIFICITY: Record<SymptomDomain, 'high' | 'medium' | 'low'> = {
+  // High specificity
+  psychosis: 'high',
+  substance_use: 'high',
+  suicidal_tendencies: 'high', // Always high priority due to clinical importance
+
+  // Medium specificity
+  mania: 'medium',
+  dissociation: 'medium',
+  depression: 'medium',
+  anxiety: 'medium',
+  anger: 'medium',
+  sleep_problems: 'medium',
+
+  // Low specificity
+  somatic_symptoms: 'low',
+  memory: 'low',
+  repetitive_thoughts: 'low',
+  personality: 'low',
+};
+
+const SPECIFICITY_PRIORITY: Record<'high' | 'medium' | 'low', number> = {
+  high: 0,
+  medium: 1,
+  low: 2,
+};
+
+/**
+ * Identify domains whose average screening score meets or exceeds the threshold.
+ * Sorted by: specificity tier (high > medium > low), then by score descending.
+ * Limited to max 5 domains.
  *
  * @param domainScores  Record of domain -> average score
  * @param threshold     Minimum score to flag (default 2)
- * @returns             Array of flagged domains sorted by severity
+ * @param maxDomains    Maximum number of domains to return (default 5)
+ * @returns             Array of flagged domains sorted by specificity and severity
  */
 export function identifyFlaggedDomains(
   domainScores: Record<string, number>,
   threshold: number = 2,
+  maxDomains: number = 5,
 ): SymptomDomain[] {
   return (Object.entries(domainScores) as [SymptomDomain, number][])
     .filter(([, score]) => score >= threshold)
-    .sort(([, a], [, b]) => b - a)
+    .sort(([domainA, scoreA], [domainB, scoreB]) => {
+      // First sort by specificity tier (high < medium < low in priority value)
+      const tierA = SPECIFICITY_PRIORITY[DOMAIN_SPECIFICITY[domainA] ?? 'low'];
+      const tierB = SPECIFICITY_PRIORITY[DOMAIN_SPECIFICITY[domainB] ?? 'low'];
+      if (tierA !== tierB) return tierA - tierB;
+
+      // Within same tier, sort by score descending
+      return scoreB - scoreA;
+    })
+    .slice(0, maxDomains)
     .map(([domain]) => domain);
 }

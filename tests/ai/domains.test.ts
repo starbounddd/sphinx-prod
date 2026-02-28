@@ -199,4 +199,90 @@ describe('identifyFlaggedDomains', () => {
     const flagged = identifyFlaggedDomains(domainScores);
     expect(flagged).toEqual(['suicidal_tendencies']);
   });
+
+  /* ------------------------------------------------------------------ */
+  /* Specificity tier sorting tests                                     */
+  /* ------------------------------------------------------------------ */
+
+  it('prioritizes high specificity domains over medium even with lower scores', () => {
+    const domainScores: Record<string, number> = {
+      // High specificity (psychosis, substance_use, suicidal_tendencies)
+      psychosis: 2,
+      // Medium specificity (mania, dissociation, depression, anxiety, anger, sleep_problems)
+      depression: 4,
+      anxiety: 4,
+    };
+    const flagged = identifyFlaggedDomains(domainScores);
+    // Psychosis should be first despite lower score
+    expect(flagged[0]).toBe('psychosis');
+  });
+
+  it('prioritizes medium specificity domains over low even with lower scores', () => {
+    const domainScores: Record<string, number> = {
+      // Low specificity (somatic_symptoms, memory, repetitive_thoughts, personality)
+      somatic_symptoms: 4,
+      memory: 4,
+      // Medium specificity
+      depression: 2,
+    };
+    const flagged = identifyFlaggedDomains(domainScores);
+    // Depression should be first despite lower score
+    expect(flagged[0]).toBe('depression');
+  });
+
+  it('sorts by score descending within the same specificity tier', () => {
+    const domainScores: Record<string, number> = {
+      // All high specificity
+      psychosis: 2,
+      substance_use: 4,
+      suicidal_tendencies: 3,
+    };
+    const flagged = identifyFlaggedDomains(domainScores);
+    // Within high tier: substance_use (4) > suicidal_tendencies (3) > psychosis (2)
+    expect(flagged).toEqual(['substance_use', 'suicidal_tendencies', 'psychosis']);
+  });
+
+  it('limits to 5 domains by default', () => {
+    const domainScores: Record<string, number> = {
+      psychosis: 4,
+      substance_use: 4,
+      suicidal_tendencies: 4,
+      mania: 4,
+      dissociation: 4,
+      depression: 4,
+      anxiety: 4,
+    };
+    const flagged = identifyFlaggedDomains(domainScores);
+    expect(flagged).toHaveLength(5);
+  });
+
+  it('respects maxDomains parameter', () => {
+    const domainScores: Record<string, number> = {
+      psychosis: 4,
+      substance_use: 4,
+      suicidal_tendencies: 4,
+      depression: 4,
+    };
+    const flagged = identifyFlaggedDomains(domainScores, 2, 3);
+    expect(flagged).toHaveLength(3);
+  });
+
+  it('returns all high specificity domains before any medium specificity', () => {
+    const domainScores: Record<string, number> = {
+      // High specificity
+      psychosis: 2,
+      substance_use: 2,
+      suicidal_tendencies: 2,
+      // Medium specificity with higher scores
+      mania: 4,
+      depression: 4,
+      anxiety: 4,
+    };
+    const flagged = identifyFlaggedDomains(domainScores);
+    // First 3 should all be high specificity
+    const firstThree = flagged.slice(0, 3);
+    expect(firstThree).toContain('psychosis');
+    expect(firstThree).toContain('substance_use');
+    expect(firstThree).toContain('suicidal_tendencies');
+  });
 });
