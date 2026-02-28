@@ -9,7 +9,7 @@ import type {
   ChatMessage,
   AssessmentMetadata,
 } from '@/components/assessment/types';
-import { DOMAIN_LABELS } from '@/lib/ai/assessmentTypes';
+import { DOMAIN_LABELS } from '@/lib/ai/domainLabels';
 import surveySchema from '@/../resources/survey_schemas/wellbeing_surveyv1.json';
 
 const SCORE_LABELS: Record<number, string> = {

@@ -11,7 +11,16 @@ import {
   type ScreeningResult,
   type AssessmentDimension,
 } from './assessmentTypes';
+import { validateAIReport } from './reportSchema';
 import { promptTemplates } from './promptTemplates';
+import {
+  routeEntry,
+  routeAfterProcessing,
+  MAX_QUESTIONS,
+  MAX_DURATION_MINUTES,
+  QUESTIONS_PER_DOMAIN,
+  MIN_DIMENSIONS_TO_TRANSITION,
+} from './routingLogic';
 
 /* ==========================================================================
    LLM Instance
@@ -29,11 +38,6 @@ function getModel() {
 /* ==========================================================================
    Helpers
    ========================================================================== */
-
-const MAX_QUESTIONS = 20;
-const MAX_DURATION_MINUTES = 20;
-const QUESTIONS_PER_DOMAIN = 4;
-const MIN_DIMENSIONS_TO_TRANSITION = 3;
 
 function defaultScoring(): DomainScoring {
   return {
@@ -421,11 +425,18 @@ async function generateReportNode(
       ? response.content
       : JSON.stringify(response.content);
 
-  let report: any = null;
+  let report: AssessmentGraphStateType['report'] = null;
   try {
-    report = parseJsonResponse(responseText);
+    const parsed = parseJsonResponse(responseText);
+    const validation = validateAIReport(parsed);
+    if (validation.valid) {
+      report = validation.report;
+    } else {
+      console.warn('[generateReport] AI report failed validation:', validation.error);
+      report = parsed; // fall back to raw parsed JSON
+    }
   } catch {
-    report = { raw: responseText };
+    report = null;
   }
 
   const closingMessage =
@@ -441,71 +452,6 @@ async function generateReportNode(
     domainAssessments: updatedAssessments,
     quickReplies: [],
   };
-}
-
-/* ==========================================================================
-   Routing Functions
-   ========================================================================== */
-
-function routeEntry(state: AssessmentGraphStateType): string {
-  // If there are no human messages yet, this is the initial invocation
-  const hasHumanMessage = state.messages.some(
-    (m) => m._getType() === 'human',
-  );
-  return hasHumanMessage ? 'processResponse' : 'initialize';
-}
-
-function routeAfterProcessing(state: AssessmentGraphStateType): string {
-  // Check time limit
-  if (elapsedMinutes(state.startTime) >= MAX_DURATION_MINUTES) {
-    return 'generateReport';
-  }
-
-  // Check global question limit
-  if (state.questionCount >= MAX_QUESTIONS) {
-    return 'generateReport';
-  }
-
-  const currentDomain = state.currentDomain;
-  if (!currentDomain) {
-    return 'generateReport';
-  }
-
-  const currentAssessment = state.domainAssessments[currentDomain];
-  if (!currentAssessment) {
-    return 'generateReport';
-  }
-
-  // Count pending domains
-  const pendingDomains = state.flaggedDomains.filter((d) => {
-    const a = state.domainAssessments[d];
-    return a && a.status === 'pending';
-  });
-
-  const questionsAsked = currentAssessment.questionsAsked;
-  const dimensionsCovered = getDimensionsCovered(
-    state.dimensionsCovered,
-    currentDomain,
-  );
-
-  // Transition if the domain has enough questions or dimensions covered
-  // AND there are still pending domains
-  const shouldTransition =
-    (questionsAsked >= QUESTIONS_PER_DOMAIN ||
-      dimensionsCovered.length >= MIN_DIMENSIONS_TO_TRANSITION) &&
-    pendingDomains.length > 0;
-
-  if (shouldTransition) {
-    return 'transitionDomain';
-  }
-
-  // If domain is exhausted and no pending domains, generate report
-  if (questionsAsked >= QUESTIONS_PER_DOMAIN && pendingDomains.length === 0) {
-    return 'generateReport';
-  }
-
-  // Otherwise continue probing current domain
-  return 'generateQuestion';
 }
 
 /* ==========================================================================

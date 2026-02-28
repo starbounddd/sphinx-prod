@@ -1,4 +1,5 @@
 import { Annotation, MessagesAnnotation } from '@langchain/langgraph';
+import type { AIGeneratedReport } from './reportSchema';
 
 /* ==========================================================================
    Symptom Domains
@@ -160,7 +161,7 @@ export const AssessmentGraphState = Annotation.Root({
   }),
 
   /** Final structured report (generated at assessment end) */
-  report: Annotation<any | null>({
+  report: Annotation<AIGeneratedReport | null>({
     reducer: (_prev, next) => next,
     default: () => null,
   }),

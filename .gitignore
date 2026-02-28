@@ -39,3 +39,9 @@ Thumbs.db
 
 # Worktrees
 .worktrees/
+
+# Local logs / agent artifacts
+logs/
+*.log
+.agent-logs/
+.playwright-mcp/

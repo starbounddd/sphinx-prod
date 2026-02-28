@@ -1,5 +1,5 @@
 import { detectHarmfulContent } from '@/lib/safety/detectors';
-import { describe, it } from 'node:test';
+import { describe, it } from 'vitest';
 
 describe('Safety Detectors', () => {
   it('should detect harmful content', () => {
