@@ -510,6 +510,45 @@ export function resetAssessmentGraph() {
 }
 
 /* ==========================================================================
+   Force-End: Generate a partial report from whatever data exists
+   ========================================================================== */
+
+/**
+ * Force the assessment to generate a report based on whatever conversation
+ * data has been gathered so far.  Used when the user ends the session early
+ * or the timer expires.
+ *
+ * Reads the current thread state from the checkpointer, runs the report-
+ * generation LLM call, and returns the updated state including the report.
+ */
+export async function forceGenerateReport(
+  threadId: string,
+): Promise<AssessmentGraphStateType> {
+  const graph = getAssessmentGraph();
+  const config = { configurable: { thread_id: threadId } };
+
+  const snapshot = await graph.getState(config);
+  const currentState = snapshot.values as AssessmentGraphStateType;
+
+  // Run the report generation node directly with the current state
+  const reportUpdates = await generateReportNode(currentState);
+
+  // Merge the updates into the current state so the caller gets a full picture
+  return {
+    ...currentState,
+    ...reportUpdates,
+    domainAssessments: {
+      ...currentState.domainAssessments,
+      ...(reportUpdates.domainAssessments ?? {}),
+    },
+    messages: [
+      ...currentState.messages,
+      ...(reportUpdates.messages ?? []),
+    ],
+  } as AssessmentGraphStateType;
+}
+
+/* ==========================================================================
    Convenience Runner
    ========================================================================== */
 

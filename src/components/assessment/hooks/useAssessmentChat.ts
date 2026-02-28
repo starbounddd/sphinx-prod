@@ -47,22 +47,43 @@ export function useAssessmentChat() {
     };
   }, [isInitialized, state.isComplete]);
 
+  // Track whether endSession is already in flight
+  const endingRef = useRef(false);
+
   // ------------------------------------------------------------------
-  // Force-end the session (timer expiry or manual End Session)
+  // End session: request a partial report from the backend, then complete
   // ------------------------------------------------------------------
-  const forceEnd = useCallback(() => {
-    if (state.isComplete) return;
+  const endSession = useCallback(async () => {
+    if (endingRef.current) return;
+    endingRef.current = true;
     if (timerRef.current) clearInterval(timerRef.current);
 
+    setState((prev) => ({ ...prev, isThinking: true }));
+
+    try {
+      const res = await fetch('/api/assessment/chat/end', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ threadId }),
+      });
+
+      const data = await res.json();
+      if (data.success && data.message.report) {
+        setReport(data.message.report);
+      }
+    } catch (err) {
+      console.error('Failed to generate partial report:', err);
+    }
+
     setState((prev) => ({ ...prev, isComplete: true, isThinking: false }));
-  }, [state.isComplete]);
+  }, [threadId]);
 
   // Auto-end when timer reaches zero
   useEffect(() => {
     if (remainingMs <= 0 && isInitialized && !state.isComplete) {
-      forceEnd();
+      endSession();
     }
-  }, [remainingMs, isInitialized, state.isComplete, forceEnd]);
+  }, [remainingMs, isInitialized, state.isComplete, endSession]);
 
   // ------------------------------------------------------------------
   // Persist chat data to localStorage when assessment completes
@@ -248,6 +269,6 @@ export function useAssessmentChat() {
     dataPersisted,
     // Timer + end session
     remainingMs,
-    forceEnd,
+    endSession,
   };
 }

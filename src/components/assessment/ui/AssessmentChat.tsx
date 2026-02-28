@@ -1,8 +1,8 @@
 'use client';
 
-import { type JSX, useEffect } from 'react';
+import { type JSX, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ShieldCheck } from 'lucide-react';
+import { AlertTriangle, ShieldCheck } from 'lucide-react';
 import { ChatInput } from '@/components/ui/chat';
 import { AssessmentHeader } from './AssessmentHeader';
 import { ChatSidebar } from './ChatSidebar';
@@ -33,10 +33,39 @@ export function AssessmentChat({
     currentDomain,
     dataPersisted,
     remainingMs,
-    forceEnd,
+    endSession,
   } = useAssessmentChat();
 
   const router = useRouter();
+  const [showEndConfirm, setShowEndConfirm] = useState(false);
+
+  const handleEndClick = useCallback(() => {
+    setShowEndConfirm(true);
+  }, []);
+
+  const handleConfirmEnd = useCallback(() => {
+    setShowEndConfirm(false);
+    endSession();
+  }, [endSession]);
+
+  const handleCancelEnd = useCallback(() => {
+    setShowEndConfirm(false);
+  }, []);
+
+  // Dismiss the confirmation dialog if endSession fires from the timer
+  useEffect(() => {
+    if (isThinking) setShowEndConfirm(false);
+  }, [isThinking]);
+
+  // Escape key closes the dialog
+  useEffect(() => {
+    if (!showEndConfirm) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowEndConfirm(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [showEndConfirm]);
 
   useEffect(() => {
     if (isComplete && dataPersisted) {
@@ -63,7 +92,7 @@ export function AssessmentChat({
         {/* Header */}
         <AssessmentHeader
           remainingMs={remainingMs}
-          onEndSession={forceEnd}
+          onEndSession={handleEndClick}
         />
 
         {/* Messages area */}
@@ -101,6 +130,45 @@ export function AssessmentChat({
           </div>
         </div>
       </div>
+
+      {/* End Session confirmation dialog */}
+      {showEndConfirm && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="end-session-title"
+            className="flex max-w-sm flex-col items-center gap-4 rounded-2xl border border-sage bg-white p-8 text-center shadow-lg"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-50">
+              <AlertTriangle className="h-6 w-6 text-amber-500" />
+            </div>
+            <h2 id="end-session-title" className="text-lg font-semibold text-dark">
+              End Session Early?
+            </h2>
+            <p className="text-sm text-gray">
+              The assessment is not complete yet. A partial report will be
+              generated based on the information gathered so far.
+            </p>
+            <div className="flex w-full gap-3">
+              <button
+                type="button"
+                onClick={handleCancelEnd}
+                className="flex-1 rounded-lg border border-sage px-4 py-2.5 text-sm font-semibold text-dark transition-colors hover:bg-cream"
+              >
+                Continue
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmEnd}
+                className="flex-1 rounded-lg bg-red-500 px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              >
+                End Session
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
