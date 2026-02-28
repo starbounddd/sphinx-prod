@@ -21,7 +21,7 @@ export function QuickReplyBar({
   if (options.length === 0) return null;
 
   return (
-    <div className={cn('flex flex-wrap gap-2', className)}>
+    <div className={cn('flex flex-wrap justify-center gap-2', className)}>
       {options.map((option) => (
         <QuickReplyChip
           key={option}

@@ -1,6 +1,6 @@
 import type { JSX } from 'react';
+import Image from 'next/image';
 import {
-  Brain,
   LayoutDashboard,
   Users,
   FileText,
@@ -44,61 +44,63 @@ export function ReportSidebar({
 }: ReportSidebarProps): JSX.Element {
   return (
     <aside
+      aria-label="Report sidebar"
       className={cn(
-        'flex w-[280px] shrink-0 flex-col gap-5 border-r border-[#D4E4D4] bg-[#FDFCF8] px-4 py-6',
+        'flex h-full w-[280px] shrink-0 flex-col gap-5 border-r border-sage bg-cream px-4 py-6',
         className
       )}
     >
       {/* Brand */}
-      <div className="flex items-center gap-2.5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-[#0D9488]">
-          <Brain className="h-[18px] w-[18px] text-white" />
-        </div>
-        <span className="font-[Outfit] text-base font-semibold text-[#292524]">
-          Sphinx
-        </span>
+      <div className="flex items-center">
+        <Image
+          src="/images/logo/sphinx_logo.png"
+          alt="Sphinx"
+          width={120}
+          height={32}
+          className="object-contain"
+        />
       </div>
 
       {/* Divider */}
-      <div className="h-px w-full bg-[#D4E4D4]" />
+      <div className="h-px w-full bg-sage" />
 
       {/* Current Patient Card */}
-      <div className="flex flex-col gap-3 rounded-lg border border-[#D4E4D4] bg-white p-4">
-        <span className="text-[10px] font-semibold tracking-[1px] text-[#78716C]">
+      <div className="flex flex-col gap-3 rounded-lg border border-sage bg-white p-4">
+        <span className="text-[10px] font-semibold tracking-[1px] text-gray">
           CURRENT PATIENT
         </span>
 
         {/* Patient Row */}
         <div className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#E8EFE8]">
-            <span className="text-xs font-semibold text-[#0D9488]">
+            <span className="text-xs font-semibold text-teal">
               {getInitials(patientName)}
             </span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-[13px] font-semibold text-[#292524]">
+            <span className="text-[13px] font-semibold text-dark">
               {patientName}
             </span>
-            <span className="text-[11px] text-[#78716C]">
+            <span className="text-[11px] text-gray">
               DOB: {patientDOB}
             </span>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="h-px w-full bg-[#D4E4D4]" />
+        <div className="h-px w-full bg-sage" />
 
         {/* Details */}
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] text-[#78716C]">Assessment</span>
-            <span className="text-[11px] font-medium text-[#292524]">
+            <span className="text-[11px] text-gray">Assessment</span>
+            <span className="text-[11px] font-medium text-dark">
               DSM-5 CCM
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[11px] text-[#78716C]">Date</span>
-            <span className="text-[11px] font-medium text-[#292524]">
+            <span className="text-[11px] text-gray">Date</span>
+            <span className="text-[11px] font-medium text-dark">
               {assessmentDate}
             </span>
           </div>
@@ -106,25 +108,27 @@ export function ReportSidebar({
       </div>
 
       {/* Divider */}
-      <div className="h-px w-full bg-[#D4E4D4]" />
+      <div className="h-px w-full bg-sage" />
 
       {/* Navigation */}
-      <nav className="flex flex-col gap-0.5">
+      <nav aria-label="Report navigation" className="flex flex-col gap-0.5">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           return (
-            <div
+            <button
+              type="button"
               key={item.label}
+              aria-current={item.active ? 'page' : undefined}
               className={cn(
-                'flex items-center gap-2.5 rounded-lg px-3 py-2.5',
+                'flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-left',
                 item.active
-                  ? 'bg-[#0D9488]/[0.06] font-semibold text-[#0D9488]'
-                  : 'text-[#78716C]'
+                  ? 'bg-teal/6 font-semibold text-teal'
+                  : 'text-gray'
               )}
             >
               <Icon className="h-[18px] w-[18px]" />
               <span className="text-[13px]">{item.label}</span>
-            </div>
+            </button>
           );
         })}
       </nav>
@@ -133,18 +137,18 @@ export function ReportSidebar({
       <div className="flex-1" />
 
       {/* Divider */}
-      <div className="h-px w-full bg-[#D4E4D4]" />
+      <div className="h-px w-full bg-sage" />
 
       {/* Doctor Profile */}
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#FFB7B2]">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-coral">
           <span className="text-sm font-semibold text-white">SM</span>
         </div>
         <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-semibold text-[#292524]">
+          <span className="text-sm font-semibold text-dark">
             Dr. Sarah Mitchell
           </span>
-          <span className="text-xs text-[#78716C]">Psychiatrist</span>
+          <span className="text-xs text-gray">Psychiatrist</span>
         </div>
       </div>
     </aside>

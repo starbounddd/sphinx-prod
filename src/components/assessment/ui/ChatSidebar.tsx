@@ -1,14 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import type { JSX } from 'react';
+import Image from 'next/image';
 import {
-  Brain,
-  Timer,
-  MessageSquare,
-  CircleCheck,
-  Loader,
+  Sparkles,
   Circle,
+  CircleCheck,
   MessageCircle,
+  SquarePen,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -31,63 +31,29 @@ interface ChatSidebarProps {
 
 function BrandSection() {
   return (
-    <div className="flex items-center gap-2.5">
-      <div className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-[#0D9488]">
-        <Brain className="h-4 w-4 text-white" />
+    <div className="flex w-full items-center justify-between rounded-lg bg-[#78716C08] px-2 py-2">
+      <div className="flex items-center">
+        <Image
+          src="/images/logo/sphinx_logo.png"
+          alt="Sphinx"
+          width={120}
+          height={32}
+          className="object-contain"
+        />
       </div>
-      <span className="font-[Outfit] text-base font-semibold text-white">
-        Sphinx
-      </span>
+      <button
+        type="button"
+        className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#78716C08]"
+        aria-label="New Chat"
+      >
+        <SquarePen className="h-4 w-4 text-gray" />
+      </button>
     </div>
   );
 }
 
 function Divider() {
-  return <div className="h-px w-full bg-white/10" />;
-}
-
-function SessionInfoCard({
-  questionCount,
-  maxQuestions,
-  totalTime,
-}: {
-  questionCount: number;
-  maxQuestions: number;
-  totalTime: string;
-}) {
-  const progress = maxQuestions > 0 ? (questionCount / maxQuestions) * 100 : 0;
-
-  return (
-    <div className="flex w-full flex-col gap-3 rounded-lg border border-white/10 bg-white/5 p-4">
-      <span className="text-[10px] font-semibold tracking-[1px] text-gray-400">
-        ACTIVE SESSION
-      </span>
-
-      {/* Timer row */}
-      <div className="flex w-full items-center gap-2">
-        <Timer className="h-4 w-4 text-[#0D9488]" />
-        <span className="text-[13px] font-medium text-white">
-          {totalTime} remaining
-        </span>
-      </div>
-
-      {/* Question row */}
-      <div className="flex w-full items-center gap-2">
-        <MessageSquare className="h-4 w-4 text-[#0D9488]" />
-        <span className="text-[13px] font-medium text-white">
-          Question {questionCount} of {maxQuestions}
-        </span>
-      </div>
-
-      {/* Progress bar */}
-      <div className="h-1.5 w-full overflow-hidden rounded-sm bg-white/10">
-        <div
-          className="h-full rounded-sm bg-[#0D9488] transition-all duration-300"
-          style={{ width: `${Math.min(progress, 100)}%` }}
-        />
-      </div>
-    </div>
-  );
+  return <div className="h-px w-full bg-[#E7E5E4]" />;
 }
 
 function DomainProgressList({
@@ -101,8 +67,8 @@ function DomainProgressList({
   if (entries.length === 0) return null;
 
   return (
-    <div className="flex w-full flex-col gap-2.5">
-      <span className="text-[10px] font-semibold tracking-[1px] text-gray-400">
+    <div className="flex w-full flex-col gap-1.5">
+      <span className="text-[11px] font-semibold tracking-[0.5px] text-gray">
         DOMAINS TO EXPLORE
       </span>
 
@@ -116,40 +82,41 @@ function DomainProgressList({
           <div
             key={domain}
             className={cn(
-              'flex w-full items-center gap-2 rounded-md px-2 py-1.5',
+              'flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5',
+              isCurrent &&
+                'border border-[#FF9B9540] bg-[#FFB7B218]',
               isDone && 'bg-[#0D948810]',
-              isCurrent && 'bg-[#FFB7B220]',
             )}
           >
             {isDone && (
-              <CircleCheck className="h-3.5 w-3.5 text-[#0D9488]" />
+              <CircleCheck className="h-[18px] w-[18px] shrink-0 text-teal" />
             )}
             {isCurrent && (
-              <Loader className="h-3.5 w-3.5 text-[#FF6B6B]" />
+              <Sparkles className="h-[18px] w-[18px] shrink-0 text-coral-dark" />
             )}
             {isPending && (
-              <Circle className="h-3.5 w-3.5 text-gray-400" />
+              <Circle className="h-[18px] w-[18px] shrink-0 text-[#A8A29E]" />
             )}
 
             <span
               className={cn(
-                'text-xs',
-                isDone && 'font-medium text-white',
-                isCurrent && 'font-semibold text-white',
-                isPending && 'font-normal text-gray-400',
+                'text-[13px] font-body',
+                isCurrent && 'font-semibold text-dark',
+                isDone && 'font-medium text-dark',
+                isPending && 'font-normal text-gray',
               )}
             >
               {domain}
             </span>
 
-            {isDone && (
-              <span className="ml-auto text-[10px] font-semibold text-[#0D9488]">
-                Done
+            {isCurrent && (
+              <span className="ml-auto text-[11px] font-semibold text-coral-dark">
+                Current
               </span>
             )}
-            {isCurrent && (
-              <span className="ml-auto text-[10px] font-semibold text-[#FF6B6B]">
-                Current
+            {isDone && (
+              <span className="ml-auto text-[11px] font-semibold text-teal">
+                Done
               </span>
             )}
           </div>
@@ -160,23 +127,40 @@ function DomainProgressList({
 }
 
 function ChatHistorySection() {
+  const [sessionTime] = useState(() =>
+    new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+  );
+
   return (
-    <>
-      <span className="text-[10px] font-semibold tracking-[1px] text-gray-400">
+    <div className="flex w-full flex-1 flex-col gap-1.5 overflow-y-auto">
+      <span className="text-[11px] font-semibold tracking-[0.5px] text-gray">
         CHAT HISTORY
       </span>
       <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5">
-        <MessageCircle className="h-[18px] w-[18px] shrink-0 text-gray-400" />
+        <MessageCircle className="h-[18px] w-[18px] shrink-0 text-[#A8A29E]" />
         <div className="flex flex-col gap-0.5">
-          <span className="text-[13px] font-medium leading-tight text-white">
+          <span className="text-[13px] font-medium leading-tight text-dark">
             Current Session
           </span>
-          <span className="text-[11px] text-gray-400">
-            Today, {new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+          <span className="text-[11px] text-[#A8A29E]">
+            Today, {sessionTime}
           </span>
         </div>
       </div>
-    </>
+    </div>
+  );
+}
+
+function SidebarFooter() {
+  return (
+    <div className="flex w-full items-center gap-2.5 px-1 py-2">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-coral text-xs font-semibold text-white">
+        U
+      </div>
+      <span className="text-[13px] font-medium font-body text-dark">
+        User
+      </span>
+    </div>
   );
 }
 
@@ -194,20 +178,13 @@ export function ChatSidebar({
 }: ChatSidebarProps): JSX.Element {
   return (
     <aside
+      aria-label="Assessment sidebar"
       className={cn(
-        'flex h-full w-[280px] shrink-0 flex-col gap-5 border-r border-white/10 bg-slate-900 px-4 py-6',
+        'flex h-full w-[280px] shrink-0 flex-col gap-3 border-r border-[#E7E5E4] bg-cream p-3',
         className,
       )}
     >
       <BrandSection />
-      <Divider />
-
-      <SessionInfoCard
-        questionCount={questionCount}
-        maxQuestions={maxQuestions}
-        totalTime={totalTime}
-      />
-
       <Divider />
 
       <DomainProgressList
@@ -218,6 +195,9 @@ export function ChatSidebar({
       <Divider />
 
       <ChatHistorySection />
+
+      <Divider />
+      <SidebarFooter />
     </aside>
   );
 }

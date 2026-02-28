@@ -32,7 +32,7 @@ export function ChatMessage({
           'px-4 py-3 text-sm leading-relaxed',
           isAI
             ? 'rounded-2xl rounded-bl-sm border border-gray-200 bg-white text-foreground shadow-[0_2px_8px_rgba(41,37,36,0.03)]'
-            : 'rounded-2xl rounded-br-sm bg-[#0D9488] text-white',
+            : 'rounded-2xl rounded-br-sm bg-[#E8E4E0] text-foreground',
           className,
         )}
       >

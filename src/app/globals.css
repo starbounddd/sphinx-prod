@@ -6,11 +6,13 @@
   --font-sans: var(--font-outfit);
   --font-chat: var(--font-inter);
   --font-handwritten: var(--font-reenie);
+  --font-body: var(--font-pjs);
 
   /* Fallback font tokens (in case font loader doesn't define them) */
   --font-outfit: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
   --font-inter: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
   --font-reenie: 'Reenie Beanie', cursive;
+  --font-pjs: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 
   /* Radius */
   --radius-sm: calc(var(--radius) - 4px);

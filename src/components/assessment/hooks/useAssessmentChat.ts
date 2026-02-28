@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { ChatMessage, AssessmentState } from '../types';
+
+const SESSION_DURATION_MS = 20 * 60 * 1000; // 20 minutes
 
 export function useAssessmentChat() {
   const [state, setState] = useState<AssessmentState>({
@@ -21,6 +23,46 @@ export function useAssessmentChat() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [report, setReport] = useState<any>(null);
   const [dataPersisted, setDataPersisted] = useState(false);
+
+  // 20-minute countdown timer
+  const [remainingMs, setRemainingMs] = useState(SESSION_DURATION_MS);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const startTimeRef = useRef<number | null>(null);
+
+  // ------------------------------------------------------------------
+  // Start the countdown timer once initialized
+  // ------------------------------------------------------------------
+  useEffect(() => {
+    if (!isInitialized || state.isComplete) return;
+
+    startTimeRef.current = Date.now();
+    timerRef.current = setInterval(() => {
+      const elapsed = Date.now() - (startTimeRef.current ?? Date.now());
+      const left = Math.max(0, SESSION_DURATION_MS - elapsed);
+      setRemainingMs(left);
+    }, 1000);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isInitialized, state.isComplete]);
+
+  // ------------------------------------------------------------------
+  // Force-end the session (timer expiry or manual End Session)
+  // ------------------------------------------------------------------
+  const forceEnd = useCallback(() => {
+    if (state.isComplete) return;
+    if (timerRef.current) clearInterval(timerRef.current);
+
+    setState((prev) => ({ ...prev, isComplete: true, isThinking: false }));
+  }, [state.isComplete]);
+
+  // Auto-end when timer reaches zero
+  useEffect(() => {
+    if (remainingMs <= 0 && isInitialized && !state.isComplete) {
+      forceEnd();
+    }
+  }, [remainingMs, isInitialized, state.isComplete, forceEnd]);
 
   // ------------------------------------------------------------------
   // Persist chat data to localStorage when assessment completes
@@ -61,7 +103,13 @@ export function useAssessmentChat() {
     const stored = localStorage.getItem('sphinx_screening_answers');
     if (!stored) return; // no screening data yet
 
-    const screeningAnswers: Record<string, number> = JSON.parse(stored);
+    let screeningAnswers: Record<string, number>;
+    try {
+      screeningAnswers = JSON.parse(stored);
+    } catch {
+      console.error('Invalid screening data in localStorage');
+      return;
+    }
     initAssessment(screeningAnswers);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInitialized]);
@@ -163,17 +211,18 @@ export function useAssessmentChat() {
   }
 
   // ------------------------------------------------------------------
-  // Convenience handlers
+  // Convenience handlers (ref avoids stale closures)
   // ------------------------------------------------------------------
+  const sendMessageRef = useRef(sendMessage);
+  sendMessageRef.current = sendMessage;
+
   const handleQuickReply = useCallback(
-    (option: string) => sendMessage(option),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    (option: string) => sendMessageRef.current(option),
     []
   );
 
   const handleSend = useCallback(
-    () => sendMessage(inputValue),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    () => sendMessageRef.current(inputValue),
     [inputValue]
   );
 
@@ -197,5 +246,8 @@ export function useAssessmentChat() {
     threadId,
     isInitialized,
     dataPersisted,
+    // Timer + end session
+    remainingMs,
+    forceEnd,
   };
 }

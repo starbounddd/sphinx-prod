@@ -2,7 +2,7 @@
 
 import type { JSX } from 'react';
 import { useEffect, useRef } from 'react';
-import { Send, MessageCircle } from 'lucide-react';
+import { Send, Mic } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ChatInputProps {
@@ -17,7 +17,7 @@ interface ChatInputProps {
 
 /**
  * Chat input with textarea + send button.
- * Card-style container with MessageCircle icon, matching the Pencil design.
+ * Rounded pill style with mic icon and coral gradient send button.
  */
 export function ChatInput({
   value,
@@ -30,7 +30,6 @@ export function ChatInput({
 }: ChatInputProps): JSX.Element {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Auto-resize textarea based on content
   useEffect(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -53,10 +52,12 @@ export function ChatInput({
   return (
     <div className={cn('flex w-full items-center gap-3', className)}>
       {/* Text input card */}
-      <div className="flex flex-1 items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 shadow-[0_2px_8px_rgba(41,37,36,0.03)]"
-        style={{ height: 48 }}
+      <div
+        className="flex h-12 flex-1 items-center gap-3 rounded-3xl border border-[#E7E5E4] bg-white px-4 shadow-[0_1px_4px_rgba(41,37,36,0.02)]"
       >
-        <MessageCircle className="h-[18px] w-[18px] shrink-0 text-muted-foreground" />
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#78716C15]">
+          <Mic className="h-[18px] w-[18px] text-gray" />
+        </div>
         <textarea
           ref={textareaRef}
           value={value}
@@ -68,25 +69,25 @@ export function ChatInput({
           className={cn(
             'flex-1 resize-none bg-transparent py-3 text-sm text-foreground placeholder:text-muted-foreground',
             'focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',
-            'leading-6',
+            'font-body leading-6',
           )}
         />
       </div>
 
-      {/* Send button */}
+      {/* Send button — coral gradient */}
       <button
         type="button"
         onClick={onSend}
         disabled={isDisabledSend}
         className={cn(
-          'flex h-12 w-12 shrink-0 items-center justify-center rounded-xl',
-          'bg-[#0D9488] text-white transition-opacity',
-          'hover:opacity-90',
+          'flex h-12 w-12 shrink-0 items-center justify-center rounded-full',
+          'bg-linear-to-b from-[#FFB7B2] to-[#FF9B95] text-white shadow-[0_2px_10px_rgba(255,183,178,0.19)]',
+          'transition-opacity hover:opacity-90',
           'disabled:pointer-events-none disabled:opacity-50',
         )}
         aria-label="Send message"
       >
-        <Send className="h-[18px] w-[18px]" />
+        <Send className="h-5 w-5" />
       </button>
     </div>
   );

@@ -1,70 +1,70 @@
-'use client';
-
 import type { JSX } from 'react';
-import { Timer, Hash, Square } from 'lucide-react';
+import { Timer, Square } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface AssessmentHeaderProps {
-  currentDomain?: string | null;
-  questionCount?: number;
-  maxQuestions?: number;
-  totalTime?: string;
+  remainingMs?: number;
   onEndSession?: () => void;
   className?: string;
 }
 
-/**
- * Assessment chat header bar.
- *
- * Left:  "Assessment Interview" title + domain badge
- * Right: Timer pill, Question counter pill, End Session button
- */
+function formatTime(ms: number): string {
+  const totalSec = Math.max(0, Math.floor(ms / 1000));
+  const min = Math.floor(totalSec / 60);
+  const sec = totalSec % 60;
+  return `${min}:${sec.toString().padStart(2, '0')}`;
+}
+
 export function AssessmentHeader({
-  currentDomain,
-  questionCount = 5,
-  maxQuestions = 20,
-  totalTime = '14:32',
+  remainingMs = 20 * 60 * 1000,
   onEndSession,
   className,
 }: AssessmentHeaderProps): JSX.Element {
+  const isLow = remainingMs < 2 * 60 * 1000; // under 2 minutes
+
   return (
     <header
       className={cn(
-        'flex h-16 w-full shrink-0 items-center justify-between border-b border-gray-200 bg-white px-8',
+        'flex h-14 w-full shrink-0 items-center justify-between border-b border-[#E7E5E4] bg-cream px-6',
         className,
       )}
     >
-      {/* Left side */}
-      <div className="flex items-center gap-3">
-        <h1 className="font-[Outfit] text-lg font-semibold text-foreground">
-          Assessment Interview
-        </h1>
+      {/* Left: empty spacer */}
+      <div />
 
-        {currentDomain && (
-          <div className="flex items-center gap-1 rounded-full bg-[#FFB7B220] px-2.5 py-1">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#FF6B6B]" />
-            <span className="text-[11px] font-semibold text-[#FF6B6B]">
-              {currentDomain}
-            </span>
-          </div>
-        )}
-      </div>
-
-      {/* Right side */}
+      {/* Right: Online + Timer + End Session */}
       <div className="flex items-center gap-3">
-        {/* Timer pill */}
-        <div className="flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5">
-          <Timer className="h-3.5 w-3.5 text-[#0D9488]" />
-          <span className="text-xs font-semibold text-foreground">
-            {totalTime}
+        {/* Online status */}
+        <div className="flex items-center gap-1.5 rounded-lg bg-[#78716C0A] px-3 py-1.5" role="status" aria-label="Connection status: online">
+          <span className="h-2 w-2 rounded-full bg-teal" aria-hidden="true" />
+          <span className="text-xs font-normal font-body text-emerald">
+            Online
           </span>
         </div>
 
-        {/* Question counter pill */}
-        <div className="flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5">
-          <Hash className="h-3.5 w-3.5 text-[#0D9488]" />
-          <span className="text-xs font-semibold text-foreground">
-            {questionCount} / {maxQuestions}
+        {/* Timer pill */}
+        <div
+          role="timer"
+          aria-live="polite"
+          aria-label={`${formatTime(remainingMs)} remaining`}
+          className={cn(
+            'flex items-center gap-1.5 rounded-lg px-3 py-1.5',
+            isLow ? 'bg-red-50' : 'bg-[#78716C0A]',
+          )}
+        >
+          <Timer
+            className={cn(
+              'h-3.5 w-3.5',
+              isLow ? 'text-red-500' : 'text-teal',
+            )}
+          />
+          <span
+            className={cn(
+              'text-xs font-semibold tabular-nums',
+              isLow ? 'text-red-500' : 'text-foreground',
+            )}
+          >
+            {formatTime(remainingMs)}
           </span>
         </div>
 
