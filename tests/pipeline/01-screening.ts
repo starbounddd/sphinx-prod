@@ -1,4 +1,5 @@
-// tests/pipeline/01-screening.test.ts
+// tests/pipeline/01-screening.ts — Phase 1: Screening
+// Run via: npx vitest run tests/pipeline/pipeline.test.ts
 import { describe, it, expect, beforeAll } from 'vitest';
 import {
   signInTestUser,

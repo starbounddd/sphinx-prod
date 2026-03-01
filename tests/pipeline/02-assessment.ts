@@ -1,4 +1,5 @@
-// tests/pipeline/02-assessment.test.ts
+// tests/pipeline/02-assessment.ts — Phase 2: Assessment Chat
+// Run via: npx vitest run tests/pipeline/pipeline.test.ts
 import { describe, it, expect, beforeAll } from 'vitest';
 import { v4 as uuidv4 } from 'uuid';
 import {

@@ -1,8 +1,8 @@
-// tests/pipeline/03-report.test.ts
+// tests/pipeline/03-report.ts — Phase 3: Report Generation
+// Run via: npx vitest run tests/pipeline/pipeline.test.ts
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import {
   sharedState,
-  signInTestUser,
   cleanup,
   prisma,
 } from './helpers';
@@ -19,23 +19,20 @@ import {
   getUserScreening,
 } from '@/lib/db/assessmentService';
 import { validateAIReport } from '@/lib/ai/reportSchema';
+import type { AssessmentGraphStateType } from '@/lib/ai/assessmentTypes';
+
+// Cache the report result to avoid redundant LLM calls
+let reportResult: AssessmentGraphStateType;
 
 describe('Phase 3: Report Generation', { timeout: 180_000 }, () => {
   beforeAll(async () => {
-    // If running standalone, recover state from DB
-    if (!sharedState.userId) {
-      sharedState.userId = await signInTestUser();
-    }
+    // Requires Phase 2 to have populated sharedState + LangGraph checkpointer
     if (!sharedState.threadId || !sharedState.sessionId) {
-      // Find the most recent in-progress session for this user
-      const session = await prisma.assessmentSession.findFirst({
-        where: { userId: sharedState.userId, status: 'in_progress' },
-        orderBy: { startedAt: 'desc' },
-      });
-      if (!session) throw new Error('No in-progress session — run phases 1+2 first');
-      sharedState.threadId = session.threadId;
-      sharedState.sessionId = session.id;
+      throw new Error('Phase 3 requires sharedState from Phase 2 — run via pipeline.test.ts');
     }
+
+    // Generate report once, reuse across tests
+    reportResult = await forceGenerateReport(sharedState.threadId);
   });
 
   afterAll(async () => {
@@ -43,50 +40,45 @@ describe('Phase 3: Report Generation', { timeout: 180_000 }, () => {
     await prisma.$disconnect();
   });
 
-  it('force-generates a report from current assessment state', async () => {
-    const result = await forceGenerateReport(sharedState.threadId);
-
+  it('force-generates a report from current assessment state', () => {
     // Should have a report
-    expect(result.report).not.toBeNull();
-    expect(result.report).toBeDefined();
+    expect(reportResult.report).not.toBeNull();
+    expect(reportResult.report).toBeDefined();
 
     // Report should have required fields
-    expect(result.report!.chiefComplaint).toBeTruthy();
-    expect(result.report!.mainGoal).toBeTruthy();
-    expect(result.report!.analysis).toBeTruthy();
-    expect(result.report!.domains).toBeDefined();
-    expect(Array.isArray(result.report!.domains)).toBe(true);
-    expect(result.report!.findings).toBeDefined();
-    expect(result.report!.recommendations).toBeDefined();
+    expect(reportResult.report!.chiefComplaint).toBeTruthy();
+    expect(reportResult.report!.mainGoal).toBeTruthy();
+    expect(reportResult.report!.analysis).toBeTruthy();
+    expect(reportResult.report!.domains).toBeDefined();
+    expect(Array.isArray(reportResult.report!.domains)).toBe(true);
+    expect(reportResult.report!.findings).toBeDefined();
+    expect(reportResult.report!.recommendations).toBeDefined();
   });
 
-  it('report passes schema validation', async () => {
-    const result = await forceGenerateReport(sharedState.threadId);
-    const validation = validateAIReport(result.report);
+  it('report passes schema validation', () => {
+    const validation = validateAIReport(reportResult.report);
     expect(validation.valid).toBe(true);
   });
 
   it('persists report to Supabase', async () => {
-    const result = await forceGenerateReport(sharedState.threadId);
-
-    if (result.report) {
+    if (reportResult.report) {
       await saveAssessmentReport({
         sessionId: sharedState.sessionId,
-        report: result.report,
+        report: reportResult.report,
       });
     }
 
     // Update domain assessments
     await updateDomainAssessments(
       sharedState.sessionId,
-      result.domainAssessments as Parameters<typeof updateDomainAssessments>[1],
+      reportResult.domainAssessments as Parameters<typeof updateDomainAssessments>[1],
     );
 
     // Complete the session
     await completeSession({
       sessionId: sharedState.sessionId,
-      chiefComplaint: result.chiefComplaint,
-      totalQuestions: result.questionCount,
+      chiefComplaint: reportResult.chiefComplaint,
+      totalQuestions: reportResult.questionCount,
       isEarlyTermination: true,
     });
   });
