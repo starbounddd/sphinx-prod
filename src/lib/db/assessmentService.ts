@@ -8,7 +8,6 @@
 import { prisma } from './prisma';
 import type {
   AssessmentSession,
-  ScreeningResponse,
   ChatMessage,
   DomainAssessment as PrismaDomainAssessment,
   AssessmentReport,
@@ -21,7 +20,6 @@ import type {
 } from '@prisma/client';
 import type { AIGeneratedReport } from '@/lib/ai/reportSchema';
 import type {
-  ScreeningResult,
   DomainAssessment,
   SymptomDomain as AppSymptomDomain,
 } from '@/lib/ai/assessmentTypes';
@@ -34,7 +32,7 @@ export interface CreateSessionInput {
   threadId: string;
   userId?: string;
   flaggedDomains: AppSymptomDomain[];
-  screeningResults: ScreeningResult[];
+  screeningSnapshot: Record<string, number>;  // all 13 domain scores
 }
 
 export interface SaveMessageInput {
@@ -85,35 +83,26 @@ export interface CompleteSessionInput {
    ========================================================================== */
 
 /**
- * Create a new assessment session with screening responses.
+ * Create a new assessment session with screening snapshot.
  */
 export async function createAssessmentSession(
   input: CreateSessionInput
 ): Promise<AssessmentSession> {
-  const { threadId, userId, flaggedDomains, screeningResults } = input;
+  const { threadId, userId, flaggedDomains, screeningSnapshot } = input;
 
-  // Create session with screening responses and initial domain assessments
   const session = await prisma.assessmentSession.create({
     data: {
       threadId,
       userId,
       flaggedDomains: flaggedDomains as SymptomDomain[],
+      screeningSnapshot,
       status: 'in_progress',
-      // Create screening responses
-      screeningResponses: {
-        create: screeningResults.map((r) => ({
-          questionId: r.questionId,
-          domain: r.domain as SymptomDomain,
-          score: r.score,
-          questionText: r.questionText,
-        })),
-      },
       // Create initial domain assessments for flagged domains
       domainAssessments: {
         create: flaggedDomains.map((domain, index) => ({
           domain: domain as SymptomDomain,
           status: index === 0 ? 'in_progress' : 'pending',
-          screeningScore: calculateDomainScreeningScore(screeningResults, domain),
+          screeningScore: screeningSnapshot[domain] ?? 0,
         })),
       },
     },
@@ -140,7 +129,6 @@ export async function getFullSession(sessionId: string) {
   return prisma.assessmentSession.findUnique({
     where: { id: sessionId },
     include: {
-      screeningResponses: true,
       chatMessages: { orderBy: { sequence: 'asc' } },
       domainAssessments: true,
       report: true,
@@ -442,19 +430,4 @@ export async function getUserLatestSession(
     where: { userId },
     orderBy: { startedAt: 'desc' },
   });
-}
-
-/* ==========================================================================
-   Helpers
-   ========================================================================== */
-
-function calculateDomainScreeningScore(
-  screeningResults: ScreeningResult[],
-  domain: AppSymptomDomain
-): number {
-  const domainResults = screeningResults.filter((r) => r.domain === domain);
-  if (domainResults.length === 0) return 0;
-
-  const sum = domainResults.reduce((acc, r) => acc + r.score, 0);
-  return sum / domainResults.length;
 }

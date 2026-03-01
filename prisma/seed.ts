@@ -17,27 +17,21 @@ async function main() {
       flaggedDomains: ['anxiety', 'sleep_problems'],
       isEarlyTermination: false,
       endedAt: new Date(),
-      screeningResponses: {
-        create: [
-          {
-            questionId: 'q1',
-            domain: 'anxiety',
-            score: 3,
-            questionText: 'Feeling nervous, anxious, or on edge',
-          },
-          {
-            questionId: 'q2',
-            domain: 'anxiety',
-            score: 2,
-            questionText: 'Not being able to stop or control worrying',
-          },
-          {
-            questionId: 'q3',
-            domain: 'sleep_problems',
-            score: 3,
-            questionText: 'Trouble falling or staying asleep',
-          },
-        ],
+      // Snapshot of screening scores for all 13 domains
+      screeningSnapshot: {
+        depression: 1.0,
+        anger: 0.5,
+        mania: 0.0,
+        anxiety: 2.5,
+        somatic_symptoms: 1.0,
+        suicidal_tendencies: 0.0,
+        psychosis: 0.0,
+        sleep_problems: 3.0,
+        memory: 0.5,
+        repetitive_thoughts: 1.0,
+        dissociation: 0.0,
+        personality: 0.5,
+        substance_use: 0.0,
       },
       domainAssessments: {
         create: [
@@ -149,7 +143,6 @@ async function main() {
       },
     },
     include: {
-      screeningResponses: true,
       domainAssessments: true,
       chatMessages: true,
       report: true,
@@ -160,7 +153,7 @@ async function main() {
     id: session.id,
     threadId: session.threadId,
     status: session.status,
-    screeningResponses: session.screeningResponses.length,
+    hasScreeningSnapshot: !!session.screeningSnapshot,
     domainAssessments: session.domainAssessments.length,
     chatMessages: session.chatMessages.length,
     hasReport: !!session.report,

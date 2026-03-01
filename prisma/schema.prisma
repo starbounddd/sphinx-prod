@@ -99,7 +99,6 @@ model AssessmentSession {
   isEarlyTermination Boolean           @default(false)
 
   // Relations (within sphinx-data)
-  screeningResponses ScreeningResponse[]
   chatMessages       ChatMessage[]
   domainAssessments  DomainAssessment[]
   report             AssessmentReport?
@@ -112,25 +111,6 @@ model AssessmentSession {
   @@index([status])
   @@index([startedAt])
   @@map("assessment_sessions")
-}
-
-// Screening Response - individual questionnaire answers
-model ScreeningResponse {
-  id           String        @id @default(uuid()) @db.Uuid
-  sessionId    String        @db.Uuid
-  questionId   String
-  domain       SymptomDomain
-  score        Int           // 0-4 Likert scale
-  questionText String
-
-  session AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-
-  @@unique([sessionId, questionId])
-  @@index([sessionId])
-  @@index([domain])
-  @@map("screening_responses")
 }
 
 // Chat Message - full conversation history
