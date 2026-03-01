@@ -13,7 +13,7 @@ export function NavbarCTAButton({ isSignedIn }: NavbarCTAButtonProps): JSX.Eleme
 
   if (isSignedIn) {
     return (
-      <PrimaryButton href="/screening" className="px-5 py-2 text-base shrink-0">
+      <PrimaryButton href="/assessment/screening" className="px-5 py-2 text-base shrink-0">
         Start Screening
       </PrimaryButton>
     );

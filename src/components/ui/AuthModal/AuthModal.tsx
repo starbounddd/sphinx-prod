@@ -175,7 +175,7 @@ export function AuthModal(): React.JSX.Element {
         setLoading(false);
         closeAuthModal();
         router.refresh();
-        router.push('/screening');
+        router.push('/assessment/screening');
       } else {
         setError('Failed to create account. Please try again.');
         setLoading(false);
@@ -198,7 +198,7 @@ export function AuthModal(): React.JSX.Element {
         setLoading(false);
         closeAuthModal();
         router.refresh();
-        router.push('/screening');
+        router.push('/assessment/screening');
       }
     }
   }
@@ -240,7 +240,7 @@ export function AuthModal(): React.JSX.Element {
       setLoading(false);
       closeAuthModal();
       router.refresh();
-      router.push('/screening');
+      router.push('/assessment/screening');
     } else {
       setError('Verification failed. Please try again.');
       setLoading(false);

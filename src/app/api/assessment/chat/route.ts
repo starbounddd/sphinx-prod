@@ -162,6 +162,7 @@ export async function POST(request: NextRequest) {
         undefined,
         screeningResults,
         flaggedDomains,
+        domainScores,
       );
 
       // Create session in database with screening snapshot

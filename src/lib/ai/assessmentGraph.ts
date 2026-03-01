@@ -81,6 +81,23 @@ function getAllFlaggedDomainsFromScreening(
 }
 
 /**
+ * Get all flagged domains from precomputed domain scores (screeningSnapshot).
+ * Avoids recalculating from raw answers when snapshot is available.
+ */
+function getAllFlaggedDomainsFromSnapshot(
+  domainScores: Record<string, number>,
+  threshold: number = 2,
+): Record<SymptomDomain, number> {
+  const result = {} as Record<SymptomDomain, number>;
+  for (const [domain, score] of Object.entries(domainScores)) {
+    if (score >= threshold) {
+      result[domain as SymptomDomain] = score;
+    }
+  }
+  return result;
+}
+
+/**
  * Safely parse JSON from an LLM response, stripping markdown fences if present.
  */
 function parseJsonResponse(text: string): any {
@@ -467,7 +484,9 @@ async function generateReportNode(
 
   // ---- Append ALL flagged domains (not just top 5) with screening-only data ----
   if (report) {
-    const allFlaggedScores = getAllFlaggedDomainsFromScreening(state.screeningResults);
+    const allFlaggedScores = Object.keys(state.screeningSnapshot).length > 0
+      ? getAllFlaggedDomainsFromSnapshot(state.screeningSnapshot)
+      : getAllFlaggedDomainsFromScreening(state.screeningResults);
     const assessedDomainKeys = new Set(report.domains.map((d) => d.domain));
 
     // Also strip clinical notes from assessed domains that had NO actual evidence
@@ -626,16 +645,18 @@ export async function forceGenerateReport(
  * The compiled graph (and its MemorySaver checkpointer) is kept as a
  * module-level singleton so that thread state persists across calls.
  *
- * @param threadId          Unique thread identifier for session persistence
- * @param userMessage       The user's message (omit for initialization)
- * @param screeningResults  Screening answers (only needed for initialization)
- * @param flaggedDomains    Flagged domains (only needed for initialization)
+ * @param threadId            Unique thread identifier for session persistence
+ * @param userMessage         The user's message (omit for initialization)
+ * @param screeningResults    Screening answers (only needed for initialization)
+ * @param flaggedDomains      Flagged domains (only needed for initialization)
+ * @param screeningSnapshot   Precomputed domain scores (only needed for initialization)
  */
 export async function runAssessmentTurn(
   threadId: string,
   userMessage?: string,
   screeningResults?: ScreeningResult[],
   flaggedDomains?: SymptomDomain[],
+  screeningSnapshot?: Record<string, number>,
 ): Promise<AssessmentGraphStateType> {
   const graph = getAssessmentGraph();
   const config = { configurable: { thread_id: threadId } };
@@ -647,6 +668,7 @@ export async function runAssessmentTurn(
         messages: [],
         screeningResults: screeningResults || [],
         flaggedDomains: flaggedDomains || [],
+        screeningSnapshot: screeningSnapshot || {},
       },
       config,
     );

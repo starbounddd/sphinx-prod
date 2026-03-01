@@ -98,6 +98,12 @@ export const AssessmentGraphState = Annotation.Root({
     default: () => [],
   }),
 
+  /** Precomputed domain scores snapshot (all 13 domains) from DB */
+  screeningSnapshot: Annotation<Record<string, number>>({
+    reducer: (_prev, next) => next,
+    default: () => ({}),
+  }),
+
   /** Domains that scored above the flagging threshold */
   flaggedDomains: Annotation<SymptomDomain[]>({
     reducer: (_prev, next) => next,

@@ -2,10 +2,12 @@
 
 import type { JSX } from 'react';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { SurveyForm } from '@/components/survey/SurveyForm/SurveyForm';
-import surveyJson from '../../../resources/survey_schemas/wellbeing_surveyv1.json';
+import surveyJson from '../../../../resources/survey_schemas/wellbeing_surveyv1.json';
 import { Activity } from 'lucide-react';
-import { useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { useAuthModal } from '@/contexts/AuthModalContext';
 
 function Sidebar({
   answeredCount,
@@ -84,7 +86,30 @@ function Sidebar({
 
 export default function ScreeningPage(): JSX.Element {
   const [answeredCount, setAnsweredCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const { openAuthModal } = useAuthModal();
   const totalQuestions = surveyJson.questions.length;
+
+  useEffect(() => {
+    async function checkAuth() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        openAuthModal();
+      }
+      setIsLoading(false);
+    }
+    checkAuth();
+  }, [openAuthModal]);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <p className="text-gray font-chat">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex flex-col">
