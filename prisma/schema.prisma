@@ -57,6 +57,23 @@ enum SafetyEventType {
 }
 
 // ============================================================================
+// User Screening Result
+// ============================================================================
+
+// User's latest screening result (one per user, overwritten on each screening)
+model UserScreeningResult {
+  id             String          @id @default(uuid()) @db.Uuid
+  userId         String          @unique @db.Uuid
+  answers        Json            // { questionId: score }
+  domainScores   Json            // { domain: avgScore } - all 13 domains
+  flaggedDomains SymptomDomain[] // top 5 with score >= 2
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@map("user_screening_results")
+}
+
+// ============================================================================
 // AI Assessment Data Models
 // Note: userId references auth.users.id in sphinx-auth (cross-database ref)
 // ============================================================================
@@ -77,6 +94,8 @@ model AssessmentSession {
   chiefComplaint     String?
   totalQuestions     Int               @default(0)
   flaggedDomains     SymptomDomain[]
+  // Snapshot of all 13 domain scores at session creation
+  screeningSnapshot  Json?
   isEarlyTermination Boolean           @default(false)
 
   // Relations (within sphinx-data)
