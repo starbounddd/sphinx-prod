@@ -9,7 +9,6 @@ import {
   type DomainAssessment,
   type DomainScoring,
   type ScreeningResult,
-  type AssessmentDimension,
   DOMAIN_LABELS,
 } from './assessmentTypes';
 import { validateAIReport } from './reportSchema';
@@ -18,6 +17,7 @@ import { calculateDomainScores } from './domains';
 import {
   routeEntry,
   routeAfterProcessing,
+  getDimensionsCovered,
 } from './routingLogic';
 
 /* ==========================================================================
@@ -109,18 +109,6 @@ function parseJsonResponse(text: string): any {
   return JSON.parse(cleaned);
 }
 
-/**
- * Get the list of assessment dimensions already touched for a domain,
- * reading from the dimensionsCovered state field.
- */
-function getDimensionsCovered(
-  dimensionsCoveredState: Record<string, string[]>,
-  domain: SymptomDomain,
-): AssessmentDimension[] {
-  const dims = dimensionsCoveredState[domain];
-  if (!dims) return [];
-  return dims as AssessmentDimension[];
-}
 
 /* ==========================================================================
    Graph Node: initialize

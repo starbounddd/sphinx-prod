@@ -9,10 +9,7 @@ import {
 } from '@/lib/ai/inputValidation';
 import {
   createAssessmentSession,
-  completeSession,
-  saveAssessmentReport,
-  updateDomainAssessments,
-  getSessionByThreadId,
+  persistSessionResults,
   getUserScreening,
 } from '@/lib/db/assessmentService';
 import { createClient } from '@/lib/supabase/server';
@@ -20,48 +17,6 @@ import { createClient } from '@/lib/supabase/server';
 /* ==========================================================================
    Helpers
    ========================================================================== */
-
-/**
- * Persist completed session data to database.
- * Called when assessment naturally completes (report generated).
- */
-async function persistCompletedSession(
-  threadId: string,
-  result: {
-    report: import('@/lib/ai/reportSchema').AIGeneratedReport;
-    domainAssessments: Record<string, import('@/lib/ai/assessmentTypes').DomainAssessment>;
-    chiefComplaint?: string;
-    questionCount: number;
-  },
-): Promise<void> {
-  const session = await getSessionByThreadId(threadId);
-  if (!session) {
-    console.warn('[persistCompletedSession] Session not found:', threadId);
-    return;
-  }
-
-  // Save report
-  if (result.report) {
-    await saveAssessmentReport({
-      sessionId: session.id,
-      report: result.report,
-    });
-  }
-
-  // Update domain assessments
-  await updateDomainAssessments(
-    session.id,
-    result.domainAssessments as Parameters<typeof updateDomainAssessments>[1],
-  );
-
-  // Mark session as completed
-  await completeSession({
-    sessionId: session.id,
-    chiefComplaint: result.chiefComplaint,
-    totalQuestions: result.questionCount,
-    isEarlyTermination: false,
-  });
-}
 
 function buildDomainStatuses(
   domainAssessments: Record<string, { status: string }>,
@@ -202,12 +157,12 @@ export async function POST(request: NextRequest) {
 
       // If assessment is complete, persist to database
       if (result.isComplete && result.report) {
-        persistCompletedSession(threadId, {
+        persistSessionResults(threadId, {
           report: result.report,
           domainAssessments: result.domainAssessments,
           chiefComplaint: result.chiefComplaint,
           questionCount: result.questionCount,
-        }).catch((err) => {
+        }, false).catch((err: unknown) => {
           console.error('[assessment/chat] Failed to persist session:', err);
         });
       }

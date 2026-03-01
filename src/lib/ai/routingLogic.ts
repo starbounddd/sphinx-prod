@@ -21,7 +21,7 @@ function elapsedMinutes(startTime: string): number {
   return (Date.now() - new Date(startTime).getTime()) / 60_000;
 }
 
-function getDimensionsCovered(
+export function getDimensionsCovered(
   dimensionsCoveredState: Record<string, string[]>,
   domain: SymptomDomain,
 ): AssessmentDimension[] {

@@ -2,12 +2,27 @@
 
 import { useReducer, useCallback, useEffect, useRef, useMemo } from 'react';
 import type { ChatMessage } from '../types';
+import { useSessionTimer } from './useSessionTimer';
 
 /* ==========================================================================
    Constants
    ========================================================================== */
 
-const SESSION_DURATION_MS = 20 * 60 * 1000; // 20 minutes
+const SESSION_DURATION_SECONDS = 20 * 60; // 20 minutes
+
+/* ==========================================================================
+   Helpers
+   ========================================================================== */
+
+function createAIMessage(content: string, quickReplies?: string[]): ChatMessage {
+  return {
+    id: `ai-${Date.now()}`,
+    role: 'ai',
+    content,
+    timestamp: new Date(),
+    quickReplies,
+  };
+}
 
 /* ==========================================================================
    State & Action Types
@@ -29,8 +44,6 @@ interface ChatState {
   currentDomain: string | null;
   // Report
   report: unknown;
-  // Timer
-  remainingMs: number;
 }
 
 type ChatAction =
@@ -43,8 +56,7 @@ type ChatAction =
   | { type: 'UPDATE_DOMAIN_STATE'; domainStatuses: Record<string, string>; currentDomain: string | null }
   | { type: 'SET_REPORT'; report: unknown }
   | { type: 'COMPLETE_SESSION' }
-  | { type: 'MARK_PERSISTED' }
-  | { type: 'UPDATE_TIMER'; remainingMs: number };
+  | { type: 'MARK_PERSISTED' };
 
 /* ==========================================================================
    Reducer
@@ -106,9 +118,6 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
     case 'MARK_PERSISTED':
       return { ...state, dataPersisted: true };
 
-    case 'UPDATE_TIMER':
-      return { ...state, remainingMs: action.remainingMs };
-
     default:
       return state;
   }
@@ -130,7 +139,6 @@ function createInitialState(): ChatState {
     domainStatuses: {},
     currentDomain: null,
     report: null,
-    remainingMs: SESSION_DURATION_MS,
   };
 }
 
@@ -142,27 +150,7 @@ export function useAssessmentChat() {
   const [state, dispatch] = useReducer(chatReducer, null, createInitialState);
   const threadId = useMemo(() => crypto.randomUUID(), []);
 
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const startTimeRef = useRef<number | null>(null);
   const endingRef = useRef(false);
-
-  // ------------------------------------------------------------------
-  // Start the countdown timer once initialized
-  // ------------------------------------------------------------------
-  useEffect(() => {
-    if (!state.isInitialized || state.isComplete) return;
-
-    startTimeRef.current = Date.now();
-    timerRef.current = setInterval(() => {
-      const elapsed = Date.now() - (startTimeRef.current ?? Date.now());
-      const left = Math.max(0, SESSION_DURATION_MS - elapsed);
-      dispatch({ type: 'UPDATE_TIMER', remainingMs: left });
-    }, 1000);
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [state.isInitialized, state.isComplete]);
 
   // ------------------------------------------------------------------
   // End session: request a partial report from the backend
@@ -170,7 +158,6 @@ export function useAssessmentChat() {
   const endSession = useCallback(async () => {
     if (endingRef.current) return;
     endingRef.current = true;
-    if (timerRef.current) clearInterval(timerRef.current);
 
     dispatch({ type: 'START_THINKING' });
 
@@ -192,12 +179,16 @@ export function useAssessmentChat() {
     dispatch({ type: 'COMPLETE_SESSION' });
   }, [threadId]);
 
-  // Auto-end when timer reaches zero
-  useEffect(() => {
-    if (state.remainingMs <= 0 && state.isInitialized && !state.isComplete) {
-      endSession();
-    }
-  }, [state.remainingMs, state.isInitialized, state.isComplete, endSession]);
+  // ------------------------------------------------------------------
+  // Session countdown timer (delegates to useSessionTimer)
+  // ------------------------------------------------------------------
+  const { secondsLeft } = useSessionTimer({
+    initialSeconds: SESSION_DURATION_SECONDS,
+    isActive: state.isInitialized && !state.isComplete,
+    onExpire: endSession,
+  });
+
+  const remainingMs = secondsLeft * 1000;
 
   // ------------------------------------------------------------------
   // Persist report to sessionStorage when assessment completes,
@@ -233,7 +224,7 @@ export function useAssessmentChat() {
       const res = await fetch('/api/assessment/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ threadId }),  // No screeningAnswers
+        body: JSON.stringify({ threadId }),
       });
 
       const data = await res.json();
@@ -245,17 +236,9 @@ export function useAssessmentChat() {
       }
 
       if (data.success) {
-        const aiMsg: ChatMessage = {
-          id: `ai-${Date.now()}`,
-          role: 'ai',
-          content: data.message.content,
-          timestamp: new Date(),
-          quickReplies: data.message.quickReplies,
-        };
-
         dispatch({
           type: 'INITIALIZE_SUCCESS',
-          message: aiMsg,
+          message: createAIMessage(data.message.content, data.message.quickReplies),
           questionCount: data.message.questionCount || 1,
           isComplete: data.message.isComplete,
           domainStatuses: data.message.domainStatuses || {},
@@ -293,17 +276,9 @@ export function useAssessmentChat() {
       const data = await res.json();
 
       if (data.success) {
-        const aiMsg: ChatMessage = {
-          id: `ai-${Date.now()}`,
-          role: 'ai',
-          content: data.message.content,
-          timestamp: new Date(),
-          quickReplies: data.message.quickReplies,
-        };
-
         dispatch({
           type: 'RECEIVE_AI_MESSAGE',
-          message: aiMsg,
+          message: createAIMessage(data.message.content, data.message.quickReplies),
           questionCount: data.message.questionCount,
           isComplete: data.message.isComplete,
         });
@@ -370,7 +345,7 @@ export function useAssessmentChat() {
     isInitialized: state.isInitialized,
     dataPersisted: state.dataPersisted,
     // Timer
-    remainingMs: state.remainingMs,
+    remainingMs,
     endSession,
   };
 }
