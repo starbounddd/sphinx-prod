@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { calculateDomainScores, identifyFlaggedDomains } from '@/lib/ai/domains';
-import { upsertUserScreening } from '@/lib/db/assessmentService';
-import { validateScreeningAnswers } from '@/lib/ai/inputValidation';
+import { calculateDomainScores, identifyFlaggedDomains } from '@/features/assessment/schema/domains';
+import { upsertUserScreening } from '@/features/assessment/services/screening';
+import { validateScreeningAnswers } from '@/features/assessment/validation/input';
 
 export async function POST(request: NextRequest) {
   try {

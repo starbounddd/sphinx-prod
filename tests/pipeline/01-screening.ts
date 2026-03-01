@@ -7,9 +7,9 @@ import {
   SCREENING_ANSWERS,
   cleanup,
 } from './helpers';
-import { calculateDomainScores, identifyFlaggedDomains } from '@/lib/ai/domains';
-import { upsertUserScreening, getUserScreening } from '@/lib/db/assessmentService';
-import { toScreeningResults } from '@/lib/ai/screeningHelpers';
+import { calculateDomainScores, identifyFlaggedDomains } from '@/features/assessment/schema/domains';
+import { upsertUserScreening, getUserScreening } from '@/features/assessment/services/screening';
+import { toScreeningResults } from '@/features/assessment/utils/screening-helpers';
 
 describe('Phase 1: Screening', () => {
   beforeAll(async () => {

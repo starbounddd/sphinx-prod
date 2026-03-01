@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { ClarityReport } from '@/components/assessment/ui';
 import type { AssessmentReport } from '@/components/assessment/types';
-import { validateAIReport } from '@/lib/ai/reportSchema';
-import { mapAIReportToAssessmentReport } from '@/lib/ai/reportMapper';
+import { validateAIReport } from '@/features/assessment/schema/report-schema';
+import { mapAIReportToAssessmentReport } from '@/features/assessment/utils/report-mapper';
 
 /**
  * Try to load the AI report from sessionStorage (set by useAssessmentChat

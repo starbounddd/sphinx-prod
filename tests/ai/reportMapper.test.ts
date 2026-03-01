@@ -7,8 +7,8 @@ import {
   mapFindingToInsight,
   computeSummaryStats,
   mapAIReportToAssessmentReport,
-} from '@/lib/ai/reportMapper';
-import type { AIGeneratedReport, AIReportDomain, AIReportFinding } from '@/lib/ai/reportSchema';
+} from '@/features/assessment/utils/report-mapper';
+import type { AIGeneratedReport, AIReportDomain, AIReportFinding } from '@/features/assessment/schema/report-schema';
 
 function makeDomain(overrides: Partial<AIReportDomain> = {}): AIReportDomain {
   return {

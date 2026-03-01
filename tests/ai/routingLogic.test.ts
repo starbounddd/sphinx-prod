@@ -7,8 +7,8 @@ import {
   MAX_DURATION_MINUTES,
   QUESTIONS_PER_DOMAIN,
   MIN_DIMENSIONS_TO_TRANSITION,
-} from '@/lib/ai/routingLogic';
-import type { DomainAssessment, SymptomDomain } from '@/lib/ai/assessmentTypes';
+} from '@/features/assessment/ai/routing';
+import type { DomainAssessment, SymptomDomain } from '@/features/assessment/schema/types';
 
 function makeFakeMessage(type: 'human' | 'ai') {
   return {

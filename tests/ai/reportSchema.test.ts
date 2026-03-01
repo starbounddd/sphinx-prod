@@ -1,7 +1,7 @@
 // tests/ai/reportSchema.test.ts
 import { describe, it, expect } from 'vitest';
-import { validateAIReport } from '@/lib/ai/reportSchema';
-import type { AIGeneratedReport } from '@/lib/ai/reportSchema';
+import { validateAIReport } from '@/features/assessment/schema/report-schema';
+import type { AIGeneratedReport } from '@/features/assessment/schema/report-schema';
 
 function makeValidReport(): AIGeneratedReport {
   return {

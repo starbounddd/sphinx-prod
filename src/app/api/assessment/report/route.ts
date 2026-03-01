@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
 
 import { createClient } from '@/lib/supabase/server';
-import {
-  getUserLatestSession,
-  getSessionReport,
-} from '@/lib/db/assessmentService';
+import { getUserLatestSession } from '@/features/assessment/services/sessions';
+import { getSessionReport } from '@/features/assessment/services/reports';
 
 /**
  * GET /api/assessment/report

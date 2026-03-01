@@ -1,6 +1,6 @@
 // tests/ai/screeningHelpers.test.ts
 import { describe, it, expect } from 'vitest';
-import { toScreeningResults } from '@/lib/ai/screeningHelpers';
+import { toScreeningResults } from '@/features/assessment/utils/screening-helpers';
 
 describe('toScreeningResults', () => {
   it('converts raw answers to ScreeningResult[]', () => {

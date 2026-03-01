@@ -10,15 +10,12 @@ import {
 import {
   runAssessmentTurn,
   resetAssessmentGraph,
-} from '@/lib/ai/assessmentGraph';
-import {
-  createAssessmentSession,
-  getSessionByThreadId,
-  getSessionDomainAssessments,
-  getUserScreening,
-} from '@/lib/db/assessmentService';
-import { toScreeningResults } from '@/lib/ai/screeningHelpers';
-import type { SymptomDomain } from '@/lib/ai/assessmentTypes';
+} from '@/features/assessment/ai/graph';
+import { createAssessmentSession, getSessionByThreadId } from '@/features/assessment/services/sessions';
+import { getSessionDomainAssessments } from '@/features/assessment/services/domains';
+import { getUserScreening } from '@/features/assessment/services/screening';
+import { toScreeningResults } from '@/features/assessment/utils/screening-helpers';
+import type { SymptomDomain } from '@/features/assessment/schema/types';
 
 describe('Phase 2: Assessment Chat', { timeout: 180_000 }, () => {
   beforeAll(async () => {

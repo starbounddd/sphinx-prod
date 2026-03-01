@@ -4,7 +4,7 @@ import {
   validateThreadId,
   validateScreeningAnswers,
   validateMessage,
-} from '@/lib/ai/inputValidation';
+} from '@/features/assessment/validation/input';
 
 describe('validateThreadId', () => {
   it('accepts a non-empty string', () => {

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { forceGenerateReport } from '@/lib/ai/assessmentGraph';
-import { validateThreadId } from '@/lib/ai/inputValidation';
-import { persistSessionResults } from '@/lib/db/assessmentService';
+import { forceGenerateReport } from '@/features/assessment/ai/graph';
+import { validateThreadId } from '@/features/assessment/validation/input';
+import { persistSessionResults } from '@/features/assessment/services/persistence';
 
 /* ==========================================================================
    POST /api/assessment/chat/end

@@ -5,7 +5,7 @@ import {
   identifyFlaggedDomains,
   QUESTION_DOMAIN_MAP,
   DOMAIN_FEATURES,
-} from '@/lib/ai/domains';
+} from '@/features/assessment/schema/domains';
 
 const ALL_DOMAINS = [
   'depression', 'anger', 'mania', 'anxiety', 'somatic_symptoms',

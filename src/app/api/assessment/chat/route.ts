@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { runAssessmentTurn } from '@/lib/ai/assessmentGraph';
-import type { SymptomDomain } from '@/lib/ai/assessmentTypes';
-import { toScreeningResults } from '@/lib/ai/screeningHelpers';
+import { runAssessmentTurn } from '@/features/assessment/ai/graph';
+import type { SymptomDomain } from '@/features/assessment/schema/types';
+import { toScreeningResults } from '@/features/assessment/utils/screening-helpers';
 import {
   validateThreadId,
   validateMessage,
-} from '@/lib/ai/inputValidation';
-import {
-  createAssessmentSession,
-  persistSessionResults,
-  getUserScreening,
-} from '@/lib/db/assessmentService';
+} from '@/features/assessment/validation/input';
+import { createAssessmentSession } from '@/features/assessment/services/sessions';
+import { persistSessionResults } from '@/features/assessment/services/persistence';
+import { getUserScreening } from '@/features/assessment/services/screening';
 import { createClient } from '@/lib/supabase/server';
 
 /* ==========================================================================

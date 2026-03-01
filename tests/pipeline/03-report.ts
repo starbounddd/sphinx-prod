@@ -8,18 +8,13 @@ import {
 } from './helpers';
 import {
   forceGenerateReport,
-} from '@/lib/ai/assessmentGraph';
-import {
-  saveAssessmentReport,
-  updateDomainAssessments,
-  completeSession,
-  getSessionReport,
-  getSessionByThreadId,
-  getFullSession,
-  getUserScreening,
-} from '@/lib/db/assessmentService';
-import { validateAIReport } from '@/lib/ai/reportSchema';
-import type { AssessmentGraphStateType } from '@/lib/ai/assessmentTypes';
+} from '@/features/assessment/ai/graph';
+import { saveAssessmentReport, getSessionReport } from '@/features/assessment/services/reports';
+import { updateDomainAssessments } from '@/features/assessment/services/domains';
+import { completeSession, getSessionByThreadId, getFullSession } from '@/features/assessment/services/sessions';
+import { getUserScreening } from '@/features/assessment/services/screening';
+import { validateAIReport } from '@/features/assessment/schema/report-schema';
+import type { AssessmentGraphStateType } from '@/features/assessment/schema/types';
 
 // Cache the report result to avoid redundant LLM calls
 let reportResult: AssessmentGraphStateType;
