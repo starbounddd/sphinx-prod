@@ -2,7 +2,9 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import type { JSX } from 'react';
+import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useAuthModal } from '@/contexts/AuthModalContext';
 
 interface SurveyQuestion {
   id: string;
@@ -101,9 +103,11 @@ export function SurveyForm({
   survey,
   onProgressChange,
 }: SurveyFormProps): JSX.Element {
+  const router = useRouter();
+  const { openAuthModal } = useAuthModal();
   const [answers, setAnswers] = useState<Record<string, number>>({});
-  const [submitted, setSubmitted] = useState(false);
-  const [score, setScore] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const questions = useMemo(() => {
     return [...survey.questions].sort((a, b) => a.order - b.order);
@@ -119,50 +123,39 @@ export function SurveyForm({
     setAnswers((prev) => ({ ...prev, [qid]: value }));
   }
 
-  function computeScore() {
-    if (!survey.scoring) return 0;
-    const included =
-      survey.scoring.included_question_ids ?? questions.map((q) => q.id);
-    return included.reduce((acc: number, qid: string) => {
-      const v = answers[qid];
-      return acc + (typeof v === 'number' ? v : 0);
-    }, 0);
-  }
-
-  function getSeverity(total: number) {
-    const bands = survey.scoring?.severity_bands;
-    if (!bands) return null;
-    const match = bands.find((b: any) => total >= b.min && total <= b.max);
-    return match ? match.label : null;
-  }
-
-  function handleSubmit(e?: React.FormEvent) {
+  async function handleSubmit(e?: React.FormEvent) {
     e?.preventDefault();
-    const total = computeScore();
+    if (isSubmitting) return;
 
-    localStorage.setItem('sphinx_screening_answers', JSON.stringify(answers));
-    localStorage.setItem('sphinx_screening_score', String(total));
+    setIsSubmitting(true);
+    setError(null);
 
-    setScore(total);
-    setSubmitted(true);
-  }
+    try {
+      const res = await fetch('/api/assessment/screening', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answers }),
+      });
 
-  if (submitted) {
-    return (
-      <div className="flex flex-col items-center gap-6 py-16">
-        <h2 className="font-sans text-2xl font-bold text-dark">Results</h2>
-        <p className="text-gray font-chat">Score: {score}</p>
-        <p className="text-gray font-chat">
-          Severity: {getSeverity(score ?? 0) ?? 'N/A'}
-        </p>
-        <a
-          href="/assessment"
-          className="inline-flex items-center justify-center rounded-md bg-dark text-white font-chat text-sm font-medium px-4 py-2 hover:opacity-90 transition-opacity"
-        >
-          Go to Assessment
-        </a>
-      </div>
-    );
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          // Open auth modal for unauthenticated users
+          openAuthModal();
+          return;
+        }
+        setError(data.error || 'Failed to save screening');
+        return;
+      }
+
+      // Success - redirect to chat
+      router.push('/assessment/chat');
+    } catch (err) {
+      setError('Network error. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -205,10 +198,15 @@ export function SurveyForm({
 
         <button
           type="submit"
-          className="inline-flex items-center justify-center gap-1.5 rounded-md bg-dark text-white font-chat text-sm font-medium px-4 py-2 hover:opacity-90 transition-opacity"
+          disabled={isSubmitting}
+          className="inline-flex items-center justify-center gap-1.5 rounded-md bg-dark text-white font-chat text-sm font-medium px-4 py-2 hover:opacity-90 transition-opacity disabled:opacity-50"
         >
-          Submit Assessment
+          {isSubmitting ? 'Saving...' : 'Submit Assessment'}
         </button>
+
+        {error && (
+          <p className="text-xs text-red text-center">{error}</p>
+        )}
 
         <p className="text-xs text-red text-center leading-relaxed max-w-[500px]">
           If you are in crisis, please call 988 (Suicide &amp; Crisis Lifeline)
