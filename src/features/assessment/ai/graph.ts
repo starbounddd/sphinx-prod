@@ -59,6 +59,19 @@ function impactFromScreeningScore(screeningScore: number): number {
 }
 
 /**
+ * Derive frequency (0-3) from a screening score (0-4).
+ * The screening questionnaire directly measures frequency
+ * (Never=0, Rarely=1, Sometimes=2, Often=3, Always=4),
+ * so the domain score IS a frequency measure — just on a wider scale.
+ */
+function frequencyFromScreeningScore(screeningScore: number): number {
+  if (screeningScore >= 3.5) return 3;
+  if (screeningScore >= 2.5) return 2;
+  if (screeningScore >= 1.5) return 1;
+  return 0;
+}
+
+/**
  * Build domain scores from screening results stored in graph state.
  * Returns a Record of all domains that scored >= threshold.
  */
@@ -497,7 +510,7 @@ async function generateReportNode(
           functionalImpact: impactFromScreeningScore(screeningScore),
           control: 0,
           duration: '',
-          frequency: 0,
+          frequency: frequencyFromScreeningScore(screeningScore),
           confidence: 0,
           summary: '', // No clinical notes — not assessed via chat
         });
