@@ -28,12 +28,12 @@ export const UserMessage: Story = {
   },
 };
 
-export const AIWithWordAnimation: Story = {
+export const AIWithTimestamp: Story = {
   args: {
     variant: 'ai',
     children:
       "I understand. Let's explore what might be causing these feelings of anxiety.",
-    animateWords: true,
+    timestamp: '2:35 PM',
   },
 };
 

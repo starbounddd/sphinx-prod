@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
-import { Outfit, Inter, Reenie_Beanie } from 'next/font/google';
+import { Outfit, Inter, Reenie_Beanie, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
+import { AuthModalProvider } from '@/contexts/AuthModalContext';
+import { AuthModalLoader } from '@/components/ui/AuthModal/AuthModalLoader';
 
 const outfit = Outfit({
   variable: '--font-outfit',
@@ -20,6 +22,12 @@ const reenieBeanie = Reenie_Beanie({
   weight: ['400'],
 });
 
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: '--font-pjs',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+});
+
 export const metadata: Metadata = {
   title: 'Sphinx - Find the words for how you feel',
   description:
@@ -34,9 +42,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${outfit.variable} ${inter.variable} ${reenieBeanie.variable} font-sans antialiased`}
+        className={`${outfit.variable} ${inter.variable} ${reenieBeanie.variable} ${plusJakartaSans.variable} font-sans antialiased`}
       >
-        {children}
+        <AuthModalProvider>
+          {children}
+          <AuthModalLoader />
+        </AuthModalProvider>
       </body>
     </html>
   );

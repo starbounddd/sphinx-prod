@@ -11,7 +11,7 @@ export default function LandingPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-24">
+      <main className="pt-20">
         <Hero />
         <QuoteSection />
         {/*<PhoneShowcase />*/}

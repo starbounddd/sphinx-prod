@@ -36,3 +36,23 @@ yarn-error.log*
 
 # OS
 Thumbs.db
+
+# Worktrees
+.worktrees/
+
+# Local logs / agent artifacts
+logs/
+*.log
+.agent-logs/
+.playwright-mcp/
+
+# AI Agent Skills & Settings
+.agents/
+.agent/
+.claude/
+skills/
+skills-lock.json
+.mcp.json
+
+# Backup files
+*.backup
