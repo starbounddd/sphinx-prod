@@ -517,6 +517,12 @@ async function generateReportNode(
    Graph Construction
    ========================================================================== */
 
+/**
+ * Create assessment graph with MemorySaver for session state management.
+ *
+ * MemorySaver handles graph execution state (short-term, in-memory).
+ * Database persistence happens at session end via assessmentService.
+ */
 export function createAssessmentGraph() {
   const checkpointer = new MemorySaver();
 
@@ -539,7 +545,7 @@ export function createAssessmentGraph() {
     .addEdge('transitionDomain', END)
     // After generateReport -> END
     .addEdge('generateReport', END)
-    // Compile with checkpointer for thread-based persistence
+    // Compile with checkpointer for thread-based state management
     .compile({ checkpointer });
 
   return compiled;

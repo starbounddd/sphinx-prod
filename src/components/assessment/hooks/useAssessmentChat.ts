@@ -1,64 +1,178 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
-import type { ChatMessage, AssessmentState } from '../types';
+import { useReducer, useCallback, useEffect, useRef, useMemo } from 'react';
+import type { ChatMessage } from '../types';
+
+/* ==========================================================================
+   Constants
+   ========================================================================== */
 
 const SESSION_DURATION_MS = 20 * 60 * 1000; // 20 minutes
 
-export function useAssessmentChat() {
-  const [state, setState] = useState<AssessmentState>({
+/* ==========================================================================
+   State & Action Types
+   ========================================================================== */
+
+interface ChatState {
+  // Core chat state
+  messages: ChatMessage[];
+  isThinking: boolean;
+  currentStep: number;
+  isComplete: boolean;
+  // Input
+  inputValue: string;
+  // Session state
+  isInitialized: boolean;
+  dataPersisted: boolean;
+  // Domain tracking
+  domainStatuses: Record<string, string>;
+  currentDomain: string | null;
+  // Report
+  report: unknown;
+  // Timer
+  remainingMs: number;
+}
+
+type ChatAction =
+  | { type: 'SET_INPUT'; value: string }
+  | { type: 'START_THINKING' }
+  | { type: 'STOP_THINKING' }
+  | { type: 'ADD_USER_MESSAGE'; message: ChatMessage }
+  | { type: 'RECEIVE_AI_MESSAGE'; message: ChatMessage; questionCount: number; isComplete: boolean }
+  | { type: 'INITIALIZE_SUCCESS'; message: ChatMessage; questionCount: number; isComplete: boolean; domainStatuses: Record<string, string>; currentDomain: string | null }
+  | { type: 'UPDATE_DOMAIN_STATE'; domainStatuses: Record<string, string>; currentDomain: string | null }
+  | { type: 'SET_REPORT'; report: unknown }
+  | { type: 'COMPLETE_SESSION' }
+  | { type: 'MARK_PERSISTED' }
+  | { type: 'UPDATE_TIMER'; remainingMs: number };
+
+/* ==========================================================================
+   Reducer
+   ========================================================================== */
+
+function chatReducer(state: ChatState, action: ChatAction): ChatState {
+  switch (action.type) {
+    case 'SET_INPUT':
+      return { ...state, inputValue: action.value };
+
+    case 'START_THINKING':
+      return { ...state, isThinking: true };
+
+    case 'STOP_THINKING':
+      return { ...state, isThinking: false };
+
+    case 'ADD_USER_MESSAGE':
+      return {
+        ...state,
+        messages: [...state.messages, action.message],
+        isThinking: true,
+        inputValue: '',
+      };
+
+    case 'RECEIVE_AI_MESSAGE':
+      return {
+        ...state,
+        messages: [...state.messages, action.message],
+        isThinking: false,
+        currentStep: action.questionCount,
+        isComplete: action.isComplete,
+      };
+
+    case 'INITIALIZE_SUCCESS':
+      return {
+        ...state,
+        messages: [action.message],
+        isThinking: false,
+        currentStep: action.questionCount,
+        isComplete: action.isComplete,
+        isInitialized: true,
+        domainStatuses: action.domainStatuses,
+        currentDomain: action.currentDomain,
+      };
+
+    case 'UPDATE_DOMAIN_STATE':
+      return {
+        ...state,
+        domainStatuses: action.domainStatuses,
+        currentDomain: action.currentDomain,
+      };
+
+    case 'SET_REPORT':
+      return { ...state, report: action.report };
+
+    case 'COMPLETE_SESSION':
+      return { ...state, isComplete: true, isThinking: false };
+
+    case 'MARK_PERSISTED':
+      return { ...state, dataPersisted: true };
+
+    case 'UPDATE_TIMER':
+      return { ...state, remainingMs: action.remainingMs };
+
+    default:
+      return state;
+  }
+}
+
+/* ==========================================================================
+   Initial State Factory
+   ========================================================================== */
+
+function createInitialState(): ChatState {
+  return {
     messages: [],
     isThinking: false,
     currentStep: 1,
     isComplete: false,
-  });
+    inputValue: '',
+    isInitialized: false,
+    dataPersisted: false,
+    domainStatuses: {},
+    currentDomain: null,
+    report: null,
+    remainingMs: SESSION_DURATION_MS,
+  };
+}
 
-  const [inputValue, setInputValue] = useState('');
-  const [threadId] = useState(() => crypto.randomUUID());
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [domainStatuses, setDomainStatuses] = useState<Record<string, string>>(
-    {}
-  );
-  const [currentDomain, setCurrentDomain] = useState<string | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [report, setReport] = useState<any>(null);
-  const [dataPersisted, setDataPersisted] = useState(false);
+/* ==========================================================================
+   Hook
+   ========================================================================== */
 
-  // 20-minute countdown timer
-  const [remainingMs, setRemainingMs] = useState(SESSION_DURATION_MS);
+export function useAssessmentChat() {
+  const [state, dispatch] = useReducer(chatReducer, null, createInitialState);
+  const threadId = useMemo(() => crypto.randomUUID(), []);
+
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startTimeRef = useRef<number | null>(null);
+  const endingRef = useRef(false);
 
   // ------------------------------------------------------------------
   // Start the countdown timer once initialized
   // ------------------------------------------------------------------
   useEffect(() => {
-    if (!isInitialized || state.isComplete) return;
+    if (!state.isInitialized || state.isComplete) return;
 
     startTimeRef.current = Date.now();
     timerRef.current = setInterval(() => {
       const elapsed = Date.now() - (startTimeRef.current ?? Date.now());
       const left = Math.max(0, SESSION_DURATION_MS - elapsed);
-      setRemainingMs(left);
+      dispatch({ type: 'UPDATE_TIMER', remainingMs: left });
     }, 1000);
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isInitialized, state.isComplete]);
-
-  // Track whether endSession is already in flight
-  const endingRef = useRef(false);
+  }, [state.isInitialized, state.isComplete]);
 
   // ------------------------------------------------------------------
-  // End session: request a partial report from the backend, then complete
+  // End session: request a partial report from the backend
   // ------------------------------------------------------------------
   const endSession = useCallback(async () => {
     if (endingRef.current) return;
     endingRef.current = true;
     if (timerRef.current) clearInterval(timerRef.current);
 
-    setState((prev) => ({ ...prev, isThinking: true }));
+    dispatch({ type: 'START_THINKING' });
 
     try {
       const res = await fetch('/api/assessment/chat/end', {
@@ -69,35 +183,32 @@ export function useAssessmentChat() {
 
       const data = await res.json();
       if (data.success && data.message.report) {
-        setReport(data.message.report);
+        dispatch({ type: 'SET_REPORT', report: data.message.report });
       }
     } catch (err) {
       console.error('Failed to generate partial report:', err);
     }
 
-    setState((prev) => ({ ...prev, isComplete: true, isThinking: false }));
+    dispatch({ type: 'COMPLETE_SESSION' });
   }, [threadId]);
 
   // Auto-end when timer reaches zero
   useEffect(() => {
-    if (remainingMs <= 0 && isInitialized && !state.isComplete) {
+    if (state.remainingMs <= 0 && state.isInitialized && !state.isComplete) {
       endSession();
     }
-  }, [remainingMs, isInitialized, state.isComplete, endSession]);
+  }, [state.remainingMs, state.isInitialized, state.isComplete, endSession]);
 
   // ------------------------------------------------------------------
   // Persist chat data to localStorage when assessment completes
   // ------------------------------------------------------------------
   useEffect(() => {
-    if (!state.isComplete || dataPersisted) return;
+    if (!state.isComplete || state.dataPersisted) return;
 
     try {
-      localStorage.setItem(
-        'sphinx_chat_messages',
-        JSON.stringify(state.messages)
-      );
-      if (report) {
-        localStorage.setItem('sphinx_chat_report', JSON.stringify(report));
+      localStorage.setItem('sphinx_chat_messages', JSON.stringify(state.messages));
+      if (state.report) {
+        localStorage.setItem('sphinx_chat_report', JSON.stringify(state.report));
       }
       localStorage.setItem(
         'sphinx_assessment_metadata',
@@ -105,24 +216,24 @@ export function useAssessmentChat() {
           threadId,
           completedAt: new Date().toISOString(),
           totalQuestions: state.currentStep,
-          domainStatuses,
+          domainStatuses: state.domainStatuses,
         })
       );
-      setDataPersisted(true);
+      dispatch({ type: 'MARK_PERSISTED' });
     } catch (err) {
       console.error('Failed to persist assessment data:', err);
-      setDataPersisted(true); // still allow redirect
+      dispatch({ type: 'MARK_PERSISTED' }); // still allow redirect
     }
-  }, [state.isComplete, state.messages, state.currentStep, report, domainStatuses, threadId, dataPersisted]);
+  }, [state.isComplete, state.messages, state.currentStep, state.report, state.domainStatuses, state.dataPersisted, threadId]);
 
   // ------------------------------------------------------------------
   // Init: read screening answers from localStorage and call the API
   // ------------------------------------------------------------------
   useEffect(() => {
-    if (isInitialized) return;
+    if (state.isInitialized) return;
 
     const stored = localStorage.getItem('sphinx_screening_answers');
-    if (!stored) return; // no screening data yet
+    if (!stored) return;
 
     let screeningAnswers: Record<string, number>;
     try {
@@ -133,10 +244,10 @@ export function useAssessmentChat() {
     }
     initAssessment(screeningAnswers);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isInitialized]);
+  }, [state.isInitialized]);
 
   async function initAssessment(screeningAnswers: Record<string, number>) {
-    setState((prev) => ({ ...prev, isThinking: true }));
+    dispatch({ type: 'START_THINKING' });
 
     try {
       const res = await fetch('/api/assessment/chat', {
@@ -156,21 +267,18 @@ export function useAssessmentChat() {
           quickReplies: data.message.quickReplies,
         };
 
-        setState((prev) => ({
-          ...prev,
-          messages: [aiMsg],
-          isThinking: false,
-          currentStep: data.message.questionCount || 1,
+        dispatch({
+          type: 'INITIALIZE_SUCCESS',
+          message: aiMsg,
+          questionCount: data.message.questionCount || 1,
           isComplete: data.message.isComplete,
-        }));
-
-        setDomainStatuses(data.message.domainStatuses || {});
-        setCurrentDomain(data.message.currentDomain);
-        setIsInitialized(true);
+          domainStatuses: data.message.domainStatuses || {},
+          currentDomain: data.message.currentDomain,
+        });
       }
     } catch (error) {
       console.error('Failed to initialize assessment:', error);
-      setState((prev) => ({ ...prev, isThinking: false }));
+      dispatch({ type: 'STOP_THINKING' });
     }
   }
 
@@ -187,13 +295,7 @@ export function useAssessmentChat() {
       timestamp: new Date(),
     };
 
-    setState((prev) => ({
-      ...prev,
-      messages: [...prev.messages, userMsg],
-      isThinking: true,
-    }));
-
-    setInputValue('');
+    dispatch({ type: 'ADD_USER_MESSAGE', message: userMsg });
 
     try {
       const res = await fetch('/api/assessment/chat', {
@@ -213,21 +315,26 @@ export function useAssessmentChat() {
           quickReplies: data.message.quickReplies,
         };
 
-        setState((prev) => ({
-          ...prev,
-          messages: [...prev.messages, aiMsg],
-          isThinking: false,
-          currentStep: data.message.questionCount,
+        dispatch({
+          type: 'RECEIVE_AI_MESSAGE',
+          message: aiMsg,
+          questionCount: data.message.questionCount,
           isComplete: data.message.isComplete,
-        }));
+        });
 
-        setDomainStatuses(data.message.domainStatuses || {});
-        setCurrentDomain(data.message.currentDomain);
-        if (data.message.report) setReport(data.message.report);
+        dispatch({
+          type: 'UPDATE_DOMAIN_STATE',
+          domainStatuses: data.message.domainStatuses || {},
+          currentDomain: data.message.currentDomain,
+        });
+
+        if (data.message.report) {
+          dispatch({ type: 'SET_REPORT', report: data.message.report });
+        }
       }
     } catch (error) {
       console.error('Failed to send message:', error);
-      setState((prev) => ({ ...prev, isThinking: false }));
+      dispatch({ type: 'STOP_THINKING' });
     }
   }
 
@@ -243,32 +350,41 @@ export function useAssessmentChat() {
   );
 
   const handleSend = useCallback(
-    () => sendMessageRef.current(inputValue),
-    [inputValue]
+    () => sendMessageRef.current(state.inputValue),
+    [state.inputValue]
   );
+
+  const setInputValue = useCallback((value: string) => {
+    dispatch({ type: 'SET_INPUT', value });
+  }, []);
 
   const currentQuickReplies =
     state.messages.filter((m) => m.role === 'ai').at(-1)?.quickReplies ?? [];
 
   return {
+    // Core chat state
     messages: state.messages,
     isThinking: state.isThinking,
     isComplete: state.isComplete,
     currentStep: state.currentStep,
-    inputValue,
+    // Input
+    inputValue: state.inputValue,
     setInputValue,
     currentQuickReplies,
+    // Handlers
     handleQuickReply,
     handleSend,
-    // New fields for sidebar / header
-    domainStatuses,
-    currentDomain,
-    report,
+    // Domain state
+    domainStatuses: state.domainStatuses,
+    currentDomain: state.currentDomain,
+    // Report
+    report: state.report,
+    // Session
     threadId,
-    isInitialized,
-    dataPersisted,
-    // Timer + end session
-    remainingMs,
+    isInitialized: state.isInitialized,
+    dataPersisted: state.dataPersisted,
+    // Timer
+    remainingMs: state.remainingMs,
     endSession,
   };
 }

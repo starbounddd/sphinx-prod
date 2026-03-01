@@ -10,62 +10,204 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Enums
-enum AgeRange {
-  TEEN
-  ADULT
-  UNSPECIFIED
+// ============================================================================
+// Enums for AI Assessment
+// ============================================================================
+
+enum SymptomDomain {
+  depression
+  anger
+  mania
+  anxiety
+  somatic_symptoms
+  suicidal_tendencies
+  psychosis
+  sleep_problems
+  memory
+  repetitive_thoughts
+  dissociation
+  personality
+  substance_use
 }
 
-// User Identity 
-model User {
-  id             String   @id @default(uuid()) @db.Uuid
-  email          String?  @unique
-  authProviderId String?  @unique
-  createdAt      DateTime @default(now())
-
-  profile      UserProfile?
-  userConsents UserConsent[]
-
-  @@map("users")
+enum AssessmentStatus {
+  in_progress
+  completed
+  abandoned
+  expired
 }
 
-// User Profile
-model UserProfile {
-  id     String @id @default(uuid()) @db.Uuid
-  userId String @unique @db.Uuid
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+enum DomainStatus {
+  pending
+  in_progress
+  completed
+}
 
-  ageRange          AgeRange  @default(UNSPECIFIED)
-  preferredLanguage String    @default("en")
-  consentVersion    String?
-  consentedAt       DateTime?
+enum MessageRole {
+  user
+  assistant
+  system
+}
+
+enum SafetyEventType {
+  suicidal_ideation
+  self_harm
+  violence
+  crisis
+}
+
+// ============================================================================
+// AI Assessment Data Models
+// Note: userId references auth.users.id in sphinx-auth (cross-database ref)
+// ============================================================================
+
+// Assessment Session - tracks a complete assessment run
+model AssessmentSession {
+  id        String           @id @default(uuid()) @db.Uuid
+  threadId  String           @unique // LangGraph thread ID
+
+  // Cross-database reference to sphinx-auth.auth.users.id
+  userId    String?          @db.Uuid
+
+  status    AssessmentStatus @default(in_progress)
+  startedAt DateTime         @default(now())
+  endedAt   DateTime?
+
+  // Session metadata
+  chiefComplaint     String?
+  totalQuestions     Int               @default(0)
+  flaggedDomains     SymptomDomain[]
+  isEarlyTermination Boolean           @default(false)
+
+  // Relations (within sphinx-data)
+  screeningResponses ScreeningResponse[]
+  chatMessages       ChatMessage[]
+  domainAssessments  DomainAssessment[]
+  report             AssessmentReport?
+  safetyEvents       SafetyEvent[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("user_profiles")
+  @@index([userId])
+  @@index([status])
+  @@index([startedAt])
+  @@map("assessment_sessions")
 }
 
-model ConsentVersion {
-  id          String   @id @default(uuid()) @db.Uuid
-  version     String
-  title       String
-  contentHash String
-  isActive    Boolean  @default(false)
-  createdAt   DateTime @default(now())
+// Screening Response - individual questionnaire answers
+model ScreeningResponse {
+  id           String        @id @default(uuid()) @db.Uuid
+  sessionId    String        @db.Uuid
+  questionId   String
+  domain       SymptomDomain
+  score        Int           // 0-4 Likert scale
+  questionText String
 
-  userConsents UserConsent[]
+  session AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([sessionId, questionId])
+  @@index([sessionId])
+  @@index([domain])
+  @@map("screening_responses")
 }
 
-model UserConsent {
-  id               String   @id @default(uuid()) @db.Uuid
-  userId           String   @db.Uuid
-  consentVersionId String   @db.Uuid
-  acceptedAt       DateTime @default(now())
-  ipAddress        String?
-  userAgent        String?
+// Chat Message - full conversation history
+model ChatMessage {
+  id        String      @id @default(uuid()) @db.Uuid
+  sessionId String      @db.Uuid
+  role      MessageRole
+  content   String
+  sequence  Int         // message order in conversation
 
-  user           User           @relation(fields: [userId], references: [id])
-  consentVersion ConsentVersion @relation(fields: [consentVersionId], references: [id])
+  // Optional metadata
+  quickReplies String[] // suggested quick replies (for assistant messages)
+
+  session AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([sessionId, sequence])
+  @@map("chat_messages")
+}
+
+// Domain Assessment - per-domain assessment results
+model DomainAssessment {
+  id        String        @id @default(uuid()) @db.Uuid
+  sessionId String        @db.Uuid
+  domain    SymptomDomain
+  status    DomainStatus  @default(pending)
+
+  // Scores
+  screeningScore   Float  @default(0)
+  functionalImpact Int    @default(0) // 0-3
+  control          Int    @default(0) // 0-3
+  frequency        Int    @default(0) // 0-3
+  confidence       Int    @default(0) // 0-3
+  duration         String @default("")
+
+  // Evidence collected during chat
+  evidenceNotes     String[]
+  questionsAsked    Int      @default(0)
+  dimensionsCovered String[] // affective, cognitive, etc.
+
+  session AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([sessionId, domain])
+  @@index([sessionId])
+  @@map("domain_assessments")
+}
+
+// Assessment Report - AI-generated final report
+model AssessmentReport {
+  id        String @id @default(uuid()) @db.Uuid
+  sessionId String @unique @db.Uuid
+
+  // Core report content
+  chiefComplaint String
+  mainGoal       String
+  analysis       String // Empathetic 2-3 sentence summary
+
+  // Structured data (stored as JSON)
+  domains         Json     // AIReportDomain[]
+  findings        Json     // AIReportFinding[]
+  recommendations String[]
+
+  // Optional fields
+  culturalBackground String?
+  summary            String?
+
+  session AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("assessment_reports")
+}
+
+// Safety Event - flagged safety concerns
+model SafetyEvent {
+  id          String          @id @default(uuid()) @db.Uuid
+  sessionId   String          @db.Uuid
+  eventType   SafetyEventType
+  severity    Int             // 1-5 scale
+  details     String?
+  triggeredBy String?         // which message/domain triggered this
+
+  // Whether provider was notified
+  notifiedAt DateTime?
+
+  session AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([eventType])
+  @@index([severity])
+  @@map("safety_events")
 }

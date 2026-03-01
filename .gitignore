@@ -52,6 +52,7 @@ logs/
 .claude/
 skills/
 skills-lock.json
+.mcp.json
 
 # Backup files
 *.backup
