@@ -200,13 +200,22 @@ export function useAssessmentChat() {
   }, [state.remainingMs, state.isInitialized, state.isComplete, endSession]);
 
   // ------------------------------------------------------------------
-  // Mark data as persisted when assessment completes (data is in Supabase)
+  // Persist report to sessionStorage when assessment completes,
+  // so the report page can read it after navigation.
   // ------------------------------------------------------------------
   useEffect(() => {
     if (!state.isComplete || state.dataPersisted) return;
-    // Data is already in Supabase - just mark as persisted
+
+    if (state.report) {
+      try {
+        sessionStorage.setItem('sphinx_chat_report', JSON.stringify(state.report));
+      } catch {
+        // sessionStorage may be full or unavailable
+      }
+    }
+
     dispatch({ type: 'MARK_PERSISTED' });
-  }, [state.isComplete, state.dataPersisted]);
+  }, [state.isComplete, state.dataPersisted, state.report]);
 
   // ------------------------------------------------------------------
   // Init: call the API (reads screening answers from DB)
