@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { runAssessmentTurn } from '@/lib/ai/assessmentGraph';
-import { type SymptomDomain } from '@/lib/ai/assessmentTypes';
-import { calculateDomainScores, identifyFlaggedDomains } from '@/lib/ai/domains';
+import type { SymptomDomain } from '@/lib/ai/assessmentTypes';
 import { toScreeningResults } from '@/lib/ai/screeningHelpers';
 import {
   validateThreadId,
-  validateScreeningAnswers,
   validateMessage,
 } from '@/lib/ai/inputValidation';
 import {
@@ -15,7 +13,9 @@ import {
   saveAssessmentReport,
   updateDomainAssessments,
   getSessionByThreadId,
+  getUserScreening,
 } from '@/lib/db/assessmentService';
+import { createClient } from '@/lib/supabase/server';
 
 /* ==========================================================================
    Helpers
@@ -97,10 +97,9 @@ export async function POST(request: NextRequest) {
     // Parse & validate request body
     // ------------------------------------------------------------------
     const body = await request.json();
-    const { threadId, message, screeningAnswers } = body as {
+    const { threadId, message } = body as {
       threadId?: string;
       message?: string;
-      screeningAnswers?: Record<string, number>;
     };
 
     if (!validateThreadId(threadId)) {
@@ -108,26 +107,6 @@ export async function POST(request: NextRequest) {
         { error: 'Missing or invalid required field: threadId' },
         { status: 400 },
       );
-    }
-
-    if (message && screeningAnswers) {
-      return NextResponse.json(
-        {
-          error:
-            'Invalid request: provide either "screeningAnswers" (to initialize) or "message" (to continue), not both',
-        },
-        { status: 400 },
-      );
-    }
-
-    if (screeningAnswers !== undefined) {
-      const answersValidation = validateScreeningAnswers(screeningAnswers);
-      if (!answersValidation.valid) {
-        return NextResponse.json(
-          { error: answersValidation.error },
-          { status: 400 },
-        );
-      }
     }
 
     if (message !== undefined) {
@@ -151,13 +130,32 @@ export async function POST(request: NextRequest) {
     }
 
     // ------------------------------------------------------------------
-    // Route: Initialization  (screeningAnswers present, no message)
+    // Route: Initialization (no message = new session)
     // ------------------------------------------------------------------
-    if (screeningAnswers && !message) {
-      const domainScores = calculateDomainScores(screeningAnswers);
-      const flaggedDomains: SymptomDomain[] =
-        identifyFlaggedDomains(domainScores);
-      const screeningResults = toScreeningResults(screeningAnswers);
+    if (!message) {
+      // Authenticate user
+      const supabase = await createClient();
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+      if (authError || !user) {
+        return NextResponse.json(
+          { error: 'Authentication required' },
+          { status: 401 },
+        );
+      }
+
+      // Get user's latest screening from database
+      const screening = await getUserScreening(user.id);
+      if (!screening) {
+        return NextResponse.json(
+          { error: 'No screening data found. Please complete screening first.' },
+          { status: 400 },
+        );
+      }
+
+      const domainScores = screening.domainScores as Record<string, number>;
+      const flaggedDomains = screening.flaggedDomains as SymptomDomain[];
+      const screeningResults = toScreeningResults(screening.answers as Record<string, number>);
 
       const result = await runAssessmentTurn(
         threadId,
@@ -166,11 +164,12 @@ export async function POST(request: NextRequest) {
         flaggedDomains,
       );
 
-      // Create session in database (non-blocking)
+      // Create session in database with screening snapshot
       createAssessmentSession({
         threadId,
+        userId: user.id,
         flaggedDomains,
-        screeningResults,
+        screeningSnapshot: domainScores,
       }).catch((err) => {
         console.error('[assessment/chat] Failed to create session in DB:', err);
       });
@@ -186,6 +185,8 @@ export async function POST(request: NextRequest) {
             currentDomain: result.currentDomain,
             questionCount: result.questionCount,
             domainStatuses: buildDomainStatuses(result.domainAssessments),
+            screeningResults,  // Return for frontend state
+            flaggedDomains,    // Return for frontend state
           },
         },
         { status: 200 },
@@ -227,14 +228,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ------------------------------------------------------------------
-    // Neither screeningAnswers nor message provided
-    // ------------------------------------------------------------------
+    // This point should be unreachable since we handle both !message and message cases above
     return NextResponse.json(
-      {
-        error:
-          'Invalid request: provide either "screeningAnswers" (to initialize) or "message" (to continue)',
-      },
+      { error: 'Invalid request: message is required for conversation' },
       { status: 400 },
     );
   } catch (error: unknown) {
