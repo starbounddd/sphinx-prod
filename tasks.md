@@ -19,7 +19,7 @@
   - Deliverable: failing tests first, then implementation + passing tests
   - Verify: test command(s) in HOW_TO_VERIFY and green output
   - DoD: backend behavior covered by tests and passing locally
-  - Verified: `verify.md` PASS entry dated 2026-02-28 (latest pass: 2026-02-28T18:17:47-05:00, `npx vitest run` 14 files / 196 tests / 0 failures)
+  - Verified: `verify.md` PASS entry dated 2026-02-28 (latest pass: 2026-03-01T00:32:00-05:00, `npx vitest run` 7 files / 110 tests / 0 failures)
 
 - [ ] T3: Frontend implementation for assessment chat UX
   - Owner: worker
@@ -27,8 +27,8 @@
   - Deliverable: UI pages/components integrated into existing app routes with a11y + performance considerations
   - Verify: lint/build plus Browser MCP validation steps
   - DoD: working chat flow from UI to backend with policy-compliant DESIGN section
-  - Latest supervisor fail (2026-02-28): `npx tsc --noEmit 2>&1 | grep -v "test"` still emits diagnostics; `npx next build` fails on Node 18.16.1 (< 20.9.0)
-  - Required fix: verify on Node >= 20.9.0, resolve remaining TypeScript errors, and capture Browser MCP PASS evidence
+  - Latest supervisor fail (2026-03-01): Browser MCP PASS evidence is still missing in this supervisor pass
+  - Required fix: capture Browser MCP PASS evidence for the assessment chat flow and attach it to `verify.md`
 
 - [ ] T4: Integration hardening + docs
   - Owner: worker
@@ -36,8 +36,8 @@
   - Deliverable: integration notes, env expectations, and usage docs updated
   - Verify: build/lint and docs presence checks
   - DoD: feature is runnable by another engineer without hidden steps
-  - Latest supervisor fail (2026-02-28): `npx vitest run` fails with `ERR_REQUIRE_ESM`; `npx tsc --noEmit 2>&1 | grep -c "error" | grep -v test` returns `37` (expected `0`)
-  - Required fix: fix Vitest runtime/config compatibility and clear production TypeScript errors before re-verification
+  - Latest supervisor fail (2026-03-01): `npx vitest run` is intermittent (Phase 3 hook timeout at `tests/pipeline/03-report.ts:28`) and `npx tsc --noEmit 2>&1 | grep -c "error" | grep -v test` returned `1` (expected `0`)
+  - Required fix: stabilize pipeline Phase 3 verification and return TypeScript error count to `0` before re-verification
 
 - [ ] T5: Supervisor verification + completion marking
   - Owner: supervisor

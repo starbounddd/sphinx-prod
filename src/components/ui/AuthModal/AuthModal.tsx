@@ -1,34 +1,19 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X, ArrowLeft, AlertTriangle } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
-import { useAuthModal } from '@/contexts/AuthModalContext';
-import { validatePassword } from '@/utils/validation';
 import { Input } from '@/components/ui/shadcn/input';
 import { Separator } from '@/components/ui/shadcn/separator';
 import { OtpInput, OTP_LENGTH } from './OtpInput';
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
-
-type Tab = 'signup' | 'login';
-type SignupStep = 'credentials' | 'otp';
+import { useAuthFlow } from './useAuthFlow';
+import type { Tab } from './useAuthFlow';
 
 const TAB_OPTIONS: { value: Tab; label: string }[] = [
   { value: 'signup', label: 'Sign Up' },
   { value: 'login', label: 'Log In' },
 ];
-
-const DIALOG_TITLES: Record<Tab, string> = {
-  signup: 'Create Account',
-  login: 'Welcome Back',
-};
-
-const OTP_RESEND_COOLDOWN_SECONDS = 60;
-
-// Module-level singleton for Supabase client
-const supabase = createClient();
 
 // Hoisted static SVG for Google logo
 const GOOGLE_LOGO = (
@@ -58,238 +43,28 @@ function preventPaste(e: React.ClipboardEvent): void {
 }
 
 export function AuthModal(): React.JSX.Element {
-  const { isOpen, closeAuthModal } = useAuthModal();
-  const [activeTab, setActiveTab] = useState<Tab>('signup');
-  const [signupStep, setSignupStep] = useState<SignupStep>('credentials');
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState<string>('Loading...');
-  const [otpValue, setOtpValue] = useState('');
-  const [pendingEmail, setPendingEmail] = useState('');
-  const [resendCooldown, setResendCooldown] = useState(0);
-  const [signupPassword, setSignupPassword] = useState('');
-  const router = useRouter();
-
-  // Countdown timer for resend cooldown
-  useEffect(() => {
-    if (resendCooldown <= 0) return;
-
-    const timer = setInterval(() => {
-      setResendCooldown((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [resendCooldown]);
-
-  // Reset state when modal closes
-  useEffect(() => {
-    if (!isOpen) {
-      setSignupStep('credentials');
-      setOtpValue('');
-      setPendingEmail('');
-      setError(null);
-      setResendCooldown(0);
-      setSignupPassword('');
-      setLoadingMessage('Loading...');
-    }
-  }, [isOpen]);
-
-  // Reset step when switching tabs
-  useEffect(() => {
-    setSignupStep('credentials');
-    setOtpValue('');
-    setPendingEmail('');
-    setError(null);
-    setSignupPassword('');
-  }, [activeTab]);
-
-  // Resend signup confirmation email (uses Confirm Sign Up template)
-  async function resendSignupOtp(email: string): Promise<boolean> {
-    const { error: resendError } = await supabase.auth.resend({
-      type: 'signup',
-      email,
-    });
-
-    if (resendError) {
-      setError(resendError.message);
-      return false;
-    }
-
-    setResendCooldown(OTP_RESEND_COOLDOWN_SECONDS);
-    return true;
-  }
-
-  async function handleCredentialsSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    const form = e.currentTarget;
-    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
-    const password = (form.elements.namedItem('password') as HTMLInputElement).value;
-
-    if (activeTab === 'signup') {
-      // === SIGNUP FLOW (with OTP email verification) ===
-      const confirmPassword = (form.elements.namedItem('confirmPassword') as HTMLInputElement)
-        .value;
-      if (password !== confirmPassword) {
-        setError('Passwords do not match');
-        setLoading(false);
-        return;
-      }
-
-      // Validate password strength and check against leaked passwords
-      setLoadingMessage('Checking password security...');
-      const validation = await validatePassword(password);
-      if (!validation.isValid) {
-        setError(validation.errors[0] || 'Password does not meet security requirements');
-        setLoading(false);
-        setLoadingMessage('Loading...');
-        return;
-      }
-
-      setLoadingMessage('Creating account...');
-      // signUp triggers "Confirm sign up" email template with OTP
-      const { data, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (authError) {
-        setError(authError.message);
-        setLoading(false);
-        setLoadingMessage('Loading...');
-        return;
-      }
-
-      // Check if user needs email confirmation
-      if (data.user && !data.session) {
-        // User created but not confirmed - show OTP screen
-        setPendingEmail(email);
-        setResendCooldown(OTP_RESEND_COOLDOWN_SECONDS);
-        setSignupStep('otp');
-        setLoading(false);
-        setLoadingMessage('Loading...');
-      } else if (data.session) {
-        // Auto-confirmed (shouldn't happen if email confirmation is enabled)
-        setLoading(false);
-        closeAuthModal();
-        router.refresh();
-        router.push('/assessment/screening');
-      } else {
-        setError('Failed to create account. Please try again.');
-        setLoading(false);
-        setLoadingMessage('Loading...');
-      }
-    } else {
-      // === LOGIN FLOW (password only, no OTP) ===
-      const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (authError) {
-        setError(authError.message);
-        setLoading(false);
-        return;
-      }
-
-      if (data.session) {
-        setLoading(false);
-        closeAuthModal();
-        router.refresh();
-        router.push('/assessment/screening');
-      }
-    }
-  }
-
-  async function handleOtpSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
-    e.preventDefault();
-    if (otpValue.length !== OTP_LENGTH) {
-      setError('Please enter all 6 digits');
-      return;
-    }
-
-    setError(null);
-    setLoading(true);
-    setLoadingMessage('Verifying...');
-
-    // Verify signup OTP (type: 'signup' for Confirm sign up template)
-    const { data, error: verifyError } = await supabase.auth.verifyOtp({
-      email: pendingEmail,
-      token: otpValue,
-      type: 'signup',
-    });
-
-    if (verifyError) {
-      // Provide user-friendly error messages
-      if (verifyError.message.includes('expired')) {
-        setError('Verification code has expired. Please request a new one.');
-      } else if (verifyError.message.includes('invalid')) {
-        setError('Invalid verification code. Please check and try again.');
-      } else {
-        setError(verifyError.message);
-      }
-      setLoading(false);
-      setLoadingMessage('Loading...');
-      return;
-    }
-
-    if (data.session) {
-      // OTP verified successfully
-      setLoading(false);
-      closeAuthModal();
-      router.refresh();
-      router.push('/assessment/screening');
-    } else {
-      setError('Verification failed. Please try again.');
-      setLoading(false);
-      setLoadingMessage('Loading...');
-    }
-  }
-
-  async function handleResendOtp(): Promise<void> {
-    if (resendCooldown > 0 || loading) return;
-
-    setError(null);
-    setLoading(true);
-    setLoadingMessage('Sending code...');
-
-    const success = await resendSignupOtp(pendingEmail);
-    if (success) {
-      setOtpValue(''); // Clear old OTP value
-    }
-
-    setLoading(false);
-    setLoadingMessage('Loading...');
-  }
-
-  function handleBackToCredentials(): void {
-    setSignupStep('credentials');
-    setOtpValue('');
-    setError(null);
-  }
-
-  const handleTabChange = useCallback((tab: Tab): void => {
-    setActiveTab(tab);
-    setError(null);
-  }, []);
-
-  const handleOpenChange = useCallback(
-    (open: boolean): void => {
-      if (!open) closeAuthModal();
-    },
-    [closeAuthModal]
-  );
-
-  const handleGoogleLogin = useCallback((): void => {
-    // TODO: Implement Google OAuth
-    alert('Google login coming soon!');
-  }, []);
-
-  // Only show OTP step for signup
-  const isOtpStep = activeTab === 'signup' && signupStep === 'otp';
-  const dialogTitle = isOtpStep ? 'Verify Your Email' : DIALOG_TITLES[activeTab];
+  const {
+    isOpen,
+    activeTab,
+    error,
+    loading,
+    loadingMessage,
+    otpValue,
+    pendingEmail,
+    resendCooldown,
+    signupPassword,
+    isOtpStep,
+    dialogTitle,
+    handleCredentialsSubmit,
+    handleOtpSubmit,
+    handleResendOtp,
+    handleBackToCredentials,
+    handleTabChange,
+    handleOpenChange,
+    handleGoogleLogin,
+    setOtpValue,
+    setSignupPassword,
+  } = useAuthFlow();
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
