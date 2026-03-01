@@ -196,11 +196,11 @@ export function validateAIReport(raw: unknown): AIReportValidation {
     }
   }
 
-  // Optional fields
-  if (obj.culturalBackground !== undefined && typeof obj.culturalBackground !== 'string') {
+  // Optional fields (accept null or undefined as absent)
+  if (obj.culturalBackground != null && typeof obj.culturalBackground !== 'string') {
     return { valid: false, error: 'culturalBackground must be a string if present' };
   }
-  if (obj.summary !== undefined && typeof obj.summary !== 'string') {
+  if (obj.summary != null && typeof obj.summary !== 'string') {
     return { valid: false, error: 'summary must be a string if present' };
   }
 
@@ -213,10 +213,10 @@ export function validateAIReport(raw: unknown): AIReportValidation {
       domains: obj.domains as AIReportDomain[],
       findings: obj.findings as AIReportFinding[],
       recommendations: obj.recommendations as string[],
-      ...(obj.culturalBackground !== undefined && {
+      ...(obj.culturalBackground != null && {
         culturalBackground: obj.culturalBackground as string,
       }),
-      ...(obj.summary !== undefined && {
+      ...(obj.summary != null && {
         summary: obj.summary as string,
       }),
     },
