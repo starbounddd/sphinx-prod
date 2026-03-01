@@ -113,12 +113,14 @@ export async function getUserSessions(
 
 /**
  * Get user's latest session.
+ * If status is provided, only returns sessions matching that status.
  */
 export async function getUserLatestSession(
-  userId: string
+  userId: string,
+  status?: AssessmentStatus,
 ): Promise<AssessmentSession | null> {
   return prisma.assessmentSession.findFirst({
-    where: { userId },
+    where: { userId, ...(status && { status }) },
     orderBy: { startedAt: 'desc' },
   });
 }

@@ -21,7 +21,7 @@ type ReportResult =
 export async function handleGetReport(
   userId: string,
 ): Promise<ReportResult> {
-  const session = await getUserLatestSession(userId);
+  const session = await getUserLatestSession(userId, 'completed');
   if (!session) {
     return { success: false, error: 'No assessment session found.', status: 404 };
   }

@@ -8,46 +8,35 @@ import { validateAIReport } from '@/features/assessment/schema/report-schema';
 import { mapAIReportToAssessmentReport } from '@/features/assessment/utils/report-mapper';
 
 /**
- * Try to load the AI report from sessionStorage (set by useAssessmentChat
- * right before navigating here).
- */
-function loadFromSessionStorage(): AssessmentReport | null {
-  try {
-    const raw = sessionStorage.getItem('sphinx_chat_report');
-    if (!raw) return null;
-
-    const parsed: unknown = JSON.parse(raw);
-    const validation = validateAIReport(parsed);
-    if (!validation.valid) return null;
-
-    return mapAIReportToAssessmentReport({
-      aiReport: validation.report,
-      domainAssessments: {},
-    });
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Fetch the report from the database API (fallback for page refreshes).
+ * Fetch the report from the database API.
  */
 async function fetchFromAPI(): Promise<AssessmentReport | null> {
   try {
     const res = await fetch('/api/assessment/report');
-    if (!res.ok) return null;
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      console.error('[report] API error:', res.status, body);
+      return null;
+    }
 
     const data = await res.json();
-    if (!data.success || !data.report) return null;
+    if (!data.success || !data.report) {
+      console.error('[report] API returned no report:', data);
+      return null;
+    }
 
     const validation = validateAIReport(data.report);
-    if (!validation.valid) return null;
+    if (!validation.valid) {
+      console.error('[report] Validation failed:', validation.error);
+      return null;
+    }
 
     return mapAIReportToAssessmentReport({
       aiReport: validation.report,
       domainAssessments: {},
     });
-  } catch {
+  } catch (err) {
+    console.error('[report] Fetch error:', err);
     return null;
   }
 }
@@ -59,16 +48,8 @@ export default function AssessmentReportPage() {
 
   useEffect(() => {
     async function loadReport() {
-      // 1. Try sessionStorage first (instant, set by chat hook before navigation)
-      const cached = loadFromSessionStorage();
-      if (cached) {
-        setReport(cached);
-        setLoading(false);
-        return;
-      }
-
-      // 2. Fallback: fetch from database API (handles page refresh)
       const fetched = await fetchFromAPI();
+
       if (fetched) {
         setReport(fetched);
         setLoading(false);

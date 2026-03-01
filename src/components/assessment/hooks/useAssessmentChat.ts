@@ -191,22 +191,13 @@ export function useAssessmentChat() {
   const remainingMs = secondsLeft * 1000;
 
   // ------------------------------------------------------------------
-  // Persist report to sessionStorage when assessment completes,
-  // so the report page can read it after navigation.
+  // Mark session as persisted when assessment completes.
+  // Report is fetched from the DB API by the report page.
   // ------------------------------------------------------------------
   useEffect(() => {
     if (!state.isComplete || state.dataPersisted) return;
-
-    if (state.report) {
-      try {
-        sessionStorage.setItem('sphinx_chat_report', JSON.stringify(state.report));
-      } catch {
-        // sessionStorage may be full or unavailable
-      }
-    }
-
     dispatch({ type: 'MARK_PERSISTED' });
-  }, [state.isComplete, state.dataPersisted, state.report]);
+  }, [state.isComplete, state.dataPersisted]);
 
   // ------------------------------------------------------------------
   // Init: call the API (reads screening answers from DB)
