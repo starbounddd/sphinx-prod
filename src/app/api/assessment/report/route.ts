@@ -1,14 +1,8 @@
 import { NextResponse } from 'next/server';
 
+import { handleGetReport } from '@/features/assessment/handlers/report';
 import { createClient } from '@/lib/supabase/server';
-import { getUserLatestSession } from '@/features/assessment/services/sessions';
-import { getSessionReport } from '@/features/assessment/services/reports';
 
-/**
- * GET /api/assessment/report
- *
- * Fetch the latest completed assessment report for the authenticated user.
- */
 export async function GET() {
   try {
     const supabase = await createClient();
@@ -21,35 +15,15 @@ export async function GET() {
       );
     }
 
-    const session = await getUserLatestSession(user.id);
-    if (!session) {
-      return NextResponse.json(
-        { error: 'No assessment session found.' },
-        { status: 404 },
-      );
-    }
+    const result = await handleGetReport(user.id);
 
-    const report = await getSessionReport(session.id);
-    if (!report) {
-      return NextResponse.json(
-        { error: 'No report found for this session.' },
-        { status: 404 },
-      );
+    if (!result.success) {
+      return NextResponse.json({ error: result.error }, { status: result.status });
     }
-
     return NextResponse.json({
       success: true,
-      report: {
-        chiefComplaint: report.chiefComplaint,
-        mainGoal: report.mainGoal,
-        analysis: report.analysis,
-        domains: report.domains,
-        findings: report.findings,
-        recommendations: report.recommendations,
-        culturalBackground: report.culturalBackground,
-        summary: report.summary,
-      },
-      screeningSnapshot: session.screeningSnapshot,
+      report: result.report,
+      screeningSnapshot: result.screeningSnapshot,
     });
   } catch (error) {
     console.error('[assessment/report] Error:', error);

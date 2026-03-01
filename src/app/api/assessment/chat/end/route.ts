@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { forceGenerateReport } from '@/features/assessment/ai/graph';
+import { handleForceEnd } from '@/features/assessment/handlers/end';
 import { validateThreadId } from '@/features/assessment/validation/input';
-import { persistSessionResults } from '@/features/assessment/services/persistence';
-
-/* ==========================================================================
-   POST /api/assessment/chat/end
-   Force-end the assessment and generate a partial report from gathered data.
-   ========================================================================== */
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,29 +22,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await forceGenerateReport(threadId);
-
-    // Persist to database (early termination)
-    persistSessionResults(threadId, {
-      report: result.report,
-      domainAssessments: result.domainAssessments,
-      chiefComplaint: result.chiefComplaint,
-      questionCount: result.questionCount,
-    }, true).catch((err: unknown) => {
-      console.error('[assessment/chat/end] Failed to persist session:', err);
-    });
-
-    return NextResponse.json(
-      {
-        success: true,
-        message: {
-          content: result.messages.at(-1)?.content ?? '',
-          isComplete: true,
-          report: result.report,
-        },
-      },
-      { status: 200 },
-    );
+    const result = await handleForceEnd(threadId);
+    return NextResponse.json(result, { status: 200 });
   } catch (error: unknown) {
     console.error('[assessment/chat/end] Error:', error);
     return NextResponse.json(
