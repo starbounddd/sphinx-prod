@@ -200,63 +200,40 @@ export function useAssessmentChat() {
   }, [state.remainingMs, state.isInitialized, state.isComplete, endSession]);
 
   // ------------------------------------------------------------------
-  // Persist chat data to localStorage when assessment completes
+  // Mark data as persisted when assessment completes (data is in Supabase)
   // ------------------------------------------------------------------
   useEffect(() => {
     if (!state.isComplete || state.dataPersisted) return;
-
-    try {
-      localStorage.setItem('sphinx_chat_messages', JSON.stringify(state.messages));
-      if (state.report) {
-        localStorage.setItem('sphinx_chat_report', JSON.stringify(state.report));
-      }
-      localStorage.setItem(
-        'sphinx_assessment_metadata',
-        JSON.stringify({
-          threadId,
-          completedAt: new Date().toISOString(),
-          totalQuestions: state.currentStep,
-          domainStatuses: state.domainStatuses,
-        })
-      );
-      dispatch({ type: 'MARK_PERSISTED' });
-    } catch (err) {
-      console.error('Failed to persist assessment data:', err);
-      dispatch({ type: 'MARK_PERSISTED' }); // still allow redirect
-    }
-  }, [state.isComplete, state.messages, state.currentStep, state.report, state.domainStatuses, state.dataPersisted, threadId]);
+    // Data is already in Supabase - just mark as persisted
+    dispatch({ type: 'MARK_PERSISTED' });
+  }, [state.isComplete, state.dataPersisted]);
 
   // ------------------------------------------------------------------
-  // Init: read screening answers from localStorage and call the API
+  // Init: call the API (reads screening answers from DB)
   // ------------------------------------------------------------------
   useEffect(() => {
     if (state.isInitialized) return;
-
-    const stored = localStorage.getItem('sphinx_screening_answers');
-    if (!stored) return;
-
-    let screeningAnswers: Record<string, number>;
-    try {
-      screeningAnswers = JSON.parse(stored);
-    } catch {
-      console.error('Invalid screening data in localStorage');
-      return;
-    }
-    initAssessment(screeningAnswers);
+    initAssessment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.isInitialized]);
+  }, []);
 
-  async function initAssessment(screeningAnswers: Record<string, number>) {
+  async function initAssessment() {
     dispatch({ type: 'START_THINKING' });
 
     try {
       const res = await fetch('/api/assessment/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ threadId, screeningAnswers }),
+        body: JSON.stringify({ threadId }),  // No screeningAnswers
       });
 
       const data = await res.json();
+
+      if (!res.ok) {
+        console.error('[initAssessment] API error:', data.error);
+        dispatch({ type: 'STOP_THINKING' });
+        return;
+      }
 
       if (data.success) {
         const aiMsg: ChatMessage = {
