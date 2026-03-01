@@ -38,14 +38,27 @@ export function impactLabel(score: number): 'None' | 'Mild' | 'Moderate' | 'High
 }
 
 /**
- * Map a 0-3 confidence score to a specificity tier.
- *  0-1 → Low, 2 → Medium, 3 → High
+ * Static diagnostic specificity per DSM-5 cross-cutting domain.
+ *
+ * High   = symptom cluster specific to few diagnoses (e.g. Psychosis)
+ * Medium = moderately differentiating
+ * Low    = symptoms common across many diagnoses (e.g. Somatic)
  */
-export function specificityFromConfidence(confidence: number): 'High' | 'Medium' | 'Low' {
-  if (confidence >= 3) return 'High';
-  if (confidence >= 2) return 'Medium';
-  return 'Low';
-}
+const DOMAIN_SPECIFICITY: Record<string, 'High' | 'Medium' | 'Low'> = {
+  psychosis: 'High',
+  substance_use: 'High',
+  suicidal_tendencies: 'High',
+  mania: 'Medium',
+  dissociation: 'Medium',
+  depression: 'Medium',
+  anxiety: 'Medium',
+  anger: 'Medium',
+  sleep_problems: 'Medium',
+  somatic_symptoms: 'Low',
+  memory: 'Low',
+  repetitive_thoughts: 'Low',
+  personality: 'Low',
+};
 
 /* ==========================================================================
    Icon Color Map
@@ -69,8 +82,8 @@ export function mapDomainToResult(d: AIReportDomain): DomainResult {
   return {
     domain: d.domain,
     label: d.label,
-    specificity: specificityFromConfidence(d.confidence),
-    impact: impactLabel(d.functionalImpact),
+    specificity: DOMAIN_SPECIFICITY[d.domain] ?? 'Low',
+    confidence: d.confidence,
     control: d.control,
     frequency: d.frequency,
     duration: d.duration,

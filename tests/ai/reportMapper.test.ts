@@ -2,7 +2,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   impactLabel,
-  specificityFromConfidence,
   mapDomainToResult,
   mapFindingToInsight,
   computeSummaryStats,
@@ -45,24 +44,29 @@ describe('impactLabel', () => {
   it('defaults unknown to None', () => expect(impactLabel(99)).toBe('None'));
 });
 
-describe('specificityFromConfidence', () => {
-  it('maps 0 -> Low', () => expect(specificityFromConfidence(0)).toBe('Low'));
-  it('maps 1 -> Low', () => expect(specificityFromConfidence(1)).toBe('Low'));
-  it('maps 2 -> Medium', () => expect(specificityFromConfidence(2)).toBe('Medium'));
-  it('maps 3 -> High', () => expect(specificityFromConfidence(3)).toBe('High'));
-});
-
 describe('mapDomainToResult', () => {
   it('converts AIReportDomain to DomainResult', () => {
     const result = mapDomainToResult(makeDomain());
     expect(result.domain).toBe('anxiety');
     expect(result.label).toBe('Anxiety');
-    expect(result.specificity).toBe('Medium');
-    expect(result.impact).toBe('Moderate');
+    expect(result.specificity).toBe('Medium'); // anxiety is Medium specificity (static)
+    expect(result.confidence).toBe(2);
     expect(result.control).toBe(1);
     expect(result.frequency).toBe(2);
     expect(result.duration).toBe('3 months');
     expect(result.clinicalNotes).toBe('Moderate anxiety.');
+  });
+
+  it('uses static specificity per domain', () => {
+    expect(mapDomainToResult(makeDomain({ domain: 'psychosis' })).specificity).toBe('High');
+    expect(mapDomainToResult(makeDomain({ domain: 'substance_use' })).specificity).toBe('High');
+    expect(mapDomainToResult(makeDomain({ domain: 'depression' })).specificity).toBe('Medium');
+    expect(mapDomainToResult(makeDomain({ domain: 'somatic_symptoms' })).specificity).toBe('Low');
+    expect(mapDomainToResult(makeDomain({ domain: 'memory' })).specificity).toBe('Low');
+  });
+
+  it('defaults unknown domain to Low specificity', () => {
+    expect(mapDomainToResult(makeDomain({ domain: 'unknown_domain' })).specificity).toBe('Low');
   });
 });
 

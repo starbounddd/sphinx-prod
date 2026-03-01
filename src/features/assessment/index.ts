@@ -65,7 +65,6 @@ export {
 export { toScreeningResults } from './utils/screening-helpers';
 export {
   impactLabel,
-  specificityFromConfidence,
   mapDomainToResult,
   mapFindingToInsight,
   computeSummaryStats,

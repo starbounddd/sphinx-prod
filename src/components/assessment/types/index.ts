@@ -50,7 +50,7 @@ export interface DomainResult {
   domain: string;
   label: string;
   specificity: 'High' | 'Medium' | 'Low';
-  impact: 'None' | 'Mild' | 'Moderate' | 'High';
+  confidence: number;
   control: number;
   frequency: number;
   duration: string;

@@ -33,43 +33,6 @@ function specificityBadge(level: DomainResult['specificity']): JSX.Element {
   );
 }
 
-function impactBadge(level: DomainResult['impact']): JSX.Element {
-  const dotColor: Record<string, string> = {
-    None: 'bg-[#A8A29E]',
-    Mild: 'bg-[#0D9488]',
-    Moderate: 'bg-[#D97706]',
-    High: 'bg-[#FF9B95]',
-  };
-
-  const bgColor: Record<string, string> = {
-    None: 'bg-[#F5F5F4]',
-    Mild: 'bg-[#0D9488]/[0.07]',
-    Moderate: 'bg-[#D97706]/[0.07]',
-    High: 'bg-[#FFB7B2]/[0.12]',
-  };
-
-  const textColor: Record<string, string> = {
-    None: 'text-[#78716C]',
-    Mild: 'text-[#0D9488]',
-    Moderate: 'text-[#D97706]',
-    High: 'text-[#FF9B95]',
-  };
-
-  return (
-    <span
-      className={cn(
-        'inline-flex w-[100px] items-center justify-center gap-[5px] rounded-xl px-2 py-[3px]',
-        bgColor[level]
-      )}
-    >
-      <span className={cn('h-1.5 w-1.5 rounded-full', dotColor[level])} />
-      <span className={cn('text-[11px] font-medium', textColor[level])}>
-        {level}
-      </span>
-    </span>
-  );
-}
-
 /* ------------------------------------------------------------------ */
 /*  Constants                                                          */
 /* ------------------------------------------------------------------ */
@@ -166,7 +129,7 @@ export function DomainResultsTable({
           Domain
         </span>
         <span className="w-[100px] text-center text-[11px] font-semibold tracking-[0.3px] text-[#78716C]">
-          Impact
+          Confidence
         </span>
         <span className="w-[55px] text-center text-[11px] font-semibold tracking-[0.3px] text-[#78716C]">
           Control
@@ -195,7 +158,9 @@ export function DomainResultsTable({
           <span className="w-[120px] text-center text-[13px] font-medium text-[#292524]">
             {domain.domain}
           </span>
-          {impactBadge(domain.impact)}
+          <span className="w-[100px] text-center text-xs text-[#78716C]">
+            {'\u2014'}
+          </span>
           <span className="w-[55px] text-center text-xs text-[#78716C]">
             {domain.control > 0 ? domain.control : '\u2014'}
           </span>
