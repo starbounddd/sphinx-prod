@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import {
   calculateDomainScores,
   identifyFlaggedDomains,
+  computeOverallSeverity,
   QUESTION_DOMAIN_MAP,
   DOMAIN_FEATURES,
 } from '@/features/assessment/schema/domains';
@@ -107,12 +108,15 @@ describe('calculateDomainScores', () => {
 });
 
 describe('identifyFlaggedDomains', () => {
-  it('flags domains with score >= 2 (default threshold)', () => {
-    const scores = { depression: 3, anxiety: 2, anger: 1.5 } as Record<string, number>;
+  it('flags domains with score > 0 (default threshold from questionnaire spec)', () => {
+    const scores = { depression: 1, anxiety: 0.5, anger: 0 } as Record<
+      string,
+      number
+    >;
     const flagged = identifyFlaggedDomains(scores);
     expect(flagged).toContain('depression');
     expect(flagged).toContain('anxiety');
-    expect(flagged).not.toContain('anger');
+    expect(flagged).not.toContain('anger'); // 0 should not be flagged
   });
 
   it('sorts by specificity tier then score', () => {
@@ -152,7 +156,60 @@ describe('identifyFlaggedDomains', () => {
   });
 
   it('returns empty array when no domains meet threshold', () => {
-    const scores = { depression: 1, anxiety: 0.5 } as Record<string, number>;
+    const scores = { depression: 0, anxiety: 0 } as Record<string, number>;
     expect(identifyFlaggedDomains(scores)).toEqual([]);
+  });
+});
+
+describe('computeOverallSeverity', () => {
+  it('returns none when no domain scores are present or all zero', () => {
+    expect(computeOverallSeverity({})).toBe('none');
+    expect(computeOverallSeverity({ depression: 0, anxiety: 0 })).toBe('none');
+  });
+
+  it('treats all domains equally (holistic): single domain drives by max score', () => {
+    expect(computeOverallSeverity({ depression: 1 })).toBe('low');
+    expect(computeOverallSeverity({ suicidal_tendencies: 1 })).toBe('low');
+    expect(computeOverallSeverity({ anxiety: 2 })).toBe('moderate');
+    expect(computeOverallSeverity({ somatic_symptoms: 2 })).toBe('moderate');
+    expect(computeOverallSeverity({ depression: 3 })).toBe('high');
+    expect(computeOverallSeverity({ psychosis: 4 })).toBe('high');
+  });
+
+  it('elevates severity when many domains are elevated (amalgamation)', () => {
+    // Max 2 but 4+ domains flagged or sum >= 8 → high
+    expect(
+      computeOverallSeverity({
+        depression: 2,
+        anxiety: 2,
+        anger: 2,
+        sleep_problems: 2,
+      })
+    ).toBe('high');
+    expect(
+      computeOverallSeverity({
+        depression: 2,
+        anxiety: 2,
+        memory: 2,
+        somatic_symptoms: 2,
+      })
+    ).toBe('high');
+    // Several domains with some burden → moderate
+    expect(
+      computeOverallSeverity({ depression: 1, anxiety: 1, anger: 1 })
+    ).toBe('moderate');
+    expect(
+      computeOverallSeverity({
+        depression: 1,
+        anxiety: 1,
+        memory: 1,
+        personality: 1,
+      })
+    ).toBe('moderate');
+  });
+
+  it('low when only one or two domains slightly elevated', () => {
+    expect(computeOverallSeverity({ somatic_symptoms: 1 })).toBe('low');
+    expect(computeOverallSeverity({ memory: 1, personality: 1 })).toBe('low');
   });
 });
