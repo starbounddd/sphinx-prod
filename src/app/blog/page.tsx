@@ -1,18 +1,26 @@
 export default function BlogPage() {
     return (
-      <main className="py-16 px-6 max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Blog</h1>
+      <main className="bg-secondary py-16 px-6 max-w-3xl mx-auto">
+        <h1 className="font-handwritten text-[75px]">Blog</h1>
         <p className="mb-4">
-          We are a team of developers who are passionate about creating a better way to assess and improve mental health.
+        Thoughts on structured mental health intake, AI safety, and care infrastructure.
         </p>
+
+        <hr className="border-teal " />
   
-        <h2 className="text-xl font-semibold mt-8 mb-2">Information We Collect</h2>
+        <h2 className="text-xl font-semibold mt-8 mb-2">Title...</h2>
+        <p className="text-sm text-muted-foreground"> mm/dd/yyyy - N minutes read</p>
         <p>
-          We may collect personal information such as name, email address,
-          and usage data to improve our services.
+          text...
         </p>
   
-        {/* Add more sections as needed */}
+        <hr className="border-teal " />
+  
+        <h2 className="text-xl font-semibold mt-8 mb-2">Title...</h2>
+        <p className="text-sm text-muted-foreground"> mm/dd/yyyy - N minutes read</p>
+        <p>
+          text...
+        </p>
       </main>
     );
   }

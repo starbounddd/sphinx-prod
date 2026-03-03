@@ -1,9 +1,11 @@
 export default function TermsOfServicePage() {
     return (
-      <main className="py-16 px-6 max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Sphinx Terms of Service</h1>
-        <p><strong>Effective Date:</strong> February 2026</p>
-        <p><strong>Version:</strong> 1.0</p>
+      <main className="bg-secondary py-16 px-6 max-w-3xl mx-auto">
+        <div className="border-l-4 border-border pl-4 mt-2">
+          <h1 className="font-sans text-[50px] mb-6">Sphinx Terms of Service</h1>
+        </div>
+        <p className="m-0 p-0 text-muted-foreground text-[14px]"><strong>Effective Date:</strong> February 2026</p>
+        <p className="m-0 p-0 text-muted-foreground text-[14px]"><strong>Version:</strong> 1.0</p>
 
         <h2 className="text-xl font-semibold mt-8 mb-2">1. Acceptance of Terms</h2>
         <p className="mb-4">
