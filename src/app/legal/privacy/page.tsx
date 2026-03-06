@@ -85,6 +85,11 @@ export default function PrivacyPolicyPage() {
           <p>
             We do not sell your data or share identifiable information with advertisers.
           </p>
+          <p>
+          In the event that you create an account, 
+          your data will be stored and used to connect you with a mental health provider that best
+          suits your needs.
+          </p>
 
           <h2 className="text-xl font-semibold mt-8 mb-2">5. How AI Processes Your Information</h2>
           <p>
@@ -100,6 +105,32 @@ export default function PrivacyPolicyPage() {
           <p>
             All sharing is limited to operational necessity. 
             We do not share data with employers, insurance companies, advertisers, or external providers without your action.
+          </p>
+
+          <h2 className="text-xl font-semibold mt-8 mb-2">7. Security and Safeguards
+          </h2>
+          <p>
+          We use administrative, technical, and physical safeguards designed to protect 
+          personal information and mental health-related data from unauthorized access, use, 
+          alteration, or disclosure.
+          </p>
+          <p>
+          Where required by applicable law or contract, 
+          including when acting as a business associate under HIPAA, 
+          we implement additional safeguards for protected health information, 
+          including role-based access controls, audit logging, vendor oversight, 
+          incident response procedures, and other reasonable and appropriate protections.
+          </p>
+          <p>
+          No system is completely secure, and we cannot guarantee absolute security.
+          </p>
+          <p>
+          If Sphinx becomes aware of a breach involving unsecured personal information or health-related information, 
+          we will provide notice as required by applicable law.
+          </p>
+          <p>
+          Where Sphinx acts as a business associate under HIPAA, 
+          breach handling and notification will be governed by applicable law and our agreement with the relevant covered entity.
           </p>
         </main>
     );
