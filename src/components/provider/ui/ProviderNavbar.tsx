@@ -15,7 +15,7 @@ interface NavLinkProps {
 
 function NavLink({ href, label, active = false }: NavLinkProps) {
   return (
-    <Link href={href}>
+    <Link href={href as any}>
       <Typography
         size="body-sm"
         as="span"

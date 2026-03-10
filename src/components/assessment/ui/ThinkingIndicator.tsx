@@ -1,9 +1,5 @@
-'use client';
-
 import type { JSX } from 'react';
 import { BouncingDots } from '@/components/ui/motion';
-import { BorderBeam } from '@/components/ui/magicui';
-import { Typography } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
 
 interface ThinkingIndicatorProps {
@@ -11,7 +7,8 @@ interface ThinkingIndicatorProps {
 }
 
 /**
- * "Sphinx is thinking..." indicator with bouncing dots and border beam
+ * "Sphinx is thinking..." indicator displayed inline in the input area.
+ * Styled to match the input field dimensions.
  */
 export function ThinkingIndicator({
   className,
@@ -19,25 +16,16 @@ export function ThinkingIndicator({
   return (
     <div
       className={cn(
-        'relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white/60 px-5 py-3 shadow-md backdrop-blur-sm',
-        className
+        'flex h-12 w-full items-center justify-center gap-2 rounded-3xl border border-[#E7E5E4] bg-white px-4',
+        className,
       )}
     >
-      {/* Rotating border beam effect */}
-      <BorderBeam
-        size={60}
-        duration={4}
-        colorFrom="var(--coral)"
-        colorTo="var(--sage)"
-      />
-
-      <Typography size="body-sm" className="text-gray">
+      <span className="text-sm font-body text-muted-foreground">
         Sphinx is thinking
-      </Typography>
-
+      </span>
       <BouncingDots
         count={3}
-        dotClassName="h-1.5 w-1.5 rounded-full bg-coral"
+        dotClassName="h-1.5 w-1.5 rounded-full bg-teal"
       />
     </div>
   );

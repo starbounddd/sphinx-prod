@@ -10,7 +10,7 @@ interface QuickReplyBarProps {
 }
 
 /**
- * Horizontal row of quick reply chips
+ * Horizontal row of quick reply suggestion chips.
  */
 export function QuickReplyBar({
   options,
@@ -21,7 +21,7 @@ export function QuickReplyBar({
   if (options.length === 0) return null;
 
   return (
-    <div className={cn('flex flex-wrap gap-2 px-6 py-3', className)}>
+    <div className={cn('flex flex-wrap justify-center gap-2', className)}>
       {options.map((option) => (
         <QuickReplyChip
           key={option}

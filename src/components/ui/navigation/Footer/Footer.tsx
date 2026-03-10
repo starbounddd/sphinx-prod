@@ -10,16 +10,15 @@ const footerLinks = {
     title: 'Product',
     links: [
       { href: '#', label: 'How it Works' },
-      { href: '#', label: 'Pricing' },
+      // { href: '#', label: 'Pricing' },
       { href: '#', label: 'FAQ' },
     ],
   },
   company: {
     title: 'Company',
     links: [
-      { href: '/about', label: 'About' },
-      { href: '/blog', label: 'Blog' },
-      { href: '#', label: 'Careers' },
+      { href: '#', label: 'About' },
+      { href: '#', label: 'Blog' },
     ],
   },
   legal: {
@@ -62,7 +61,7 @@ export function Footer(): JSX.Element {
               <ul className="mt-4 space-y-3">
                 {section.links.map((link) => (
                   <li key={link.label}>
-                    <Link href={link.href}>
+                    <Link href={link.href as any}>
                       <Typography
                         size="body-sm"
                         as="span"
@@ -88,7 +87,7 @@ export function Footer(): JSX.Element {
             {socialLinks.map((link) => (
               <Link
                 key={link.label}
-                href={link.href}
+                href={link.href as any}
                 className="text-muted-foreground transition-colors hover:text-foreground"
                 aria-label={link.label}
               >
