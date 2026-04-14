@@ -18,12 +18,13 @@ export type {
 } from './schema/report-schema';
 export { validateAIReport } from './schema/report-schema';
 
-export type { DomainFeature } from './schema/domains';
+export type { DomainFeature, SeverityLevel } from './schema/domains';
 export {
   DOMAIN_FEATURES,
   QUESTION_DOMAIN_MAP,
   calculateDomainScores,
   identifyFlaggedDomains,
+  computeOverallSeverity,
 } from './schema/domains';
 
 // AI

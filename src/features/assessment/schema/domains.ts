@@ -689,22 +689,54 @@ const SPECIFICITY_PRIORITY: Record<'high' | 'medium' | 'low', number> = {
 };
 
 /**
+ * Leaving both functions as export since they will be used for the AI guardrails.
+ */
+export type SeverityLevel = 'none' | 'low' | 'moderate' | 'high';
+
+/**
+ * Compute overall severity from domain scores using a holistic view.
+ * All domains are treated equally; no domain is prioritized over another.
+ * So a single domain at 3 or 4 → high; several domains at 2 or many at 1 can also push to moderate or high.
+ * @param domainScores  Record of domain -> average score (0–4)
+ * @returns             Severity level for guardrails
+ */
+export function computeOverallSeverity(
+  domainScores: Record<string, number>,
+): SeverityLevel {
+  const scores = Object.values(domainScores).filter((s): s is number => typeof s === 'number' && s > 0);
+  if (scores.length === 0) return 'none';
+
+  const maxScore = Math.max(...scores);
+  const sum = scores.reduce((a, b) => a + b, 0);
+  const flaggedCount = scores.length;
+
+  // Holistic: combine peak intensity (max) with overall burden (sum / count)
+  if (maxScore >= 3) return 'high';
+  if (maxScore >= 2 && (flaggedCount >= 4 || sum >= 8)) return 'high';
+
+  if (maxScore >= 2) return 'moderate';
+  if (flaggedCount >= 3 || sum >= 4) return 'moderate';
+
+  return 'low';
+}
+
+/**
  * Identify domains whose average screening score meets or exceeds the threshold.
  * Sorted by: specificity tier (high > medium > low), then by score descending.
  * Limited to max 5 domains.
  *
  * @param domainScores  Record of domain -> average score
- * @param threshold     Minimum score to flag (default 2)
+ * @param threshold     Minimum score to flag (default 0)
  * @param maxDomains    Maximum number of domains to return (default 5)
  * @returns             Array of flagged domains sorted by specificity and severity
  */
 export function identifyFlaggedDomains(
   domainScores: Record<string, number>,
-  threshold: number = 2,
-  maxDomains: number = 5,
+  threshold: number = 0,
+  maxDomains: number = 5
 ): SymptomDomain[] {
   return (Object.entries(domainScores) as [SymptomDomain, number][])
-    .filter(([, score]) => score >= threshold)
+    .filter(([, score]) => score > threshold)
     .sort(([domainA, scoreA], [domainB, scoreB]) => {
       // First sort by specificity tier (high < medium < low in priority value)
       const tierA = SPECIFICITY_PRIORITY[DOMAIN_SPECIFICITY[domainA] ?? 'low'];

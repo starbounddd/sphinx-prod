@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "vitest run --config vitest.config.mjs",
+    "test:domains": "vitest run tests/ai/domains.test.ts --config vitest.config.mjs",
     "lint": "eslint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
