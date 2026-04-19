@@ -13,7 +13,7 @@ export async function createEntry(input: CreateJournalEntryInput): Promise<Journ
     data: {
       userId: input.userId,
       content: input.content,
-      questions: input.questions ?? null,
+      questions: input.questions,
     },
   });
 

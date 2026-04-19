@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { entriesService, type UpdateJournalEntryInput } from '@/features/journal';
+import { createClient } from '@/lib/supabase/server';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -46,19 +47,20 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const userId = request.headers.get('x-user-id');
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (!id) {
       return NextResponse.json({ error: 'Entry ID is required' }, { status: 400 });
     }
 
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized - no user ID' }, { status: 401 });
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Verify ownership
     const existingEntry = await entriesService.getEntryById(id);
-    if (!existingEntry || existingEntry.userId !== userId) {
+    if (!existingEntry || existingEntry.userId !== user.id) {
       return NextResponse.json({ error: 'Unauthorized - cannot modify this entry' }, { status: 403 });
     }
 
@@ -88,19 +90,20 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const userId = request.headers.get('x-user-id');
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (!id) {
       return NextResponse.json({ error: 'Entry ID is required' }, { status: 400 });
     }
 
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized - no user ID' }, { status: 401 });
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Verify ownership
     const entry = await entriesService.getEntryById(id);
-    if (!entry || entry.userId !== userId) {
+    if (!entry || entry.userId !== user.id) {
       return NextResponse.json({ error: 'Unauthorized - cannot delete this entry' }, { status: 403 });
     }
 

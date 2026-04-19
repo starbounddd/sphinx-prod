@@ -1,41 +1,37 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { DEFAULT_JOURNAL_QUESTIONS } from '@/features/journal';
-import type { JournalEntryWithParsedQuestions } from '@/features/journal';
+import { DEFAULT_JOURNAL_QUESTIONS } from '@/features/journal/schema/questions';
+import type { JournalEntryWithQuestions } from '@/features/journal/schema/types';
 
 export default function JournalPage() {
-  const [entries, setEntries] = useState<JournalEntryWithParsedQuestions[]>([]);
+  const [entries, setEntries] = useState<JournalEntryWithQuestions[]>([]);
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
 
-  // TODO: Get userId from auth context/session
-  // For now, using a placeholder
   useEffect(() => {
-    // Replace this with actual auth context
-    const tempUserId = localStorage.getItem('userId') || 'user-123';
-    setUserId(tempUserId);
-    fetchEntries(tempUserId);
+    fetchEntries();
   }, []);
 
-  const fetchEntries = async (uid: string) => {
+  const fetchEntries = async () => {
     try {
       setLoading(true);
       const response = await fetch('/api/journal/entries', {
-        headers: {
-          'x-user-id': uid,
-        },
+        credentials: 'include',
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch entries');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('API error:', { status: response.status, error: errorData });
+        throw new Error(errorData.message || errorData.error || `Failed to fetch entries (${response.status})`);
       }
 
       const data = await response.json();
       setEntries(data.data || []);
+      setError(null);
     } catch (err) {
+      console.error('Fetch error:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
@@ -45,7 +41,7 @@ export default function JournalPage() {
   const handleCreateEntry = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!content.trim() || !userId) {
+    if (!content.trim()) {
       setError('Content is required');
       return;
     }
@@ -56,8 +52,8 @@ export default function JournalPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-user-id': userId,
         },
+        credentials: 'include',
         body: JSON.stringify({ content: content.trim() }),
       });
 
@@ -77,14 +73,10 @@ export default function JournalPage() {
   };
 
   const handleDeleteEntry = async (id: string) => {
-    if (!userId) return;
-
     try {
       const response = await fetch(`/api/journal/entries/${id}`, {
+        credentials: 'include',
         method: 'DELETE',
-        headers: {
-          'x-user-id': userId,
-        },
       });
 
       if (!response.ok) {
@@ -97,8 +89,20 @@ export default function JournalPage() {
     }
   };
 
+  if (loading && entries.length === 0) {
+    return (
+      <main className="pt-20 min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 py-8 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center">
+            <p className="text-gray-600">Loading...</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+    <main className="pt-20 min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -190,6 +194,10 @@ export default function JournalPage() {
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
 }
+
+
+
+
