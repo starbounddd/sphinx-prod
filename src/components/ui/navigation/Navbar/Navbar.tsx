@@ -10,6 +10,7 @@ import { NavbarMobileMenu } from './NavbarMobileMenu';
 const baseNavLinks = [
   { href: '/about', label: 'About' },
   { href: '/providers', label: 'For Providers' },
+  { href: '/journal', label: 'Journal' },
 ];
 
 export async function Navbar(): Promise<JSX.Element> {
