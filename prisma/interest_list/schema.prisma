@@ -1,0 +1,18 @@
+// Interest / marketing signups only — uses INTEREST_LIST_DATABASE_URL (not app DATABASE_URL).
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../src/lib/db/interest-list-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("INTEREST_LIST_DATABASE_URL")
+}
+
+model InterestListSignup {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("interest_list_signups")
+}

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && prisma generate --schema=prisma/interest_list/schema.prisma && next build",
     "start": "next start",
     "test": "vitest run --config vitest.config.mjs",
     "test:domains": "vitest run tests/ai/domains.test.ts --config vitest.config.mjs",
@@ -12,8 +12,10 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "chromatic": "npx chromatic --project-token=chpt_8237a5fc0bd5760",
-    "db:generate": "prisma generate",
+    "db:generate": "prisma generate && prisma generate --schema=prisma/interest_list/schema.prisma",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:interest": "prisma migrate dev --schema=prisma/interest_list/schema.prisma",
+    "db:deploy:interest": "prisma migrate deploy --schema=prisma/interest_list/schema.prisma",
     "db:seed": "node --import tsx prisma/seed.ts"
   },
   "prisma": {
