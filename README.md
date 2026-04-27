@@ -20,6 +20,30 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Database migrations (main + interest list)
+
+This repo uses two Prisma schemas:
+
+- `prisma/schema.prisma` (main app data, uses `DATABASE_URL`)
+- `prisma/interest_list/schema.prisma` (interest list data, uses `INTEREST_LIST_DATABASE_URL`)
+
+Always run Prisma commands with an explicit schema:
+
+```bash
+npm run prisma:migrate:main
+npm run prisma:migrate:interest
+npm run prisma:generate:main
+npm run prisma:generate:interest
+```
+
+Why this matters:
+
+- Prisma stores migration history per database/schema in `_prisma_migrations`.
+- Running migrations against the wrong schema (or using bare `prisma migrate dev`) can mix histories and cause drift.
+- Drift leads to reset prompts (`We need to reset the schema...`) and repeated local setup issues after branch switches.
+
+Using explicit schema commands keeps migration histories isolated and prevents recurring drift/reset problems in local development.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

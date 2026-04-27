@@ -16,6 +16,10 @@
     "db:migrate": "prisma migrate dev",
     "db:migrate:interest": "prisma migrate dev --schema=prisma/interest_list/schema.prisma",
     "db:deploy:interest": "prisma migrate deploy --schema=prisma/interest_list/schema.prisma",
+    "prisma:migrate:main": "prisma migrate dev --schema=prisma/schema.prisma",
+    "prisma:migrate:interest": "prisma migrate dev --schema=prisma/interest_list/schema.prisma",
+    "prisma:generate:main": "prisma generate --schema=prisma/schema.prisma",
+    "prisma:generate:interest": "prisma generate --schema=prisma/interest_list/schema.prisma",
     "db:seed": "node --import tsx prisma/seed.ts"
   },
   "prisma": {
