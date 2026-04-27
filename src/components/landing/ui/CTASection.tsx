@@ -1,9 +1,19 @@
 import type { JSX } from 'react';
 import { Container, Section } from '@/components/ui/layout';
 import { Typography } from '@/components/ui/typography';
+import { createClient } from '@/lib/supabase/server';
 import { EmailSignup } from './EmailSignup';
 
-export function CTASection(): JSX.Element {
+export async function CTASection(): Promise<JSX.Element | null> {
+  const supabase = await createClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session) {
+    return null;
+  }
+
   return (
     <Section spacing="sm">
       <Container>
@@ -17,7 +27,7 @@ export function CTASection(): JSX.Element {
             align="center"
             className="max-w-[672px]"
           >
-            Join our early access list. Free for the first 1,000 users.
+            Join our interest list to hear about Sphinx updates and availability.
           </Typography>
 
           <EmailSignup className="mt-6 w-full max-w-[576px]" />

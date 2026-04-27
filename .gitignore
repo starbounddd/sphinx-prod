@@ -56,3 +56,6 @@ skills-lock.json
 
 # Backup files
 *.backup
+
+# Generated Prisma client (interest list DB — run npm run db:generate)
+src/lib/db/interest-list-client

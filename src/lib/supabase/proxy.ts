@@ -43,9 +43,11 @@ export async function updateSession(request: NextRequest) {
 
   // Public routes that don't require authentication
   const publicRoutes = ['/', '/about', '/providers', '/login', '/auth'];
-  const isPublicRoute = publicRoutes.some(
-    (route) => request.nextUrl.pathname === route || request.nextUrl.pathname.startsWith(route + '/')
-  );
+  const publicApiPaths = ['/api/interest-signup'];
+  const isPublicRoute =
+    publicRoutes.some(
+      (route) => request.nextUrl.pathname === route || request.nextUrl.pathname.startsWith(route + '/'),
+    ) || publicApiPaths.some((path) => request.nextUrl.pathname === path);
 
   if (!user && !isPublicRoute) {
     // no user on protected route, redirect to home page (where they can use the auth modal)
