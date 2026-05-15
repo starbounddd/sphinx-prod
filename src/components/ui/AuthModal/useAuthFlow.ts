@@ -37,7 +37,7 @@ export interface AuthFlowHandlers {
   handleBackToCredentials: () => void;
   handleTabChange: (tab: Tab) => void;
   handleOpenChange: (open: boolean) => void;
-  handleGoogleLogin: () => void;
+  handleGoogleLogin: () => Promise<void>;
   setOtpValue: (value: string) => void;
   setSignupPassword: (value: string) => void;
 }
@@ -267,10 +267,24 @@ export function useAuthFlow(): AuthFlowState & AuthFlowHandlers {
     [closeAuthModal]
   );
 
-  const handleGoogleLogin = useCallback((): void => {
-    // TODO: Implement Google OAuth
-    alert('Google login coming soon!');
-  }, []);
+  const handleGoogleLogin = useCallback(async (): Promise<void> => {
+    setError(null);
+    setLoading(true);
+    setLoadingMessage('Redirecting to Google...');
+  
+    const { error: authError } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}${POST_AUTH_REDIRECT}`,
+      },
+    });
+  
+    if (authError) {
+      setError(authError.message);
+      setLoading(false);
+      setLoadingMessage(DEFAULT_LOADING_MESSAGE);
+    }
+  }, [supabase]);
 
   const isOtpStep = activeTab === 'signup' && signupStep === 'otp';
   const dialogTitle = isOtpStep ? 'Verify Your Email' : DIALOG_TITLES[activeTab];
